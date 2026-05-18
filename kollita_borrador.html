@@ -10216,16 +10216,18 @@ function clicSeguro(fn, tiempo){
 
     function buildPedidosData(ventas, sucursalId) {
         return ventas.map(v => ({
+            id:                   v._id_local || v.id || String(v.numeroNota || Math.random().toString(36).substr(2,9)),
             sucursal_id:          sucursalId,
             numero_nota:          String(v.numeroNota || v.id || ''),
             cliente:              v.cliente || 'CONSUMIDOR FINAL',
-            items:                v.items || [],
+            ci_nit:               v.ci_nit  || '',
+            productos:            v.productos || v.items || [],
             subtotal:             v.subtotal    || v.total || 0,
             descuento:            v.descuento   || 0,
             porcentaje_descuento: v.porcentajeDescuento || 0,
             total:                v.total       || 0,
             estado:               (v.estado     || 'PREPARADO').toUpperCase(),
-            metodo_pago:          v.metodoPago  || null,
+            metodo_pago:          v.metodoPago  || v.metodo_pago || 'EFECTIVO',
             efectivo_pagado:      v.efectivoPagado  || 0,
             qr_pagado:            v.qrPagado        || 0,
             total_entregado:      v.totalEntregado  || v.total || 0,
@@ -10233,10 +10235,16 @@ function clicSeguro(fn, tiempo){
             anticipo:             v.anticipo         || 0,
             anticipo_efectivo:    v.anticipoEfectivo || 0,
             anticipo_qr:          v.anticipoQR       || 0,
+            secretario:           v.secretario || v.secretario_entrega || 'Sistema',
+            turno:                v.turno || 'N/A',
             turno_entrega:        v.turnoEntrega     || null,
             secretario_entrega:   v.secretarioEntrega || null,
             fecha_entrega:        v.fechaIDEntrega ? new Date(v.fechaIDEntrega).toISOString() : null,
             hora_entrega:         v.horaEntrega      || null,
+            turno_encargado:      v.turnoEncargado   || null,
+            nombre_encargado:     v.nombreEncargado  || null,
+            fecha_id:             v.fechaID || new Date().toISOString(),
+            hora:                 v.hora || '',
             created_at:           v.id ? new Date(v.id).toISOString() : new Date().toISOString()
         }));
     }
