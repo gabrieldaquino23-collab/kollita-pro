@@ -16,3 +16,5 @@ KollitaApi/appsettings.Production.json
 # OS
 .DS_Store
 Thumbs.db
+
+.vercel

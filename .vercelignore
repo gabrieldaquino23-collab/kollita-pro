@@ -1,0 +1,5 @@
+# Ignorar backend C# en el deploy de Vercel
+KollitaApi/
+.git/
+.vs/
+*.md
