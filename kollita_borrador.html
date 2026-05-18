@@ -810,17 +810,17 @@
 <div class="menu-icon" onclick="toggleSidebar()">? MENU</div>
 
 <div id="mySidebar" class="sidebar">
-    <div class="sidebar-item" onclick="abrirModal('modal-apertura')">?? APERTURA DE TURNO</div>
-    <div class="sidebar-item" onclick="verTab('venta'); toggleSidebar();">?? VENTA RÁPIDA</div>
-    <div class="sidebar-item" onclick="verTab('catalogo'); toggleSidebar();">?? CATÁLOGO COMPLETO</div>
-    <div class="sidebar-item" onclick="abrirModal('modal-config'); toggleSidebar();">?? CONFIGURACIÓN</div>
-    <div class="sidebar-item" onclick="abrirModal('modal-config-ticket'); toggleSidebar();">??? CONFIG. TICKET</div>
-    <div class="sidebar-item" onclick="abrirModal('modal-config-impresora'); toggleSidebar();">?? CONFIG. IMPRESORA</div>
-    <div class="sidebar-item" onclick="abrirModalHistorialCierres(); toggleSidebar();">?? HISTORIAL DE CIERRES</div>
-    <div class="sidebar-item" onclick="cerrarTurno(); toggleSidebar();">?? CIERRE DE TURNO</div>
-    <div class="sidebar-item" onclick="imprimirEntregadosTurno(); toggleSidebar();">??? IMPRIMIR ENTREGADOS DEL TURNO</div>
-    <div class="sidebar-item" onclick="abrirModalExportImport(); toggleSidebar();">?? EXPORTAR / IMPORTAR DATOS</div>
-    <div class="sidebar-item" onclick="mostrarUsoAlmacenamiento(); toggleSidebar();">?? USO DE ALMACENAMIENTO</div>
+    <div class="sidebar-item" onclick="abrirModal('modal-apertura')">🌅 APERTURA DE TURNO</div>
+    <div class="sidebar-item" onclick="verTab('venta'); toggleSidebar();">⚡ VENTA RÁPIDA</div>
+    <div class="sidebar-item" onclick="verTab('catalogo'); toggleSidebar();">📖 CATÁLOGO COMPLETO</div>
+    <div class="sidebar-item" onclick="abrirModal('modal-config'); toggleSidebar();">⚙️ CONFIGURACIÓN</div>
+    <div class="sidebar-item" onclick="abrirModal('modal-config-ticket'); toggleSidebar();">🧾 CONFIG. TICKET</div>
+    <div class="sidebar-item" onclick="abrirModal('modal-config-impresora'); toggleSidebar();">🖨️ CONFIG. IMPRESORA</div>
+    <div class="sidebar-item" onclick="abrirModalHistorialCierres(); toggleSidebar();">🕰️ HISTORIAL DE CIERRES</div>
+    <div class="sidebar-item" onclick="cerrarTurno(); toggleSidebar();">🌙 CIERRE DE TURNO</div>
+    <div class="sidebar-item" onclick="imprimirEntregadosTurno(); toggleSidebar();">🖨️ IMPRIMIR ENTREGADOS DEL TURNO</div>
+    <div class="sidebar-item" onclick="abrirModalExportImport(); toggleSidebar();">💾 EXPORTAR / IMPORTAR DATOS</div>
+    <div class="sidebar-item" onclick="mostrarUsoAlmacenamiento(); toggleSidebar();">📊 USO DE ALMACENAMIENTO</div>
     <div style="border-top:2px solid rgba(255,255,255,0.3); margin:8px 0; padding:8px 20px 4px; font-size:0.7em; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:1px;">— Nuevos Módulos —</div>
     <div class="sidebar-item" onclick="abrirModulo('mod-clientes'); toggleSidebar();">?? BASE DE CLIENTES</div>
     <div class="sidebar-item" onclick="abrirModulo('mod-reclamos'); toggleSidebar();">?? RECLAMOS / OBSEQUIOS</div>
@@ -832,7 +832,7 @@
     <div id="btn-catalogo" class="nav-btn" onclick="verTab('catalogo')">Catálogo</div>
     <div id="btn-consulta" class="nav-btn" onclick="verTab('consulta')">?? Consulta</div>
     <div id="btn-historial" class="nav-btn" onclick="verTab('historial')">Historial<span id="alerta-24h-badge" style="display:none;background:var(--red);color:#fff;border-radius:20px;padding:2px 10px;font-size:.7em;font-weight:700;margin-left:8px;animation:pulse 1.5s infinite;"></span></div>
-    <div id="btn-traspaso" class="nav-btn" onclick="verTab('traspaso')">?? Traspaso</div>
+    <div id="btn-traspaso" class="nav-btn" onclick="verTab('traspaso')">📦 Traspaso</div>
     <div class="secretario-badge">
         <span class="badge-nombre">?? <span id="secretario-actual">Gabriel</span></span>
         <span class="badge-turno" id="turno-actual-badge">— sin turno —</span>
@@ -891,16 +891,16 @@
             <div style="display:flex; gap:8px; margin-bottom:14px;">
                 <button id="modo-btn-venta" onclick="setModoNota('venta')"
                     style="flex:1; padding:10px; border:2px solid var(--azul); border-radius:10px; background:var(--azul); color:white; font-weight:700; cursor:pointer; font-size:0.9em;">
-                    ?? Venta
+                    🛒 Venta
                 </button>
                 <button id="modo-btn-traspaso" onclick="setModoNota('traspaso')"
                     style="flex:1; padding:10px; border:2px solid var(--azul); border-radius:10px; background:white; color:var(--azul); font-weight:700; cursor:pointer; font-size:0.9em;">
-                    ?? Traspaso
+                    📦 Traspaso
                 </button>
             </div>
 
             <!-- TÍTULO DINÁMICO -->
-            <h3 id="nota-titulo">?? Nota de Venta Nº <span id="nota-numero">001</span></h3>
+            <h3 id="nota-titulo">📝 Nota de Venta Nº <span id="nota-numero">001</span></h3>
 
             <!-- CAMPO CLIENTE (solo en modo venta) -->
             <div id="campo-cliente">
@@ -1012,7 +1012,7 @@
                 <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
                     <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:700; color:#92400e;">
                         <input type="checkbox" id="chk-delivery" onchange="toggleDelivery()" style="width:18px;height:18px;cursor:pointer;">
-                        ?? ¿Es delivery?
+                        🛵 ¿Es delivery?
                     </label>
                 </div>
                 <div id="delivery-form" style="display:none;">
@@ -1039,9 +1039,9 @@
             <!-- BOTONES MODO VENTA -->
             <div id="botones-venta">
                 <button id="btn-aplicar-descuento" class="btn" style="background:var(--naranja); color:white; display:none;" onclick="aplicarDesc()">?? Aplicar Descuento <span id="porcentaje-btn-texto">2</span>%</button>
-                <button class="btn" style="background:var(--rojo); color:white" onclick="if(this.disabled)return;this.disabled=true;setTimeout(()=>this.disabled=false,1500);guardarVenta()">?? GUARDAR VENTA</button>
-                <button class="btn" style="background:#6c63ff; color:white" onclick="if(this.disabled)return;this.disabled=true;setTimeout(()=>this.disabled=false,1500);guardarEImprimir()">??? GUARDAR E IMPRIMIR</button>
-                <button class="btn" style="background:#888; color:white" onclick="confirmarLimpiarNota()">??? Vaciar Nota</button>
+                <button class="btn" style="background:var(--rojo); color:white" onclick="if(this.disabled)return;this.disabled=true;setTimeout(()=>this.disabled=false,1500);guardarVenta()">💾 GUARDAR VENTA</button>
+                <button class="btn" style="background:#6c63ff; color:white" onclick="if(this.disabled)return;this.disabled=true;setTimeout(()=>this.disabled=false,1500);guardarEImprimir()">🖨️ GUARDAR E IMPRIMIR</button>
+                <button class="btn" style="background:#888; color:white" onclick="confirmarLimpiarNota()">🗑️ Vaciar Nota</button>
             </div>
 
             <!-- REGISTRO MANUAL (debajo de nota) -->
@@ -1154,7 +1154,7 @@
 
     <div class="tarjeta">
         <h3>?? Historial de Traspasos</h3>
-        <p style="color:#666; font-size:0.85em; margin:-8px 0 16px 0;">Para registrar un traspaso usa las pestañas <strong>Rápida</strong> o <strong>Catálogo</strong> y cambia el modo a ?? Traspaso.</p>
+        <p style="color:#666; font-size:0.85em; margin:-8px 0 16px 0;">Para registrar un traspaso usa las pestañas <strong>Rápida</strong> o <strong>Catálogo</strong> y cambia el modo a 📦 Traspaso.</p>
 
         <!-- FILTROS -->
         <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:14px;">
@@ -1543,7 +1543,7 @@ Vuelva pronto"></textarea>
             <div style="display:flex; flex-direction:column; gap:14px;">
                 <div class="item-config" style="display:flex; justify-content:space-between; align-items:center;">
                     <div>
-                        <div style="font-weight:700;">?? Venta Rápida</div>
+                        <div style="font-weight:700;">🛒 Venta Rápida</div>
                         <div style="font-size:0.82em; color:#666;">Muestra/oculta el botón de Venta Rápida en la barra</div>
                     </div>
                     <label style="position:relative; display:inline-block; width:50px; height:28px; flex-shrink:0;">
@@ -7095,7 +7095,7 @@ function clicSeguro(fn, tiempo){
             { key: 'turnos_cerrados_kollita',   label: '?? Turnos cerrados' },
             { key: 'kollita_config_descuento',  label: '?? Config descuento' },
             { key: 'kollita_secretarios',       label: '?? Secretarios' },
-            { key: 'kollita_traspasos',         label: '?? Traspasos' },
+            { key: 'kollita_traspasos',         label: '📦 Traspasos' },
         ];
 
         // Agregar archivos mensuales de los últimos 24 meses
@@ -7129,7 +7129,7 @@ function clicSeguro(fn, tiempo){
         const barras     = detalle.map(d => `  ${d.label}: ${d.kb} KB`).join('\n');
 
         alert(
-            `?? USO DE ALMACENAMIENTO\n` +
+            `📊 USO DE ALMACENAMIENTO\n` +
             `${'-'.repeat(35)}\n` +
             `Usado:  ${totalKB} KB de 5,120 KB (${porcentaje}%)\n` +
             `Libre:  ${libre} KB\n\n` +
@@ -7449,8 +7449,8 @@ function clicSeguro(fn, tiempo){
 
         // Título
         document.getElementById('nota-titulo').innerHTML = esTraspaso
-            ? '?? Traspaso de Mercadería'
-            : '?? Nota de Venta Nº <span id="nota-numero">' + String(contadorNotas).padStart(3,'0') + '</span>';
+            ? '📦 Traspaso de Mercadería'
+            : '📝 Nota de Venta Nº <span id="nota-numero">' + String(contadorNotas).padStart(3,'0') + '</span>';
 
         // Limpiar carrito al cambiar modo
         if (carrito.length > 0) {
@@ -9038,7 +9038,7 @@ function clicSeguro(fn, tiempo){
             const esTraspaso = (a.accion || 'anular').toLowerCase() === 'traspasar';
             const colorBorde = esTraspaso ? '#fb8500' : '#c0392b';
             const colorFondo = esTraspaso ? '#fff8f0' : '#fdecea';
-            const labelAccion = esTraspaso ? '?? TRASPASO' : '? ANULACIÓN';
+            const labelAccion = esTraspaso ? '🚚 TRASPASO' : '? ANULACIÓN';
             const nota = a.nota || {};
             const tieneItems = nota.items && nota.items.length > 0;
             return `
@@ -9316,7 +9316,7 @@ function clicSeguro(fn, tiempo){
         if (!contenido || !btn) return;
         if (activo) {
             contenido.style.display = 'block';
-            btn.textContent = '?? Encendido';
+            btn.textContent = '✅ Encendido';
             btn.style.background = '#e8f5e9';
             btn.style.color      = '#2d6a4f';
             btn.style.border     = '1.5px solid #2d6a4f';
@@ -9829,7 +9829,7 @@ function clicSeguro(fn, tiempo){
             </div>
             <!-- Gráfica de ventas por día -->
             <div style="background:#f8f9fa; border-radius:12px; padding:16px; margin-bottom:20px;">
-                <div style="font-weight:700; color:var(--azul); margin-bottom:10px;">?? Ventas por Día del Mes</div>
+                <div style="font-weight:700; color:var(--azul); margin-bottom:10px;">🛒 Ventas por Día del Mes</div>
                 <canvas id="grafica-ventas-dias" style="width:100%; height:180px; border-radius:8px;"></canvas>
             </div>
             <!-- Dos columnas: productos + clientes top -->
@@ -9948,12 +9948,12 @@ function clicSeguro(fn, tiempo){
         <div style="padding:20px 24px;">
             <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:16px;">
                 <div style="background:#fdecea; border-radius:10px; padding:12px; text-align:center;"><div style="font-size:0.75em; color:#c0392b; font-weight:700;">? Anuladas</div><div id="anul-cnt-anuladas" style="font-size:1.8em; font-weight:900; color:#c0392b;">0</div></div>
-                <div style="background:#fff3e0; border-radius:10px; padding:12px; text-align:center;"><div style="font-size:0.75em; color:#b76000; font-weight:700;">?? Traspasos</div><div id="anul-cnt-traspasos" style="font-size:1.8em; font-weight:900; color:#b76000;">0</div></div>
+                <div style="background:#fff3e0; border-radius:10px; padding:12px; text-align:center;"><div style="font-size:0.75em; color:#b76000; font-weight:700;">📦 Traspasos</div><div id="anul-cnt-traspasos" style="font-size:1.8em; font-weight:900; color:#b76000;">0</div></div>
                 <div style="background:#f0ecff; border-radius:10px; padding:12px; text-align:center;"><div style="font-size:0.75em; color:#5a2ea6; font-weight:700;">?? Monto Total</div><div id="anul-cnt-monto" style="font-size:1.2em; font-weight:900; color:#5a2ea6;">0 Bs</div></div>
                 <div style="background:#e8f4fd; border-radius:10px; padding:12px; text-align:center;"><div style="font-size:0.75em; color:#1a6fa8; font-weight:700;">?? Total</div><div id="anul-cnt-total" style="font-size:1.8em; font-weight:900; color:#1a6fa8;">0</div></div>
             </div>
             <div style="display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap; align-items:center;">
-                <select id="anul-filtro-tipo" class="form-control" style="max-width:180px;" onchange="renderAnulaciones()"><option value="">Todas</option><option value="anular">? Anulaciones</option><option value="traspasar">?? Traspasos</option></select>
+                <select id="anul-filtro-tipo" class="form-control" style="max-width:180px;" onchange="renderAnulaciones()"><option value="">Todas</option><option value="anular">? Anulaciones</option><option value="traspasar">📦 Traspasos</option></select>
                 <input type="month" id="anul-filtro-mes" class="form-control" style="max-width:180px;" onchange="renderAnulaciones()">
                 <input type="text" id="anul-filtro-buscar" class="form-control" style="max-width:200px;" placeholder="?? Buscar..." oninput="renderAnulaciones()">
                 <button onclick="exportarAnulacionesCSV()" style="background:var(--verde); color:white; border:none; border-radius:8px; padding:8px 14px; font-weight:700; cursor:pointer; font-size:0.85em;">?? CSV</button>
