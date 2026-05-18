@@ -1,0 +1,3289 @@
+<!DOCTYPE html>
+<html lang="es">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CocaPay Pro — Sistema de Gestión de Pagos</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet">
+    <style>
+      /* ═══════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════ */
+      :root {
+        --c-bg: #070c14;
+        --c-surface: #0d1420;
+        --c-surface2: #111b2e;
+        --c-surface3: #16223a;
+        --c-border: rgba(255, 255, 255, .07);
+        --c-border2: rgba(255, 255, 255, .12);
+
+        --c-primary: #22d3ee;
+        --c-primary-d: #0e9ab2;
+        --c-accent: #f59e0b;
+        --c-accent-d: #b45309;
+        --c-green: #34d399;
+        --c-green-d: #059669;
+        --c-red: #f87171;
+        --c-red-d: #dc2626;
+        --c-purple: #a78bfa;
+        --c-orange: #fb923c;
+
+        --c-text: #f1f5f9;
+        --c-text2: #94a3b8;
+        --c-text3: #475569;
+
+        --r-sm: 8px;
+        --r-md: 12px;
+        --r-lg: 16px;
+        --r-xl: 20px;
+
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, .4);
+        --shadow-md: 0 4px 16px rgba(0, 0, 0, .5);
+        --shadow-lg: 0 12px 40px rgba(0, 0, 0, .6);
+        --glow-primary: 0 0 24px rgba(34, 211, 238, .18);
+        --glow-accent: 0 0 24px rgba(245, 158, 11, .18);
+        --glow-green: 0 0 24px rgba(52, 211, 153, .18);
+      }
+
+      /* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0
+      }
+
+      html {
+        height: 100%
+      }
+
+      body {
+        font-family: 'DM Sans', sans-serif;
+        background: var(--c-bg);
+        color: var(--c-text);
+        height: 100%;
+        overflow: hidden;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      button {
+        font-family: inherit;
+        cursor: pointer;
+        border: none;
+        outline: none
+      }
+
+      input,
+      select,
+      textarea {
+        font-family: inherit;
+        outline: none
+      }
+
+      ::-webkit-scrollbar {
+        width: 4px;
+        height: 4px
+      }
+
+      ::-webkit-scrollbar-track {
+        background: transparent
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--c-surface3);
+        border-radius: 2px
+      }
+
+      /* ═══════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════ */
+      #app {
+        display: flex;
+        height: 100vh;
+        overflow: hidden
+      }
+
+      /* ── Sidebar ── */
+      #sidebar {
+        width: 220px;
+        min-width: 220px;
+        background: var(--c-surface);
+        border-right: 1px solid var(--c-border);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .sb-brand {
+        padding: 22px 18px 16px;
+        border-bottom: 1px solid var(--c-border);
+      }
+
+      .sb-brand-mark {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .sb-icon {
+        width: 34px;
+        height: 34px;
+        background: linear-gradient(135deg, var(--c-primary), var(--c-purple));
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        box-shadow: var(--glow-primary);
+        flex-shrink: 0;
+      }
+
+      .sb-title {
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: -.3px
+      }
+
+      .sb-subtitle {
+        font-size: 10px;
+        color: var(--c-text3);
+        font-family: 'DM Mono';
+        margin-top: 1px
+      }
+
+      .sb-env {
+        margin-top: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(52, 211, 153, .1);
+        border: 1px solid rgba(52, 211, 153, .2);
+        border-radius: 20px;
+        padding: 3px 9px;
+        font-size: 10px;
+        color: var(--c-green);
+        font-weight: 600;
+      }
+
+      .sb-env::before {
+        content: '';
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--c-green);
+        display: inline-block;
+        animation: pulse 2s infinite
+      }
+
+      @keyframes pulse {
+
+        0%,
+        100% {
+          opacity: 1
+        }
+
+        50% {
+          opacity: .4
+        }
+      }
+
+      .sb-nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 12px 10px
+      }
+
+      .sb-section-label {
+        font-size: 9px;
+        font-weight: 700;
+        color: var(--c-text3);
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        padding: 8px 8px 4px;
+      }
+
+      .sb-item {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 9px 10px;
+        border-radius: var(--r-sm);
+        color: var(--c-text2);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all .15s;
+        margin-bottom: 1px;
+        position: relative;
+      }
+
+      .sb-item:hover {
+        background: var(--c-surface2);
+        color: var(--c-text)
+      }
+
+      .sb-item.active {
+        background: linear-gradient(135deg, rgba(34, 211, 238, .12), rgba(167, 139, 250, .08));
+        color: var(--c-primary);
+        border: 1px solid rgba(34, 211, 238, .15);
+      }
+
+      .sb-item .ico {
+        font-size: 15px;
+        width: 18px;
+        text-align: center;
+        flex-shrink: 0
+      }
+
+      .sb-item .lbl {
+        flex: 1
+      }
+
+      .sb-badge {
+        background: var(--c-red-d);
+        color: #fff;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 1px 5px;
+        border-radius: 10px;
+        min-width: 18px;
+        text-align: center;
+      }
+
+      .sb-footer {
+        border-top: 1px solid var(--c-border);
+        padding: 14px;
+      }
+
+      .pay-next {
+        background: var(--c-surface2);
+        border-radius: var(--r-md);
+        padding: 12px;
+        border: 1px solid var(--c-border);
+      }
+
+      .pay-next-label {
+        font-size: 9px;
+        color: var(--c-text3);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .8px;
+        margin-bottom: 5px
+      }
+
+      .pay-next-value {
+        font-size: 13px;
+        font-weight: 700
+      }
+
+      .pay-next-value.lunes {
+        color: var(--c-green)
+      }
+
+      .pay-next-value.miercoles {
+        color: var(--c-accent)
+      }
+
+      .pay-next-value.sabado {
+        color: var(--c-orange)
+      }
+
+      .pay-next-sub {
+        font-size: 10px;
+        color: var(--c-text3);
+        margin-top: 3px
+      }
+
+      /* ── Main Content ── */
+      #content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden
+      }
+
+      .topbar {
+        height: 54px;
+        min-height: 54px;
+        background: rgba(13, 20, 32, .92);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--c-border);
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        gap: 14px;
+        position: relative;
+        z-index: 10;
+      }
+
+      .topbar-title {
+        font-size: 16px;
+        font-weight: 700;
+        flex: 1;
+        letter-spacing: -.3px
+      }
+
+      .topbar-title span {
+        color: var(--c-primary)
+      }
+
+      .topbar-date {
+        font-size: 11px;
+        color: var(--c-text3);
+        font-family: 'DM Mono'
+      }
+
+      .page-wrap {
+        flex: 1;
+        overflow-y: auto;
+        padding: 24px
+      }
+
+      /* ═══════════════════════════════════════════
+   COMPONENTS
+═══════════════════════════════════════════ */
+
+      /* ── Buttons ── */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        border-radius: var(--r-sm);
+        font-size: 12px;
+        font-weight: 600;
+        transition: all .15s;
+        white-space: nowrap;
+      }
+
+      .btn-xs {
+        padding: 4px 9px;
+        font-size: 11px;
+        border-radius: 6px
+      }
+
+      .btn-sm {
+        padding: 6px 12px;
+        font-size: 11px
+      }
+
+      .btn-lg {
+        padding: 10px 22px;
+        font-size: 13px
+      }
+
+      .btn-primary {
+        background: var(--c-primary);
+        color: #000d14
+      }
+
+      .btn-primary:hover {
+        background: #38e8ff;
+        box-shadow: var(--glow-primary)
+      }
+
+      .btn-ghost {
+        background: var(--c-surface3);
+        color: var(--c-text2);
+        border: 1px solid var(--c-border)
+      }
+
+      .btn-ghost:hover {
+        background: var(--c-surface2);
+        color: var(--c-text);
+        border-color: var(--c-border2)
+      }
+
+      .btn-success {
+        background: var(--c-green-d);
+        color: #fff
+      }
+
+      .btn-success:hover {
+        background: var(--c-green);
+        color: #000
+      }
+
+      .btn-danger {
+        background: rgba(248, 113, 113, .1);
+        color: var(--c-red);
+        border: 1px solid rgba(248, 113, 113, .2)
+      }
+
+      .btn-danger:hover {
+        background: var(--c-red-d);
+        color: #fff;
+        border-color: transparent
+      }
+
+      .btn-accent {
+        background: var(--c-accent-d);
+        color: #fff
+      }
+
+      .btn-accent:hover {
+        background: var(--c-accent);
+        color: #000
+      }
+
+      .btn-purple {
+        background: rgba(167, 139, 250, .12);
+        color: var(--c-purple);
+        border: 1px solid rgba(167, 139, 250, .2)
+      }
+
+      .btn-purple:hover {
+        background: var(--c-purple);
+        color: #000
+      }
+
+      /* ── Cards ── */
+      .card {
+        background: var(--c-surface);
+        border: 1px solid var(--c-border);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+      }
+
+      .card-header {
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--c-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .card-title {
+        font-size: 13px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 7px
+      }
+
+      .card-body {
+        padding: 18px
+      }
+
+      .card-body-flush {
+        padding: 0
+      }
+
+      /* ── Stat Cards ── */
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-bottom: 20px
+      }
+
+      .stat {
+        background: var(--c-surface);
+        border: 1px solid var(--c-border);
+        border-radius: var(--r-lg);
+        padding: 18px;
+        position: relative;
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+      }
+
+      .stat:hover {
+        transform: translateY(-2px)
+      }
+
+      .stat-top-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px
+      }
+
+      .stat.primary .stat-top-bar {
+        background: linear-gradient(90deg, var(--c-primary), var(--c-purple))
+      }
+
+      .stat.green .stat-top-bar {
+        background: linear-gradient(90deg, var(--c-green), var(--c-primary))
+      }
+
+      .stat.accent .stat-top-bar {
+        background: linear-gradient(90deg, var(--c-accent), var(--c-orange))
+      }
+
+      .stat.red .stat-top-bar {
+        background: linear-gradient(90deg, var(--c-red), var(--c-purple))
+      }
+
+      .stat-lbl {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--c-text3);
+        text-transform: uppercase;
+        letter-spacing: .8px
+      }
+
+      .stat-val {
+        font-size: 26px;
+        font-weight: 700;
+        margin: 8px 0 3px;
+        font-family: 'DM Mono';
+        letter-spacing: -1px
+      }
+
+      .stat.primary .stat-val {
+        color: var(--c-primary)
+      }
+
+      .stat.green .stat-val {
+        color: var(--c-green)
+      }
+
+      .stat.accent .stat-val {
+        color: var(--c-accent)
+      }
+
+      .stat.red .stat-val {
+        color: var(--c-red)
+      }
+
+      .stat-sub {
+        font-size: 11px;
+        color: var(--c-text3)
+      }
+
+      .stat-ico {
+        position: absolute;
+        right: 14px;
+        top: 14px;
+        font-size: 24px;
+        opacity: .15
+      }
+
+      /* ── Table ── */
+      .tbl-wrap {
+        overflow-x: auto
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px
+      }
+
+      thead th {
+        background: var(--c-surface2);
+        padding: 9px 14px;
+        text-align: left;
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--c-text3);
+        text-transform: uppercase;
+        letter-spacing: .8px;
+        border-bottom: 1px solid var(--c-border);
+        white-space: nowrap;
+      }
+
+      tbody tr {
+        border-bottom: 1px solid rgba(255, 255, 255, .04);
+        transition: background .1s
+      }
+
+      tbody tr:hover {
+        background: var(--c-surface2)
+      }
+
+      tbody td {
+        padding: 10px 14px;
+        color: var(--c-text2);
+        vertical-align: middle
+      }
+
+      td.mono {
+        font-family: 'DM Mono';
+        font-size: 11px
+      }
+
+      td.bold {
+        font-weight: 700;
+        color: var(--c-text)
+      }
+
+      .tbl-empty {
+        text-align: center;
+        padding: 40px;
+        color: var(--c-text3);
+        font-size: 13px
+      }
+
+      /* ── Badges ── */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .bg-green {
+        background: rgba(52, 211, 153, .1);
+        color: var(--c-green);
+        border: 1px solid rgba(52, 211, 153, .2)
+      }
+
+      .bg-red {
+        background: rgba(248, 113, 113, .1);
+        color: var(--c-red);
+        border: 1px solid rgba(248, 113, 113, .2)
+      }
+
+      .bg-accent {
+        background: rgba(245, 158, 11, .1);
+        color: var(--c-accent);
+        border: 1px solid rgba(245, 158, 11, .2)
+      }
+
+      .bg-blue {
+        background: rgba(34, 211, 238, .1);
+        color: var(--c-primary);
+        border: 1px solid rgba(34, 211, 238, .2)
+      }
+
+      .bg-purple {
+        background: rgba(167, 139, 250, .1);
+        color: var(--c-purple);
+        border: 1px solid rgba(167, 139, 250, .2)
+      }
+
+      .bg-orange {
+        background: rgba(251, 146, 60, .1);
+        color: var(--c-orange);
+        border: 1px solid rgba(251, 146, 60, .2)
+      }
+
+      /* ── Tags ── */
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 7px;
+        border-radius: 5px;
+        font-size: 10px;
+        font-weight: 600
+      }
+
+      .tag-suc {
+        background: rgba(167, 139, 250, .1);
+        color: var(--c-purple)
+      }
+
+      /* ── Forms ── */
+      .form-grid {
+        display: grid;
+        gap: 14px
+      }
+
+      .fg-2 {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .fg-3 {
+        grid-template-columns: 1fr 1fr 1fr
+      }
+
+      .fg-4 {
+        grid-template-columns: 1fr 1fr 1fr 1fr
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px
+      }
+
+      .field label {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--c-text3);
+        text-transform: uppercase;
+        letter-spacing: .7px
+      }
+
+      .field input,
+      .field select,
+      .field textarea {
+        background: var(--c-surface2);
+        border: 1px solid var(--c-border);
+        border-radius: var(--r-sm);
+        padding: 8px 12px;
+        color: var(--c-text);
+        font-size: 13px;
+        transition: border-color .15s, box-shadow .15s;
+      }
+
+      .field input:focus,
+      .field select:focus {
+        border-color: var(--c-primary);
+        box-shadow: 0 0 0 3px rgba(34, 211, 238, .08);
+      }
+
+      .field select option {
+        background: var(--c-surface)
+      }
+
+      /* ── Modal ── */
+      .overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, .75);
+        backdrop-filter: blur(6px);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .overlay.open {
+        display: flex;
+        animation: fadeIn .2s
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0
+        }
+
+        to {
+          opacity: 1
+        }
+      }
+
+      .modal {
+        background: var(--c-surface);
+        border: 1px solid var(--c-border2);
+        border-radius: var(--r-xl);
+        width: 90%;
+        max-height: 88vh;
+        overflow-y: auto;
+        box-shadow: var(--shadow-lg);
+        animation: slideUp .22s ease;
+      }
+
+      .modal-sm {
+        max-width: 480px
+      }
+
+      .modal-md {
+        max-width: 600px
+      }
+
+      .modal-lg {
+        max-width: 760px
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(16px)
+        }
+
+        to {
+          opacity: 1;
+          transform: none
+        }
+      }
+
+      .modal-head {
+        padding: 18px 22px;
+        border-bottom: 1px solid var(--c-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        background: var(--c-surface);
+        z-index: 1;
+      }
+
+      .modal-head h3 {
+        font-size: 15px;
+        font-weight: 700
+      }
+
+      .modal-close {
+        background: var(--c-surface2);
+        border: 1px solid var(--c-border);
+        border-radius: 6px;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--c-text3);
+        font-size: 14px;
+        transition: all .15s;
+      }
+
+      .modal-close:hover {
+        background: var(--c-red-d);
+        color: #fff;
+        border-color: transparent
+      }
+
+      .modal-body {
+        padding: 22px
+      }
+
+      .modal-foot {
+        padding: 14px 22px;
+        border-top: 1px solid var(--c-border);
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        position: sticky;
+        bottom: 0;
+        background: var(--c-surface);
+      }
+
+      /* ── Alert Banner ── */
+      .alert {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 16px;
+        border-radius: var(--r-md);
+        margin-bottom: 18px;
+        font-size: 12px;
+      }
+
+      .alert-info {
+        background: rgba(34, 211, 238, .06);
+        border: 1px solid rgba(34, 211, 238, .15);
+        color: var(--c-primary)
+      }
+
+      .alert-success {
+        background: rgba(52, 211, 153, .06);
+        border: 1px solid rgba(52, 211, 153, .15);
+        color: var(--c-green)
+      }
+
+      .alert-warn {
+        background: rgba(245, 158, 11, .06);
+        border: 1px solid rgba(245, 158, 11, .15);
+        color: var(--c-accent)
+      }
+
+      .alert-ico {
+        font-size: 16px;
+        flex-shrink: 0;
+        margin-top: 1px
+      }
+
+      /* ── Periodo Tabs ── */
+      .periodo-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 18px;
+        flex-wrap: wrap
+      }
+
+      .ptab {
+        padding: 8px 18px;
+        border-radius: var(--r-md);
+        border: 1px solid var(--c-border);
+        background: var(--c-surface);
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--c-text3);
+        transition: all .15s;
+      }
+
+      .ptab:hover {
+        border-color: var(--c-border2);
+        color: var(--c-text)
+      }
+
+      .ptab.p-lunes {
+        background: rgba(52, 211, 153, .08);
+        border-color: rgba(52, 211, 153, .25);
+        color: var(--c-green)
+      }
+
+      .ptab.p-miercoles {
+        background: rgba(245, 158, 11, .08);
+        border-color: rgba(245, 158, 11, .25);
+        color: var(--c-accent)
+      }
+
+      .ptab.p-sabado {
+        background: rgba(251, 146, 60, .08);
+        border-color: rgba(251, 146, 60, .25);
+        color: var(--c-orange)
+      }
+
+      /* ── Toast ── */
+      #toast-stack {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        pointer-events: none
+      }
+
+      .toast-item {
+        background: var(--c-surface2);
+        border: 1px solid var(--c-border2);
+        border-radius: var(--r-md);
+        padding: 12px 16px;
+        font-size: 12px;
+        min-width: 260px;
+        box-shadow: var(--shadow-md);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        animation: toastIn .25s ease;
+        pointer-events: all;
+      }
+
+      .toast-item.removing {
+        animation: toastOut .25s ease forwards
+      }
+
+      @keyframes toastIn {
+        from {
+          opacity: 0;
+          transform: translateX(20px)
+        }
+
+        to {
+          opacity: 1;
+          transform: none
+        }
+      }
+
+      @keyframes toastOut {
+        to {
+          opacity: 0;
+          transform: translateX(20px)
+        }
+      }
+
+      .toast-item.t-success {
+        border-left: 3px solid var(--c-green)
+      }
+
+      .toast-item.t-error {
+        border-left: 3px solid var(--c-red)
+      }
+
+      .toast-item.t-info {
+        border-left: 3px solid var(--c-primary)
+      }
+
+      .toast-item.t-warn {
+        border-left: 3px solid var(--c-accent)
+      }
+
+      /* ══════ TICKET TÉRMICO (80mm) ══════ */
+      .ticket-container {
+        display: none;
+        width: 76mm;
+        max-width: 76mm;
+        font-family: 'Courier New', monospace;
+        font-size: 11pt;
+        font-weight: bold;
+        color: #000;
+        line-height: 1.2;
+        padding: 2mm;
+      }
+
+      .ticket-header {
+        text-align: center;
+        margin-bottom: 2px
+      }
+
+      .ticket-title {
+        font-size: 16pt;
+        font-weight: 900;
+        margin: 1px 0;
+        letter-spacing: 0.5px
+      }
+
+      .ticket-subtitle {
+        font-size: 9pt;
+        font-weight: bold;
+        margin: 1px 0;
+        line-height: 1.15
+      }
+
+      .ticket-info {
+        margin-bottom: 2px;
+        font-size: 10pt;
+        font-weight: bold
+      }
+
+      .ticket-line {
+        display: flex;
+        justify-content: space-between;
+        margin: 1px 0;
+        line-height: 1.2
+      }
+
+      .ticket-items {
+        margin-bottom: 2px
+      }
+
+      .ticket-item-row {
+        display: flex;
+        margin: 1px 0;
+        line-height: 1.2;
+        font-weight: bold;
+        font-size: 10pt
+      }
+
+      .ticket-totals {
+        margin: 2px 0;
+        font-size: 10pt;
+        font-weight: bold
+      }
+
+      .ticket-total-line {
+        display: flex;
+        justify-content: space-between;
+        margin: 1px 0;
+        line-height: 1.2;
+        font-weight: bold
+      }
+
+      .ticket-footer {
+        text-align: center;
+        margin-top: 2px;
+        font-size: 9pt;
+        font-weight: bold;
+        line-height: 1.2
+      }
+
+      .ticket-divider {
+        border: none;
+        border-top: 2px solid #000;
+        margin: 2px 0
+      }
+
+      .ticket-dashed {
+        border: none;
+        border-top: 1px dashed #000;
+        margin: 2px 0
+      }
+
+      .ticket-double {
+        border-top: 3px double #000;
+        border-bottom: 3px double #000;
+        padding: 2px 0;
+        margin: 2px 0
+      }
+
+      /* ── Nota de Venta (Térmica, legado) ── */
+      .receipt {
+        display: none
+      }
+
+      /* ── Timeline Auditoria ── */
+      .timeline {
+        padding-left: 22px;
+        position: relative
+      }
+
+      .timeline::before {
+        content: '';
+        position: absolute;
+        left: 6px;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: var(--c-border)
+      }
+
+      .tl-item {
+        position: relative;
+        margin-bottom: 16px
+      }
+
+      .tl-dot {
+        position: absolute;
+        left: -19px;
+        top: 6px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border: 2px solid var(--c-surface);
+      }
+
+      .tl-dot.green {
+        background: var(--c-green)
+      }
+
+      .tl-dot.blue {
+        background: var(--c-primary)
+      }
+
+      .tl-dot.accent {
+        background: var(--c-accent)
+      }
+
+      .tl-dot.red {
+        background: var(--c-red)
+      }
+
+      .tl-dot.purple {
+        background: var(--c-purple)
+      }
+
+      .tl-card {
+        background: var(--c-surface2);
+        border: 1px solid var(--c-border);
+        border-radius: var(--r-sm);
+        padding: 10px 14px
+      }
+
+      .tl-time {
+        font-size: 9px;
+        color: var(--c-text3);
+        font-family: 'DM Mono'
+      }
+
+      .tl-action {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--c-text);
+        margin-top: 1px
+      }
+
+      .tl-detail {
+        font-size: 11px;
+        color: var(--c-text2);
+        margin-top: 2px
+      }
+
+      /* ── Charts (CSS bars) ── */
+      .bar-chart {
+        display: flex;
+        flex-direction: column;
+        gap: 8px
+      }
+
+      .bar-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 11px
+      }
+
+      .bar-label {
+        width: 80px;
+        color: var(--c-text2);
+        text-align: right;
+        flex-shrink: 0;
+        font-size: 10px
+      }
+
+      .bar-track {
+        flex: 1;
+        height: 8px;
+        background: var(--c-surface3);
+        border-radius: 4px;
+        overflow: hidden
+      }
+
+      .bar-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width .6s ease
+      }
+
+      .bar-val {
+        width: 70px;
+        text-align: right;
+        font-family: 'DM Mono';
+        font-size: 10px;
+        color: var(--c-text3)
+      }
+
+      /* ── Divider ── */
+      .divider {
+        height: 1px;
+        background: var(--c-border);
+        margin: 18px 0
+      }
+
+      /* ── Utility ── */
+      .flex {
+        display: flex
+      }
+
+      .items-center {
+        align-items: center
+      }
+
+      .justify-between {
+        justify-content: space-between
+      }
+
+      .gap-2 {
+        gap: 8px
+      }
+
+      .gap-3 {
+        gap: 12px
+      }
+
+      .gap-4 {
+        gap: 16px
+      }
+
+      .mt-4 {
+        margin-top: 16px
+      }
+
+      .mb-4 {
+        margin-bottom: 16px
+      }
+
+      .text-right {
+        text-align: right
+      }
+
+      .text-center {
+        text-align: center
+      }
+
+      .w-full {
+        width: 100%
+      }
+
+      .col-span-2 {
+        grid-column: span 2
+      }
+
+      .col-span-3 {
+        grid-column: span 3
+      }
+
+      .fw-700 {
+        font-weight: 700
+      }
+
+      .c-primary {
+        color: var(--c-primary)
+      }
+
+      .c-accent {
+        color: var(--c-accent)
+      }
+
+      .c-green {
+        color: var(--c-green)
+      }
+
+      .c-red {
+        color: var(--c-red)
+      }
+
+      .c-text3 {
+        color: var(--c-text3)
+      }
+
+      .c-text2 {
+        color: var(--c-text2)
+      }
+
+      .fs-11 {
+        font-size: 11px
+      }
+
+      .fs-10 {
+        font-size: 10px
+      }
+
+      /* ── Page transitions ── */
+      .page {
+        display: none;
+        animation: pageFade .2s ease
+      }
+
+      .page.active {
+        display: block
+      }
+
+      @keyframes pageFade {
+        from {
+          opacity: 0;
+          transform: translateY(6px)
+        }
+
+        to {
+          opacity: 1;
+          transform: none
+        }
+      }
+
+      /* ── Infobox ── */
+      .infobox {
+        background: var(--c-surface2);
+        border: 1px solid var(--c-border);
+        border-radius: var(--r-md);
+        padding: 14px 16px;
+        display: flex;
+        gap: 10px;
+        font-size: 12px;
+      }
+
+      .infobox-ico {
+        font-size: 18px;
+        flex-shrink: 0
+      }
+
+      /* Print — Térmica 80mm */
+      @media print {
+        * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important
+        }
+
+        body * {
+          visibility: hidden !important;
+          display: none !important
+        }
+
+        #ticket-print,
+        #ticket-print * {
+          visibility: visible !important;
+          display: block !important
+        }
+
+        /* Restaurar flex DESPUÉS del block genérico */
+        #ticket-print .ticket-line,
+        #ticket-print .ticket-item-header,
+        #ticket-print .ticket-item-row,
+        #ticket-print .ticket-total-line,
+        .ticket-line,
+        .ticket-item-header,
+        .ticket-item-row,
+        .ticket-total-line {
+          display: flex !important
+        }
+
+        #ticket-print span {
+          display: inline !important
+        }
+
+        #ticket-print .table-responsive {
+          display: block !important
+        }
+
+        html,
+        body {
+          width: 80mm !important;
+          height: auto !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          overflow: hidden !important
+        }
+
+        #ticket-print {
+          position: absolute !important;
+          left: 0 !important;
+          top: 0 !important;
+          width: 76mm !important;
+          max-width: 76mm !important;
+          margin: 2mm !important;
+          padding: 0 !important
+        }
+
+        @page {
+          size: 80mm auto !important;
+          margin: 0 !important
+        }
+
+        .ticket-container,
+        #ticket-print,
+        .ticket-header,
+        .ticket-info,
+        .ticket-items,
+        .ticket-item-row,
+        .ticket-totals,
+        .ticket-footer {
+          page-break-inside: avoid !important
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- SIDEBAR -->
+      <nav id="sidebar">
+        <div class="sb-brand">
+          <div class="sb-brand-mark">
+            <div class="sb-icon">🍃</div>
+            <div>
+              <div class="sb-title">CocaPay Pro</div>
+              <div class="sb-subtitle">v3.0.0 · MVC Architecture</div>
+            </div>
+          </div>
+          <div class="sb-env">● Sistema Activo</div>
+        </div>
+
+        <div class="sb-nav">
+          <div class="sb-section-label">Principal</div>
+          <div class="sb-item active" data-page="dashboard">
+            <span class="ico">▦</span><span class="lbl">Dashboard</span>
+          </div>
+          <div class="sb-item" data-page="registro">
+            <span class="ico">✎</span><span class="lbl">Registro Diario</span>
+          </div>
+          <div class="sb-item" data-page="pagos">
+            <span class="ico">◈</span><span class="lbl">Gestión de Pagos</span>
+            <span class="sb-badge" id="badge-pagos">0</span>
+          </div>
+          <div class="sb-item" data-page="notas">
+            <span class="ico">▤</span><span class="lbl">Notas de Venta</span>
+          </div>
+
+          <div class="sb-section-label" style="margin-top:8px">Gestión</div>
+          <div class="sb-item" data-page="caseros">
+            <span class="ico">◎</span><span class="lbl">Caseros</span>
+          </div>
+          <div class="sb-item" data-page="sucursales">
+            <span class="ico">⬡</span><span class="lbl">Sucursales</span>
+          </div>
+
+          <div class="sb-section-label" style="margin-top:8px">Inteligencia</div>
+          <div class="sb-item" data-page="historial">
+            <span class="ico">◷</span><span class="lbl">Historial</span>
+          </div>
+          <div class="sb-item" data-page="reportes">
+            <span class="ico">◈</span><span class="lbl">Reportes</span>
+          </div>
+          <div class="sb-item" data-page="auditoria">
+            <span class="ico">◉</span><span class="lbl">Auditoría</span>
+          </div>
+        </div>
+
+        <div class="sb-footer">
+          <div class="pay-next">
+            <div class="pay-next-label">Próximo pago</div>
+            <div class="pay-next-value" id="pnv"></div>
+            <div class="pay-next-sub" id="pns"></div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- CONTENT -->
+      <div id="content">
+        <div class="topbar no-print">
+          <div class="topbar-title" id="tt">Dashboard <span>General</span></div>
+          <div class="topbar-date" id="td"></div>
+          <button class="btn btn-primary btn-sm" onclick="UI.openModal('m-registro-rapido')">＋ Registro</button>
+        </div>
+
+        <div class="page-wrap">
+
+          <!-- ════ DASHBOARD ════ -->
+          <div class="page active" id="page-dashboard">
+            <div id="dash-alert"></div>
+            <div class="stats-row" id="dash-stats"></div>
+            <div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-bottom:16px">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">◷ Últimos Registros</div>
+                  <button class="btn btn-ghost btn-xs" onclick="Router.go('registro')">Ver todo →</button>
+                </div>
+                <div class="card-body-flush">
+                  <div class="tbl-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Casero</th>
+                          <th>Sucursal</th>
+                          <th>Fecha</th>
+                          <th>Turno</th>
+                          <th>Tanques</th>
+                          <th>Monto</th>
+                          <th>Estado</th>
+                        </tr>
+                      </thead>
+                      <tbody id="dash-ultimos"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">◈ Períodos Pendientes</div>
+                </div>
+                <div class="card-body" id="dash-periodos"></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">⬡ Rendimiento por Sucursal</div>
+              </div>
+              <div class="card-body" id="dash-chart"></div>
+            </div>
+          </div>
+
+          <!-- ════ REGISTRO ════ -->
+          <div class="page" id="page-registro">
+            <div class="card mb-4">
+              <div class="card-header">
+                <div class="card-title">✎ Nuevo Registro de Tanques</div>
+              </div>
+              <div class="card-body">
+                <div class="form-grid fg-3" style="margin-bottom:14px">
+                  <div class="field"><label>Casero *</label><select id="r-casero"></select></div>
+                  <div class="field"><label>Sucursal *</label><select id="r-sucursal"></select></div>
+                  <div class="field"><label>Fecha *</label><input type="date" id="r-fecha"></div>
+                  <div class="field"><label>Turno</label>
+                    <select id="r-turno">
+                      <option value="DIA">☀ Turno Día</option>
+                      <option value="TARDE">⛅ Turno Tarde</option>
+                      <option value="NOCHE">◑ Turno Noche</option>
+                    </select>
+                  </div>
+                  <div class="field"><label>Cantidad Tanques *</label><input type="number" id="r-tanques" min="0"
+                      step="0.5" placeholder="0"></div>
+                  <div class="field"><label>Precio / Tanque (Bs) *</label><input type="number" id="r-precio" min="0"
+                      step="0.01" placeholder="45.00"></div>
+                </div>
+                <div class="field mb-4"><label>Observaciones</label><input type="text" id="r-obs"
+                    placeholder="Notas opcionales..."></div>
+                <div class="flex items-center gap-3">
+                  <button class="btn btn-primary" onclick="RegistroController.guardar()">◉ Guardar Registro</button>
+                  <button class="btn btn-ghost" onclick="RegistroController.limpiar()">✕ Limpiar</button>
+                  <div style="margin-left:auto;font-size:12px;color:var(--c-text3)">
+                    Subtotal: <strong class="c-accent" style="font-family:'DM Mono';font-size:14px" id="r-subtotal">Bs
+                      0.00</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">▤ Registros</div>
+                <div class="flex gap-2">
+                  <input type="date" id="f-desde"
+                    style="background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:5px 8px;color:var(--c-text);font-size:11px">
+                  <input type="date" id="f-hasta"
+                    style="background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:5px 8px;color:var(--c-text);font-size:11px">
+                  <button class="btn btn-ghost btn-xs" onclick="RegistroController.filtrar()">Filtrar</button>
+                  <button class="btn btn-ghost btn-xs" onclick="RegistroController.render()">✕</button>
+                </div>
+              </div>
+              <div class="card-body-flush">
+                <div class="tbl-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Fecha</th>
+                        <th>Día</th>
+                        <th>Casero</th>
+                        <th>Sucursal</th>
+                        <th>Turno</th>
+                        <th>Tanques</th>
+                        <th>Precio</th>
+                        <th>Monto</th>
+                        <th>Estado</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbl-registros"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════ PAGOS ════ -->
+          <div class="page" id="page-pagos">
+            <div class="alert alert-info">
+              <div class="alert-ico">ℹ</div>
+              <div>
+                <strong>Ciclo de Pagos del Sistema:</strong><br>
+                <span style="color:var(--c-green)">● Lunes</span> → paga registros de <b>Sábado + Domingo</b>
+                &nbsp;|&nbsp;
+                <span style="color:var(--c-accent)">● Miércoles</span> → paga registros de <b>Lunes + Martes</b>
+                &nbsp;|&nbsp;
+                <span style="color:var(--c-orange)">● Sábado</span> → paga registros de <b>Mié + Jue + Viernes</b>
+              </div>
+            </div>
+            <div class="periodo-tabs">
+              <div class="ptab" id="pt-LUNES" onclick="PagoController.selectPeriodo('LUNES')">● Lunes — (Sáb/Dom)</div>
+              <div class="ptab" id="pt-MIERCOLES" onclick="PagoController.selectPeriodo('MIERCOLES')">● Miércoles —
+                (Lun/Mar)</div>
+              <div class="ptab" id="pt-SABADO" onclick="PagoController.selectPeriodo('SABADO')">● Sábado — (Mié/Jue/Vie)
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title" id="pago-title">Selecciona un período</div>
+                <div class="flex gap-2" id="pago-actions" style="display:none!important"></div>
+              </div>
+              <div class="card-body-flush">
+                <div class="tbl-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Casero</th>
+                        <th>Sucursal</th>
+                        <th>Días cubiertos</th>
+                        <th>Tanques</th>
+                        <th>Monto Total</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbl-pagos"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════ NOTAS ════ -->
+          <div class="page" id="page-notas">
+            <div style="display:grid;grid-template-columns:300px 1fr;gap:16px">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">▤ Generar Nota</div>
+                </div>
+                <div class="card-body">
+                  <div class="field mb-4"><label>Casero</label><select id="n-casero"></select></div>
+                  <div class="field mb-4"><label>Período de Pago</label>
+                    <select id="n-periodo">
+                      <option value="LUNES">Lunes — Sáb/Dom</option>
+                      <option value="MIERCOLES">Miércoles — Lun/Mar</option>
+                      <option value="SABADO">Sábado — Mié/Jue/Vie</option>
+                    </select>
+                  </div>
+                  <div class="field mb-4"><label>Semana del mes</label>
+                    <select id="n-semana">
+                      <option value="1">Semana 1</option>
+                      <option value="2">Semana 2</option>
+                      <option value="3">Semana 3</option>
+                      <option value="4">Semana 4</option>
+                      <option value="5">Semana 5</option>
+                    </select>
+                  </div>
+                  <button class="btn btn-primary w-full" onclick="NotaController.generar()">Generar Nota de
+                    Venta</button>
+                  <button class="btn btn-ghost w-full mt-4" onclick="NotaController.imprimir()">🖨 Imprimir
+                    Ticket</button>
+                  <button class="btn btn-ghost w-full mt-4" onclick="UI.openModal('m-config-impresora')">⚙️ Configurar
+                    Impresora</button>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Vista Previa</div>
+                </div>
+                <div class="card-body" id="nota-preview">
+                  <div class="text-center c-text3" style="padding:48px 0">
+                    <div style="font-size:40px;margin-bottom:10px">▤</div>
+                    <div>Selecciona casero y período</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card mt-4">
+              <div class="card-header">
+                <div class="card-title">◷ Notas Generadas</div>
+              </div>
+              <div class="card-body-flush">
+                <div class="tbl-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>#Nota</th>
+                        <th>Fecha</th>
+                        <th>Casero</th>
+                        <th>Período</th>
+                        <th>Semana</th>
+                        <th>Tanques</th>
+                        <th>Monto</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbl-notas"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════ CASEROS ════ -->
+          <div class="page" id="page-caseros">
+            <div class="flex justify-between mb-4">
+              <div></div>
+              <button class="btn btn-primary" onclick="_editCaseroId=null;document.getElementById('m-casero').querySelector('.modal-head h3').textContent='◎ Nuevo Casero / Proveedor';['c-nombre','c-tel'].forEach(function(id){document.getElementById(id).value=''});UI.openModal('m-casero')">＋ Nuevo Casero</button>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">◎ Base de Datos — Caseros / Proveedores</div>
+              </div>
+              <div class="card-body-flush">
+                <div class="tbl-wrap">
+                  <table>
+                      <thead>
+                       <tr>
+                         <th>#</th>
+                         <th>Nombre</th>
+                         <th>Teléfono</th>
+                         <th>Sucursal</th>
+                         <th>Estado</th>
+                         <th>Acciones</th>
+                       </tr>
+                     </thead>
+                    <tbody id="tbl-caseros"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════ SUCURSALES ════ -->
+          <div class="page" id="page-sucursales">
+            <div class="flex justify-between mb-4">
+              <div></div>
+              <button class="btn btn-primary" onclick="UI.openModal('m-sucursal')">＋ Nueva Sucursal</button>
+            </div>
+            <div class="stats-row" id="suc-cards"></div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">⬡ Detalle de Sucursales</div>
+              </div>
+              <div class="card-body-flush">
+                <div class="tbl-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Código</th>
+                        <th>Caseros</th>
+                        <th>Tanques (mes)</th>
+                        <th>Monto (mes)</th>
+                        <th>Estado</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbl-sucursales"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════ HISTORIAL ════ -->
+          <div class="page" id="page-historial">
+            <div class="form-grid fg-3 mb-4">
+              <div class="field"><label>Casero</label><select id="h-casero" onchange="HistorialController.render()">
+                  <option value="">Todos</option>
+                </select></div>
+              <div class="field"><label>Sucursal</label><select id="h-sucursal" onchange="HistorialController.render()">
+                  <option value="">Todas</option>
+                </select></div>
+              <div class="field"><label>Período</label>
+                <select id="h-periodo" onchange="HistorialController.render()">
+                  <option value="">Todos</option>
+                  <option value="LUNES">Lunes</option>
+                  <option value="MIERCOLES">Miércoles</option>
+                  <option value="SABADO">Sábado</option>
+                </select>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">◷ Historial de Pagos Procesados</div>
+                <div id="h-total" class="c-accent" style="font-family:'DM Mono';font-size:13px;font-weight:700"></div>
+              </div>
+              <div class="card-body-flush">
+                <div class="tbl-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Fecha Pago</th>
+                        <th>Casero</th>
+                        <th>Sucursal</th>
+                        <th>Período</th>
+                        <th>Tanques</th>
+                        <th>Monto</th>
+                        <th>Nota</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbl-historial"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════ REPORTES ════ -->
+          <div class="page" id="page-reportes">
+            <div class="form-grid fg-3 mb-4">
+              <div class="field"><label>Vista</label>
+                <select id="rep-vista">
+                  <option value="semana">Por Semana</option>
+                  <option value="sucursal">Por Sucursal</option>
+                  <option value="casero">Por Casero</option>
+                  <option value="periodo">Por Período de Pago</option>
+                </select>
+              </div>
+              <div class="field"><label>Casero (opcional)</label>
+                <select id="rep-casero-f">
+                  <option value="">Todos los caseros</option>
+                </select>
+              </div>
+              <div class="field"><label>Desde / Hasta</label>
+                <div style="display:flex;gap:8px">
+                  <input type="date" id="rep-desde-f"
+                    style="background:var(--c-surface2);border:1px solid var(--c-border);color:var(--c-text);padding:6px 8px;border-radius:6px;font-size:11px;flex:1">
+                  <input type="date" id="rep-hasta-f"
+                    style="background:var(--c-surface2);border:1px solid var(--c-border);color:var(--c-text);padding:6px 8px;border-radius:6px;font-size:11px;flex:1">
+                </div>
+              </div>
+              <div class="field" style="justify-content:flex-end;padding-top:18px">
+                <button class="btn btn-primary" onclick="ReporteController.generar()">◈ Generar Reporte</button>
+                <button class="btn btn-accent btn-sm" onclick="ReporteController.exportarWord()"
+                  style="margin-left:6px">📄 Word</button>
+              </div>
+            </div>
+            <div id="rep-output"></div>
+          </div>
+        <!-- ════ AUDITORÍA ════ -->
+        <div class="page" id="page-auditoria">
+          <div class="flex justify-between mb-4">
+            <div class="infobox" style="flex:1;margin-right:16px">
+              <div class="infobox-ico">◉</div>
+              <div>
+                <div style="font-weight:700;margin-bottom:3px">Log de Auditoría del Sistema</div>
+                <div class="fs-11 c-text3">Registro inmutable de todas las operaciones. Cada acción queda registrada con
+                  timestamp preciso.</div>
+              </div>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="AuditoriaController.limpiar()">Limpiar Log</button>
+          </div>
+          <div class="timeline" id="tl-auditoria"></div>
+        </div>
+
+      </div><!-- /page-wrap -->
+    </div><!-- /content -->
+    </div><!-- /app -->
+
+    <!-- ════════ MODALES ════════ -->
+
+    <!-- Registro rápido -->
+    <div class="overlay" id="m-registro-rapido">
+      <div class="modal modal-md">
+        <div class="modal-head">
+          <h3>⚡ Registro Rápido</h3><button class="modal-close" onclick="UI.closeModal('m-registro-rapido')">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-grid fg-2">
+            <div class="field"><label>Casero *</label><select id="rq-casero"></select></div>
+            <div class="field"><label>Sucursal *</label><select id="rq-sucursal"></select></div>
+            <div class="field"><label>Fecha *</label><input type="date" id="rq-fecha"></div>
+            <div class="field"><label>Turno</label>
+              <select id="rq-turno">
+                <option value="DIA">☀ Día</option>
+                <option value="TARDE">⛅ Tarde</option>
+                <option value="NOCHE">◑ Noche</option>
+              </select>
+            </div>
+            <div class="field"><label>Tanques *</label><input type="number" id="rq-tanques" min="0" step="0.5"
+                placeholder="0"></div>
+            <div class="field"><label>Precio (Bs) *</label><input type="number" id="rq-precio" min="0" step="0.01"
+                placeholder="45.00"></div>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-ghost" onclick="UI.closeModal('m-registro-rapido')">Cancelar</button>
+          <button class="btn btn-primary" onclick="RegistroController.guardarRapido()">Guardar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nuevo Casero -->
+    <div class="overlay" id="m-casero">
+      <div class="modal modal-md">
+        <div class="modal-head">
+          <h3>◎ Nuevo Casero / Proveedor</h3><button class="modal-close" onclick="UI.closeModal('m-casero')">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-grid fg-2">
+            <div class="field col-span-2"><label>Nombre Completo *</label><input type="text" id="c-nombre"
+                placeholder="Ej: Juan Mamani Quispe"></div>
+            <div class="field"><label>Teléfono</label><input type="text" id="c-tel" placeholder="Ej: 76543210"></div>
+            <div class="field"><label>Sucursal Principal</label><select id="c-sucursal"></select></div>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-ghost" onclick="UI.closeModal('m-casero')">Cancelar</button>
+          <button class="btn btn-primary" onclick="CaseroController.guardar()">Guardar Casero</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nueva Sucursal -->
+    <div class="overlay" id="m-sucursal">
+      <div class="modal modal-sm">
+        <div class="modal-head">
+          <h3>⬡ Nueva Sucursal</h3><button class="modal-close" onclick="UI.closeModal('m-sucursal')">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-grid fg-2">
+            <div class="field"><label>Nombre *</label><input type="text" id="s-nombre" placeholder="Ej: COTOCA"></div>
+            <div class="field"><label>Código</label><input type="text" id="s-codigo" placeholder="Ej: COT"></div>
+            <div class="field col-span-2"><label>Dirección</label><input type="text" id="s-dir"
+                placeholder="Dirección..."></div>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-ghost" onclick="UI.closeModal('m-sucursal')">Cancelar</button>
+          <button class="btn btn-primary" onclick="SucursalController.guardar()">Guardar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Informe pago -->
+    <div class="overlay" id="m-informe">
+      <div class="modal modal-md">
+        <div class="modal-head">
+          <h3>▤ Informe de Pago</h3><button class="modal-close" onclick="UI.closeModal('m-informe')">✕</button>
+        </div>
+        <div class="modal-body" id="informe-body"></div>
+        <div class="modal-foot">
+          <button class="btn btn-ghost" onclick="UI.closeModal('m-informe')">Cerrar</button>
+          <button class="btn btn-accent" onclick="window.print()">🖨 Imprimir</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Config Impresora -->
+    <div class="overlay" id="m-config-impresora">
+      <div class="modal modal-md">
+        <div class="modal-head">
+          <h3>⚙️ Configuración de Impresora</h3><button class="modal-close"
+            onclick="UI.closeModal('m-config-impresora')">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-grid fg-2">
+            <div class="field"><label>Tipo de Impresora</label>
+              <select id="cfg-tipo">
+                <option value="termica">Térmica 80mm (ZKP8008)</option>
+                <option value="termica58">Térmica 58mm</option>
+                <option value="normal">Normal (A4)</option>
+              </select>
+            </div>
+            <div class="field"><label>Tamaño de Papel</label>
+              <select id="cfg-tamano">
+                <option value="80x210">80mm x 210mm (Rollo Térmico)</option>
+                <option value="58x210">58mm x 210mm (Rollo Térmico)</option>
+                <option value="a4">A4 (210mm x 297mm)</option>
+              </select>
+            </div>
+            <div class="field"><label>Tamaño de Fuente</label>
+              <select id="cfg-font">
+                <option value="small">Pequeña (10pt)</option>
+                <option value="medium" selected>Mediana (11pt)</option>
+                <option value="large">Grande (12pt)</option>
+              </select>
+            </div>
+            <div class="field"><label>Negocio</label><input type="text" id="cfg-negocio" value="KOLLITA PRO"></div>
+            <div class="field"><label>Dirección</label><input type="text" id="cfg-direccion"
+                value="Santa Cruz de la Sierra"></div>
+            <div class="field"><label>Teléfono</label><input type="text" id="cfg-telefono" placeholder="Opcional"></div>
+            <div class="field"><label>Mensaje</label><input type="text" id="cfg-mensaje" value="Gracias por su trabajo">
+            </div>
+          </div>
+          <button class="btn btn-primary w-full mt-4" onclick="NotaController.guardarConfig()">💾 Guardar
+            Configuración</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast stack -->
+    <div id="toast-stack"></div>
+    <div id="ticket-print" class="ticket-container"></div>
+
+    <!-- ════════════════════════════════════════════════
+  ARCHITECTURE: MVC + Repository + Service + EventBus
+════════════════════════════════════════════════ -->
+    <script src="recursos/js/supabase-config.js"></script>
+<script src="recursos/js/auth-global.js"></script>
+<script>
+      'use strict';
+
+      /* ═══════════════════════════════════════
+         LAYER 0: EventBus (Publish/Subscribe)
+      ═══════════════════════════════════════ */
+      const EventBus = (() => {
+        const subs = {};
+        return {
+          on(event, fn) { (subs[event] = subs[event] || []).push(fn); },
+          emit(event, data) { (subs[event] || []).forEach(fn => fn(data)); },
+          off(event, fn) { if (subs[event]) subs[event] = subs[event].filter(f => f !== fn); }
+        };
+      })();
+
+      /* ═══════════════════════════════════════
+         LAYER 1: Utilities
+      ═══════════════════════════════════════ */
+      const Utils = {
+        hoy: () => new Date().toISOString().split('T')[0],
+        fmtFecha: (f) => {
+          if (!f) return '—';
+          const d = new Date(f + 'T12:00:00');
+          return d.toLocaleDateString('es-BO', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        },
+        fmtBs: (n) => 'Bs ' + (n || 0).toLocaleString('es-BO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        diaSemana: (f) => {
+          const dias = ['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
+          return dias[new Date(f + 'T12:00:00').getDay()];
+        },
+        semanaDelMes: (f) => {
+          const d = new Date(f + 'T12:00:00');
+          return Math.ceil(d.getDate() / 7);
+        },
+        uuid: () => Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+        periodoDeGia: (dia) => {
+          if (['SABADO', 'DOMINGO'].includes(dia)) return 'LUNES';
+          if (['LUNES', 'MARTES'].includes(dia)) return 'MIERCOLES';
+          if (['MIERCOLES', 'JUEVES', 'VIERNES'].includes(dia)) return 'SABADO';
+          return null;
+        },
+        diasDePeriodo: (periodo) => ({
+          LUNES: ['SABADO', 'DOMINGO'],
+          MIERCOLES: ['LUNES', 'MARTES'],
+          SABADO: ['MIERCOLES', 'JUEVES', 'VIERNES']
+        }[periodo] || []),
+        proximoPago: () => {
+          const d = new Date();
+          const dow = d.getDay(); // 0=Dom,1=Lun,2=Mar,3=Mie,4=Jue,5=Vie,6=Sab
+          const hoy = [{ dow: 1, n: 'HOY — LUNES', c: 'lunes', p: 'Paga: Sábado y Domingo anterior' },
+          { dow: 3, n: 'HOY — MIÉRCOLES', c: 'miercoles', p: 'Paga: Lunes y Martes' },
+          { dow: 6, n: 'HOY — SÁBADO', c: 'sabado', p: 'Paga: Mié, Jue y Viernes' }].find(x => x.dow === dow);
+          if (hoy) return hoy;
+          const futuros = [{ dow: 1, n: 'LUNES', c: 'lunes' }, { dow: 3, n: 'MIÉRCOLES', c: 'miercoles' }, { dow: 6, n: 'SÁBADO', c: 'sabado' }];
+          let prox = futuros.find(p => p.dow > dow) || futuros[0];
+          const diff = prox.dow > dow ? prox.dow - dow : 7 - (dow - prox.dow);
+          return { n: `${prox.n} (en ${diff}d)`, c: prox.c, p: '' };
+        }
+      };
+
+      /* ═══════════════════════════════════════
+         LAYER 2: Repository (Data Access)
+         Uses localStorage with JSON schema
+      ═══════════════════════════════════════ */
+      const DB_KEY = 'cocapay_v3';
+
+      const Repository = {
+        _data: null,
+        _schema: {
+          caseros: [], sucursales: [], registros: [], pagos: [], notas: [], auditoria: [],
+          _seq: { casero: 1, sucursal: 1, registro: 1, pago: 1, nota: 1 }
+        },
+
+        load() {
+          try {
+            const raw = localStorage.getItem(DB_KEY);
+            this._data = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(this._schema));
+          } catch (e) {
+            this._data = JSON.parse(JSON.stringify(this._schema));
+          }
+          return this;
+        },
+
+        save() {
+          localStorage.setItem(DB_KEY, JSON.stringify(this._data));
+          return this;
+        },
+
+        nextId(entity) {
+          return this._data._seq[entity]++;
+        },
+
+        // Generic CRUD
+        getAll(entity) { return [...(this._data[entity] || [])]; },
+        getById(entity, id) { return (this._data[entity] || []).find(r => r.id === id) || null; },
+        insert(entity, record) {
+          this._data[entity].push(record);
+          this.save();
+          return record;
+        },
+        update(entity, id, patch) {
+          const idx = this._data[entity].findIndex(r => r.id === id);
+          if (idx >= 0) { Object.assign(this._data[entity][idx], patch); this.save(); }
+          return this._data[entity][idx];
+        },
+        remove(entity, id) {
+          this._data[entity] = this._data[entity].filter(r => r.id !== id);
+          this.save();
+        },
+        query(entity, predicate) {
+          return (this._data[entity] || []).filter(predicate);
+        }
+      };
+
+      /* ═══════════════════════════════════════
+         LAYER 3: Services (Business Logic)
+      ═══════════════════════════════════════ */
+      const CaseroService = {
+        getAll() { return Repository.getAll('caseros'); },
+        getActive() { return Repository.query('caseros', c => c.activo); },
+        getById(id) { return Repository.getById('caseros', id) || { nombre: '—', ci: '—' }; },
+        create(data) {
+          const casero = { id: Repository.nextId('casero'), ...data, activo: true, createdAt: Utils.hoy() };
+          Repository.insert('caseros', casero);
+          AuditoriaService.log('CASERO_CREADO', `Nuevo casero: ${casero.nombre}`, 'blue');
+          EventBus.emit('casero:created', casero);
+          return casero;
+        },
+        toggle(id) {
+          const c = Repository.getById('caseros', id);
+          if (!c) return;
+          Repository.update('caseros', id, { activo: !c.activo });
+          AuditoriaService.log('CASERO_TOGGLE', `${c.nombre} → ${!c.activo ? 'Activado' : 'Desactivado'}`, 'accent');
+          EventBus.emit('casero:updated');
+        },
+        delete(id) {
+          const c = Repository.getById('caseros', id);
+          Repository.remove('caseros', id);
+          AuditoriaService.log('CASERO_ELIMINADO', `Casero eliminado: ${c?.nombre}`, 'red');
+          EventBus.emit('casero:deleted');
+        }
+      };
+
+      const SucursalService = {
+        getAll() { return Repository.getAll('sucursales'); },
+        getActive() { return Repository.query('sucursales', s => s.activa); },
+        getById(id) { return Repository.getById('sucursales', id) || { nombre: '—' }; },
+        create(data) {
+          const suc = { id: Repository.nextId('sucursal'), ...data, activa: true };
+          Repository.insert('sucursales', suc);
+          AuditoriaService.log('SUCURSAL_CREADA', `Nueva sucursal: ${suc.nombre}`, 'purple');
+          EventBus.emit('sucursal:created', suc);
+          return suc;
+        },
+        delete(id) {
+          const s = Repository.getById('sucursales', id);
+          Repository.remove('sucursales', id);
+          AuditoriaService.log('SUCURSAL_ELIMINADA', `Eliminada: ${s?.nombre}`, 'red');
+          EventBus.emit('sucursal:deleted');
+        }
+      };
+
+      const RegistroService = {
+        getAll() { return Repository.getAll('registros'); },
+        getById(id) { return Repository.getById('registros', id); },
+
+        create(data) {
+          const dia = Utils.diaSemana(data.fecha);
+          const reg = {
+            id: Repository.nextId('registro'),
+            ...data,
+            dia,
+            periodo: Utils.periodoDeGia(dia),
+            semana: Utils.semanaDelMes(data.fecha),
+            monto: (data.tanques || 0) * (data.precio || 0),
+            pagado: false,
+            fechaPago: null,
+            createdAt: new Date().toISOString()
+          };
+          Repository.insert('registros', reg);
+          AuditoriaService.log('REGISTRO', `${CaseroService.getById(reg.casero_id).nombre} — ${reg.tanques} tanques — ${Utils.fmtBs(reg.monto)}`, 'green');
+          EventBus.emit('registro:created', reg);
+          return reg;
+        },
+
+        delete(id) {
+          Repository.remove('registros', id);
+          AuditoriaService.log('REGISTRO_ELIMINADO', `Registro #${id} eliminado`, 'red');
+          EventBus.emit('registro:deleted');
+        },
+
+        getPendientesByPeriodo(periodo) {
+          const dias = Utils.diasDePeriodo(periodo);
+          return Repository.query('registros', r => !r.pagado && dias.includes(r.dia));
+        },
+
+        marcarPagado(ids, fechaPago) {
+          ids.forEach(id => Repository.update('registros', id, { pagado: true, fechaPago }));
+        },
+
+        getByDateRange(desde, hasta) {
+          return Repository.query('registros', r => r.fecha >= desde && r.fecha <= hasta);
+        }
+      };
+
+      const PagoService = {
+        getAll() { return Repository.getAll('pagos'); },
+
+        procesarPeriodo(casero_id, sucursal_id, periodo, metodo) {
+          if (!metodo) metodo = 'QR';
+          const regs = RegistroService.getPendientesByPeriodo(periodo)
+            .filter(r => r.casero_id === casero_id && r.sucursal_id === sucursal_id);
+          if (!regs.length) return null;
+          const monto = regs.reduce((a, r) => a + r.monto, 0);
+          const tanques = regs.reduce((a, r) => a + r.tanques, 0);
+          const pago = {
+            id: Repository.nextId('pago'),
+            casero_id, sucursal_id, periodo,
+            fecha: Utils.hoy(),
+            monto, tanques, metodo,
+            reg_ids: regs.map(r => r.id)
+          };
+          Repository.insert('pagos', pago);
+          RegistroService.marcarPagado(pago.reg_ids, pago.fecha);
+          AuditoriaService.log('PAGO', `${CaseroService.getById(casero_id).nombre} — ${periodo} — ${metodo} — ${Utils.fmtBs(monto)}`, 'green');
+          EventBus.emit('pago:processed', pago);
+          return pago;
+        },
+
+        procesarTodosPeriodo(periodo, metodo) {
+          if (!metodo) metodo = 'QR';
+          const regs = RegistroService.getPendientesByPeriodo(periodo);
+          // agrupar por casero+sucursal
+          const grupos = {};
+          regs.forEach(r => {
+            const k = `${r.casero_id}_${r.sucursal_id}`;
+            if (!grupos[k]) grupos[k] = { casero_id: r.casero_id, sucursal_id: r.sucursal_id };
+          });
+          let total = 0, count = 0;
+          Object.values(grupos).forEach(g => {
+            const p = this.procesarPeriodo(g.casero_id, g.sucursal_id, periodo, metodo);
+            if (p) { total += p.monto; count++; }
+          });
+          AuditoriaService.log('PAGO_MASIVO', `Pago masivo ${periodo}: ${count} caseros — ${Utils.fmtBs(total)}`, 'accent');
+          return { total, count };
+        }
+      };
+
+      const NotaService = {
+        getAll() { return Repository.getAll('notas'); },
+        generate(casero_id, periodo, semana) {
+          const dias = Utils.diasDePeriodo(periodo);
+          const regs = Repository.query('registros',
+            r => r.casero_id === casero_id && dias.includes(r.dia) && r.semana === semana);
+          const monto = regs.reduce((a, r) => a + r.monto, 0);
+          const tanques = regs.reduce((a, r) => a + r.tanques, 0);
+          const num = 'NV-' + String(Repository._data._seq.nota).padStart(5, '0');
+          const nota = { id: Repository.nextId('nota'), numero: num, casero_id, periodo, semana, fecha: Utils.hoy(), monto, tanques, reg_count: regs.length };
+          Repository.insert('notas', nota);
+          AuditoriaService.log('NOTA_GENERADA', `${num} — ${CaseroService.getById(casero_id).nombre} — ${Utils.fmtBs(monto)}`, 'accent');
+          return { nota, regs };
+        }
+      };
+
+      const AuditoriaService = {
+        log(action, detail, color = 'blue') {
+          const entry = { id: Utils.uuid(), action, detail, color, ts: new Date().toISOString() };
+          Repository.insert('auditoria', entry);
+          // keep max 500 entries
+          const all = Repository.getAll('auditoria');
+          if (all.length > 500) Repository._data.auditoria = all.slice(all.length - 500);
+          Repository.save();
+        },
+        getAll() { return [...Repository.getAll('auditoria')].reverse(); },
+        clear() { Repository._data.auditoria = []; Repository.save(); }
+      };
+
+      const ReporteService = {
+        porSucursal(registros) {
+          return SucursalService.getAll().map(s => {
+            const sr = registros.filter(r => r.sucursal_id === s.id);
+            return { sucursal: s.nombre, tanques: sr.reduce((a, r) => a + r.tanques, 0), monto: sr.reduce((a, r) => a + r.monto, 0), pagado: sr.filter(r => r.pagado).reduce((a, r) => a + r.monto, 0) };
+          }).sort((a, b) => b.monto - a.monto);
+        },
+        porCasero(registros) {
+          return CaseroService.getAll().map(c => {
+            const cr = registros.filter(r => r.casero_id === c.id);
+            return { casero: c.nombre, codigo: c.codigo, tanques: cr.reduce((a, r) => a + r.tanques, 0), monto: cr.reduce((a, r) => a + r.monto, 0) };
+          }).filter(r => r.tanques > 0).sort((a, b) => b.monto - a.monto);
+        },
+        porPeriodo(registros) {
+          const ps = ['LUNES', 'MIERCOLES', 'SABADO'];
+          return ps.map(p => {
+            const pr = registros.filter(r => r.periodo === p);
+            return { periodo: p, tanques: pr.reduce((a, r) => a + r.tanques, 0), monto: pr.reduce((a, r) => a + r.monto, 0) };
+          });
+        },
+        porSemana(registros) {
+          return [1, 2, 3, 4, 5].map(s => {
+            const sr = registros.filter(r => r.semana === s);
+            const byDia = (d) => sr.filter(r => r.dia === d).reduce((a, r) => a + r.monto, 0);
+            return { semana: s, tanques: sr.reduce((a, r) => a + r.tanques, 0), monto: sr.reduce((a, r) => a + r.monto, 0), dias: ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO'].map(d => ({ d, m: byDia(d) })) };
+          }).filter(r => r.tanques > 0);
+        }
+      };
+
+      /* ═══════════════════════════════════════
+         LAYER 4: UI Helpers
+      ═══════════════════════════════════════ */
+      const UI = {
+        openModal(id) { document.getElementById(id).classList.add('open'); UI.populateSelects(); },
+        closeModal(id) { document.getElementById(id).classList.remove('open'); },
+        closeAllModals() { document.querySelectorAll('.overlay').forEach(o => o.classList.remove('open')); },
+
+        toast(msg, type = 'success') {
+          const icons = { success: '✓', error: '✕', info: 'i', warn: '⚠' };
+          const t = document.createElement('div');
+          t.className = `toast-item t-${type}`;
+          t.innerHTML = `<span>${icons[type] || 'i'}</span><span>${msg}</span>`;
+          document.getElementById('toast-stack').appendChild(t);
+          setTimeout(() => { t.classList.add('removing'); setTimeout(() => t.remove(), 250) }, 3200);
+        },
+
+        populateSelects() {
+          const caseros = CaseroService.getActive();
+          const sucursals = SucursalService.getActive();
+          const cOpts = '<option value="">— Seleccionar —</option>' + caseros.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+          const sOpts = '<option value="">— Seleccionar —</option>' + sucursals.map(s => `<option value="${s.id}">${s.nombre}</option>`).join('');
+          ['r-casero', 'rq-casero', 'n-casero', 'h-casero', 'c-sucursal'].forEach(id => {
+            const el = document.getElementById(id); if (!el) return;
+            if (id.includes('casero') && id !== 'c-sucursal') { const v = el.value; el.innerHTML = cOpts + (id === 'h-casero' ? '' : ''); el.value = v; }
+          });
+          ['r-sucursal', 'rq-sucursal', 'c-sucursal', 'h-sucursal'].forEach(id => {
+            const el = document.getElementById(id); if (!el) return;
+            const v = el.value; el.innerHTML = sOpts; el.value = v;
+          });
+          // historial filters special
+          const hcEl = document.getElementById('h-casero');
+          if (hcEl) { const v = hcEl.value; hcEl.innerHTML = '<option value="">Todos</option>' + caseros.map(c => `<option value="${c.id}">${c.nombre}</option>`).join(''); hcEl.value = v; }
+          const hsEl = document.getElementById('h-sucursal');
+          if (hsEl) { const v = hsEl.value; hsEl.innerHTML = '<option value="">Todas</option>' + sucursals.map(s => `<option value="${s.id}">${s.nombre}</option>`).join(''); hsEl.value = v; }
+        },
+
+        badge(txt, cls) { return `<span class="badge ${cls}">${txt}</span>`; },
+        tag(txt, cls = 'tag-suc') { return `<span class="tag ${cls}">${txt}</span>`; },
+        mono(txt, color = '') { return `<span style="font-family:'DM Mono';font-size:11px${color ? ';color:' + color : ''}">${txt}</span>`; },
+        emptyRow(cols, msg = 'Sin registros') { return `<tr><td colspan="${cols}" class="tbl-empty">${msg}</td></tr>`; },
+
+        turnoColor: { DIA: 'bg-accent', TARDE: 'bg-orange', NOCHE: 'bg-blue' },
+        periodoColor: { LUNES: 'bg-green', MIERCOLES: 'bg-accent', SABADO: 'bg-orange' },
+        diaColor(d) { if (['SABADO', 'DOMINGO'].includes(d)) return 'bg-orange'; if (['LUNES', 'MARTES'].includes(d)) return 'bg-green'; return 'bg-blue'; }
+      };
+
+      /* ═══════════════════════════════════════
+         LAYER 5: Router
+      ═══════════════════════════════════════ */
+      const Router = {
+        _current: 'dashboard',
+        _titles: {
+          dashboard: 'Dashboard <span>General</span>',
+          registro: 'Registro <span>Diario</span>',
+          pagos: 'Gestión de <span>Pagos</span>',
+          notas: 'Notas de <span>Venta</span>',
+          caseros: 'Base de <span>Caseros</span>',
+          sucursales: '<span>Sucursales</span>',
+          historial: '<span>Historial</span> de Pagos',
+          reportes: '<span>Reportes</span>',
+          auditoria: 'Log de <span>Auditoría</span>'
+        },
+
+        go(page) {
+          document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+          document.querySelectorAll('.sb-item').forEach(n => n.classList.remove('active'));
+          const pg = document.getElementById('page-' + page); if (!pg) return;
+          pg.classList.add('active');
+          document.querySelectorAll('.sb-item').forEach(n => {
+            if (n.dataset.page === page) n.classList.add('active');
+          });
+          document.getElementById('tt').innerHTML = this._titles[page] || page;
+          this._current = page;
+          UI.populateSelects();
+          this._onEnter(page);
+        },
+
+        _onEnter(page) {
+          const map = {
+            dashboard: () => DashboardController.render(),
+            registro: () => RegistroController.render(),
+            caseros: () => CaseroController.render(),
+            sucursales: () => SucursalController.render(),
+            historial: () => HistorialController.render(),
+            auditoria: () => AuditoriaController.render(),
+            notas: () => NotaController.renderList(),
+          };
+          (map[page] || (() => { }))();
+        }
+      };
+
+      /* ═══════════════════════════════════════
+         LAYER 6: Controllers (Presentation)
+      ═══════════════════════════════════════ */
+
+      // ── Dashboard ──
+      const DashboardController = {
+        render() {
+          const regs = RegistroService.getAll();
+          const h = Utils.hoy();
+          const regHoy = regs.filter(r => r.fecha === h);
+          const tHoy = regHoy.reduce((a, r) => a + r.tanques, 0);
+          const pagHoy = PagoService.getAll().filter(p => p.fecha === h).reduce((a, p) => a + p.monto, 0);
+          const pend = regs.filter(r => !r.pagado).reduce((a, r) => a + r.monto, 0);
+          const casActiv = CaseroService.getActive().length;
+
+          // Stats
+          document.getElementById('dash-stats').innerHTML = [
+            { c: 'primary', ico: '▦', lbl: 'Tanques Hoy', val: tHoy, sub: 'registros hoy' },
+            { c: 'green', ico: '◈', lbl: 'Pagado Hoy', val: Utils.fmtBs(pagHoy), sub: 'en el día' },
+            { c: 'accent', ico: '⏳', lbl: 'Monto Pendiente', val: Utils.fmtBs(pend), sub: 'por cobrar' },
+            { c: 'red', ico: '◎', lbl: 'Caseros Activos', val: casActiv, sub: 'proveedores' },
+          ].map(s => `
+      <div class="stat ${s.c}">
+        <div class="stat-top-bar"></div>
+        <div class="stat-ico">${s.ico}</div>
+        <div class="stat-lbl">${s.lbl}</div>
+        <div class="stat-val">${s.val}</div>
+        <div class="stat-sub">${s.sub}</div>
+      </div>`).join('');
+
+          // Alert
+          const pp = Utils.proximoPago();
+          const isToday = pp.n.startsWith('HOY');
+          document.getElementById('dash-alert').innerHTML = `
+      <div class="alert ${isToday ? 'alert-success' : 'alert-info'}" style="margin-bottom:18px">
+        <div class="alert-ico">${isToday ? '◉' : '◷'}</div>
+        <div><strong>${isToday ? '¡Hoy es día de pago!' : 'Próximo día de pago:'}</strong> ${pp.n} ${pp.p ? '— ' + pp.p : ''}</div>
+      </div>`;
+
+          // Últimos registros
+          const ultimos = [...regs].sort((a, b) => b.id - a.id).slice(0, 7);
+          document.getElementById('dash-ultimos').innerHTML = ultimos.length
+            ? ultimos.map(r => {
+              const c = CaseroService.getById(r.casero_id), s = SucursalService.getById(r.sucursal_id);
+              return `<tr>
+            <td class="bold">${c.nombre}</td>
+            <td>${UI.tag(s.nombre)}</td>
+            <td>${UI.mono(Utils.fmtFecha(r.fecha))}</td>
+            <td>${UI.badge(r.turno, UI.turnoColor[r.turno] || 'bg-blue')}</td>
+            <td>${UI.mono(r.tanques)}</td>
+            <td>${UI.mono(Utils.fmtBs(r.monto), 'var(--c-accent)')}</td>
+            <td>${UI.badge(r.pagado ? 'Pagado' : 'Pendiente', r.pagado ? 'bg-green' : 'bg-red')}</td>
+          </tr>`;
+            }).join('')
+            : UI.emptyRow(7, 'Sin registros — agrega el primer registro');
+
+          // Períodos
+          document.getElementById('dash-periodos').innerHTML = ['LUNES', 'MIERCOLES', 'SABADO'].map(p => {
+            const pr = RegistroService.getPendientesByPeriodo(p);
+            const t = pr.reduce((a, r) => a + r.monto, 0), tq = pr.reduce((a, r) => a + r.tanques, 0);
+            const colors = { LUNES: 'var(--c-green)', MIERCOLES: 'var(--c-accent)', SABADO: 'var(--c-orange)' };
+            const labels = { LUNES: 'Lunes — Sáb/Dom', MIERCOLES: 'Miércoles — Lun/Mar', SABADO: 'Sábado — Mié/Vie' };
+            return `<div style="border-radius:10px;padding:13px;margin-bottom:10px;background:var(--c-surface2);border-left:3px solid ${colors[p]}">
+        <div class="fs-10 c-text3 mb-4" style="font-weight:700;text-transform:uppercase;letter-spacing:.7px">${labels[p]}</div>
+        <div class="flex items-center justify-between">
+          <div><span style="font-size:22px;font-weight:700;color:${colors[p]};font-family:'DM Mono'">${tq}</span><span class="fs-10 c-text3" style="margin-left:5px">tanques</span></div>
+          <div style="font-size:14px;font-weight:700;color:${colors[p]};font-family:'DM Mono'">${Utils.fmtBs(t)}</div>
+        </div>
+      </div>`;
+          }).join('');
+
+          // Chart
+          const sucData = ReporteService.porSucursal(regs);
+          const maxM = Math.max(...sucData.map(s => s.monto), 1);
+          document.getElementById('dash-chart').innerHTML = `<div class="bar-chart">` +
+            sucData.map(s => `
+        <div class="bar-item">
+          <div class="bar-label">${s.sucursal}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${Math.round(s.monto / maxM * 100)}%;background:var(--c-primary)"></div></div>
+          <div class="bar-val">${Utils.fmtBs(s.monto)}</div>
+        </div>`).join('') + `</div>`;
+
+          // Badge
+          const pendN = regs.filter(r => !r.pagado).length;
+          document.getElementById('badge-pagos').textContent = pendN;
+        }
+      };
+
+      // ── Registro ──
+      const RegistroController = {
+        render() {
+          UI.populateSelects();
+          document.getElementById('r-fecha').value = Utils.hoy();
+          const regs = [...RegistroService.getAll()].sort((a, b) => b.id - a.id);
+          this._renderTable(regs);
+        },
+
+        _renderTable(regs) {
+          document.getElementById('tbl-registros').innerHTML = regs.length
+            ? regs.map((r, i) => {
+              const c = CaseroService.getById(r.casero_id), s = SucursalService.getById(r.sucursal_id);
+              return `<tr>
+            <td>${UI.mono(r.id)}</td>
+            <td>${UI.mono(Utils.fmtFecha(r.fecha))}</td>
+            <td>${UI.badge(r.dia, UI.diaColor(r.dia))}</td>
+            <td class="bold">${c.nombre}</td>
+            <td>${UI.tag(s.nombre)}</td>
+            <td>${UI.badge(r.turno, UI.turnoColor[r.turno] || 'bg-blue')}</td>
+            <td>${UI.mono(r.tanques)}</td>
+            <td>${UI.mono(Utils.fmtBs(r.precio))}</td>
+            <td>${UI.mono(Utils.fmtBs(r.monto), 'var(--c-accent)')}</td>
+            <td>${UI.badge(r.pagado ? 'Pagado' : 'Pendiente', r.pagado ? 'bg-green' : 'bg-red')}</td>
+            <td><button class="btn btn-danger btn-xs" onclick="RegistroController.eliminar(${r.id})">✕</button></td>
+          </tr>`;
+            }).join('')
+            : UI.emptyRow(11);
+        },
+
+        guardar() {
+          const d = this._getFormData('r-');
+          const err = this._validate(d);
+          if (err) { UI.toast(err, 'error'); return; }
+          RegistroService.create(d);
+          UI.toast('Registro guardado correctamente');
+          this.limpiar();
+          this.render();
+          DashboardController.render();
+        },
+
+        guardarRapido() {
+          const d = this._getFormData('rq-');
+          const err = this._validate(d);
+          if (err) { UI.toast(err, 'error'); return; }
+          RegistroService.create(d);
+          UI.toast('Registro guardado');
+          UI.closeModal('m-registro-rapido');
+          DashboardController.render();
+        },
+
+        _getFormData(prefix) {
+          return {
+            casero_id: parseInt(document.getElementById(prefix + 'casero')?.value) || 0,
+            sucursal_id: parseInt(document.getElementById(prefix + 'sucursal')?.value) || 0,
+            fecha: document.getElementById(prefix + 'fecha')?.value,
+            turno: document.getElementById(prefix + 'turno')?.value || 'DIA',
+            tanques: parseFloat(document.getElementById(prefix + 'tanques')?.value) || 0,
+            precio: parseFloat(document.getElementById(prefix + 'precio')?.value) || 0,
+            obs: document.getElementById(prefix + 'obs')?.value || '',
+          };
+        },
+
+        _validate(d) {
+          if (!d.casero_id) return 'Selecciona un casero';
+          if (!d.sucursal_id) return 'Selecciona una sucursal';
+          if (!d.fecha) return 'Ingresa la fecha';
+          if (!d.tanques) return 'Ingresa la cantidad de tanques';
+          if (!d.precio) return 'Ingresa el precio por tanque';
+          return null;
+        },
+
+        limpiar() {
+          ['r-casero', 'r-sucursal', 'r-turno'].forEach(id => { const el = document.getElementById(id); if (el) el.selectedIndex = 0; });
+          ['r-tanques', 'r-precio', 'r-obs'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+          document.getElementById('r-fecha').value = Utils.hoy();
+          document.getElementById('r-subtotal').textContent = 'Bs 0.00';
+        },
+
+        eliminar(id) {
+          if (!confirm('¿Eliminar este registro?')) return;
+          RegistroService.delete(id);
+          UI.toast('Registro eliminado', 'warn');
+          this.render();
+          DashboardController.render();
+        },
+
+        filtrar() {
+          const desde = document.getElementById('f-desde').value;
+          const hasta = document.getElementById('f-hasta').value;
+          if (!desde && !hasta) { UI.toast('Ingresa al menos una fecha', 'warn'); return; }
+          const regs = RegistroService.getByDateRange(desde || '2000-01-01', hasta || '2099-12-31');
+          this._renderTable([...regs].sort((a, b) => b.id - a.id));
+        }
+      };
+
+      // ── Pagos ──
+      const PagoController = {
+        _periodo: null,
+
+        selectPeriodo(p) {
+          this._periodo = p;
+          ['LUNES', 'MIERCOLES', 'SABADO'].forEach(x => {
+            const el = document.getElementById('pt-' + x);
+            if (el) el.className = 'ptab' + (x === p ? ' p-' + x.toLowerCase() : '');
+          });
+          const labels = { LUNES: '● LUNES — Registros: Sábado y Domingo', MIERCOLES: '● MIÉRCOLES — Registros: Lunes y Martes', SABADO: '● SÁBADO — Registros: Mié, Jue y Viernes' };
+          document.getElementById('pago-title').textContent = labels[p];
+
+          // actions
+          const actEl = document.getElementById('pago-actions');
+          actEl.style.display = 'flex';
+          actEl.innerHTML = `
+      <select id="pago-metodo-global" style="background:var(--c-surface2);border:1px solid var(--c-border);color:var(--c-text);padding:5px 8px;border-radius:6px;font-size:11px;margin-right:6px">
+        <option value="QR">📱 QR</option>
+        <option value="EFECTIVO">💵 Efectivo</option>
+      </select>
+      <button class="btn btn-success btn-sm" onclick="PagoController.pagarTodos()">✓ Pagar Todos</button>
+      <button class="btn btn-accent btn-sm" onclick="PagoController.informe()">▤ Informe</button>`;
+          this.renderTabla(p);
+        },
+
+        renderTabla(periodo) {
+          const regs = RegistroService.getPendientesByPeriodo(periodo);
+          const grupos = {};
+          regs.forEach(r => {
+            const k = `${r.casero_id}_${r.sucursal_id}`;
+            if (!grupos[k]) grupos[k] = { casero_id: r.casero_id, sucursal_id: r.sucursal_id, tanques: 0, monto: 0 };
+            grupos[k].tanques += r.tanques; grupos[k].monto += r.monto;
+          });
+          const items = Object.values(grupos);
+          document.getElementById('tbl-pagos').innerHTML = items.length
+            ? items.map(g => {
+              const c = CaseroService.getById(g.casero_id), s = SucursalService.getById(g.sucursal_id);
+              const dias = Utils.diasDePeriodo(periodo);
+              return `<tr>
+            <td class="bold">${c.nombre}</td>
+            <td>${UI.tag(s.nombre)}</td>
+            <td>${dias.map(d => UI.badge(d, UI.diaColor(d))).join(' ')}</td>
+            <td>${UI.mono(g.tanques)}</td>
+            <td>${UI.mono(Utils.fmtBs(g.monto), 'var(--c-accent)')}</td>
+            <td>${UI.badge('Pendiente', 'bg-red')}</td>
+            <td><select id="metodo-${g.casero_id}-${g.sucursal_id}" style="background:var(--c-surface2);border:1px solid var(--c-border);color:var(--c-text);padding:3px 6px;border-radius:4px;font-size:10px;margin-right:4px"><option value="QR">📱 QR</option><option value="EFECTIVO">💵 Efectivo</option></select><button class="btn btn-success btn-xs" onclick="PagoController.pagar(${g.casero_id},${g.sucursal_id})">✓ Pagar</button></td>
+          </tr>`;
+            }).join('')
+            : UI.emptyRow(7, '✓ Sin pagos pendientes para este período');
+        },
+
+        pagar(casero_id, sucursal_id) {
+          var sel = document.getElementById('metodo-' + casero_id + '-' + sucursal_id);
+          var metodo = sel ? sel.value : 'QR';
+          const p = PagoService.procesarPeriodo(casero_id, sucursal_id, this._periodo, metodo);
+          if (!p) { UI.toast('Sin registros pendientes', 'warn'); return; }
+          UI.toast('Pago ' + metodo + ' procesado: ' + Utils.fmtBs(p.monto));
+          this.renderTabla(this._periodo);
+          DashboardController.render();
+        },
+
+        pagarTodos() {
+          if (!this._periodo) { UI.toast('Selecciona un período', 'error'); return; }
+          var metodo = document.getElementById('pago-metodo-global')?.value || 'QR';
+          if (!confirm('Pagar TODOS por ' + metodo + '?')) return;
+          const { total, count } = PagoService.procesarTodosPeriodo(this._periodo, metodo);
+          UI.toast(count + ' pagos procesados — ' + Utils.fmtBs(total));
+          this.renderTabla(this._periodo);
+          DashboardController.render();
+        },
+
+        informe() {
+          if (!this._periodo) { UI.toast('Selecciona un período', 'error'); return; }
+          const regs = RegistroService.getPendientesByPeriodo(this._periodo);
+          const grupos = {};
+          regs.forEach(r => { const k = r.casero_id; if (!grupos[k]) grupos[k] = { casero_id: r.casero_id, t: 0, m: 0 }; grupos[k].t += r.tanques; grupos[k].m += r.monto; });
+          const items = Object.values(grupos);
+          const total = items.reduce((a, i) => a + i.m, 0);
+          document.getElementById('informe-body').innerHTML = `
+      <div class="receipt">
+        <h2>INFORME DE PAGO</h2>
+        <div class="rec-sub">Período: ${this._periodo} · ${Utils.fmtFecha(Utils.hoy())}</div>
+        <hr class="rec-hr">
+        ${items.map(g => `
+          <div class="rec-row"><span>${CaseroService.getById(g.casero_id).nombre}</span><span>${g.t} tq · ${Utils.fmtBs(g.m)}</span></div>`).join('')}
+        <hr class="rec-hr">
+        <div class="rec-row total-row"><span>TOTAL A PAGAR</span><span>${Utils.fmtBs(total)}</span></div>
+        <div style="text-align:center;font-size:10px;color:#999;margin-top:12px">Generado: ${new Date().toLocaleString('es-BO')}</div>
+      </div>`;
+          UI.openModal('m-informe');
+        }
+      };
+
+      // ── Notas ──
+      const NotaController = {
+        _notaActual: null,
+
+        _loadConfig() {
+          return JSON.parse(localStorage.getItem('coca_impresora_config') || '{"tipo":"termica","tamano":"80x210","font":"medium","negocio":"KOLLITA PRO","direccion":"Santa Cruz de la Sierra","telefono":"","mensaje":"Gracias por su trabajo"}');
+        },
+
+        _initConfigModal() {
+          var c = this._loadConfig();
+          var set = function (id, val) { var e = document.getElementById(id); if (e) e.value = val; };
+          set('cfg-tipo', c.tipo || 'termica'); set('cfg-tamano', c.tamano || '80x210'); set('cfg-font', c.font || 'medium');
+          set('cfg-negocio', c.negocio || 'KOLLITA PRO'); set('cfg-direccion', c.direccion || ''); set('cfg-telefono', c.telefono || ''); set('cfg-mensaje', c.mensaje || '');
+        },
+
+        guardarConfig() {
+          var c = {
+            tipo: document.getElementById('cfg-tipo')?.value || 'termica',
+            tamano: document.getElementById('cfg-tamano')?.value || '80x210',
+            font: document.getElementById('cfg-font')?.value || 'medium',
+            negocio: document.getElementById('cfg-negocio')?.value || 'KOLLITA PRO',
+            direccion: document.getElementById('cfg-direccion')?.value || '',
+            telefono: document.getElementById('cfg-telefono')?.value || '',
+            mensaje: document.getElementById('cfg-mensaje')?.value || 'Gracias por su trabajo'
+          };
+          localStorage.setItem('coca_impresora_config', JSON.stringify(c));
+          UI.closeModal('m-config-impresora');
+          UI.toast('Configuración guardada');
+          if (this._notaActual) this.generar();
+        },
+
+        generar() {
+          UI.populateSelects();
+          this._initConfigModal();
+          const casero_id = parseInt(document.getElementById('n-casero').value) || 0;
+          const periodo = document.getElementById('n-periodo').value;
+          const semana = parseInt(document.getElementById('n-semana').value) || 1;
+          if (!casero_id) { UI.toast('Selecciona un casero', 'error'); return; }
+          const { nota, regs } = NotaService.generate(casero_id, periodo, semana);
+          const c = CaseroService.getById(casero_id);
+          const suc = SucursalService.getById(c.sucursal_id || 0);
+          var pagosAsoc = Repository.query('pagos', function (p) { return p.casero_id === casero_id && p.periodo === periodo; });
+          var metodoPago = pagosAsoc.length ? pagosAsoc[0].metodo || '—' : '—';
+          this._notaActual = { nota: nota, casero: c, suc: suc, regs: regs, metodo: metodoPago };
+
+          var cfg = this._loadConfig();
+          var buildTicket = function (cfg, nota, c, suc, regs, metodoPago, periodo, semana) {
+            function fmt2(v){ return (v%1===0)?Number(v).toFixed(0):Number(v).toFixed(2); }
+
+            var t = '<div style="font-family:\'Courier New\',\'Consolas\',monospace;color:#000;line-height:1.25;">';
+
+            // ENCABEZADO
+            t += '<div style="text-align:center;margin-bottom:4px;">';
+            t += '<div style="font-size:9pt;">NOTA DE PAGO</div>';
+            t += '<div style="font-size:16pt;font-weight:900;letter-spacing:0.5px;">' + cfg.negocio + '</div>';
+            if (cfg.direccion) t += '<div style="font-size:10pt;font-style:italic;">' + cfg.direccion + '</div>';
+            if (cfg.telefono)  t += '<div style="font-size:9pt;">Telf: ' + cfg.telefono + '</div>';
+            t += '</div>';
+            t += '<div style="border-bottom:2px solid #000;margin:3px 0;"></div>';
+
+            // DATOS INFO — tabla 2 columnas para alineación perfecta
+            t += '<table style="width:100%;border-collapse:collapse;font-size:10pt;font-weight:bold;color:#000;margin:0;line-height:1.15;">';
+            t += '<tr><td style="padding:0 0 1px 0;"><b>NOTA N°:</b></td><td style="text-align:right;padding:0 0 1px 0;"><b>' + nota.numero + '</b></td></tr>';
+            t += '<tr><td style="padding:0 0 1px 0;"><b>FECHA:</b></td><td style="text-align:right;padding:0 0 1px 0;"><b>' + Utils.fmtFecha(nota.fecha) + '</b></td></tr>';
+            t += '<tr><td style="padding:0 0 1px 0;"><b>CASERO:</b></td><td style="text-align:right;padding:0 0 1px 0;"><b>' + c.nombre + '</b></td></tr>';
+
+            t += '<tr><td style="padding:0 0 1px 0;"><b>PERIODO:</b></td><td style="text-align:right;padding:0 0 1px 0;"><b>' + periodo + ' &mdash; Sem ' + semana + '</b></td></tr>';
+            if (metodoPago !== '—') t += '<tr><td style="padding:0;"><b>PAGO:</b></td><td style="text-align:right;padding:0;"><b>' + metodoPago + '</b></td></tr>';
+            t += '</table>';
+            t += '<div style="border-bottom:1px dashed #000;margin:3px 0;"></div>';
+
+            // CABECERA DE ITEMS — tabla 4 columnas
+            t += '<table style="width:100%;border-collapse:collapse;font-size:10pt;">';
+            t += '<thead><tr style="border-bottom:2px solid #000;">';
+            t += '<th style="text-align:center;padding:2px;width:8%;font-size:11pt;font-weight:900;color:#000;">TQ</th>';
+            t += '<th style="text-align:left;padding:2px;width:48%;font-size:11pt;font-weight:900;color:#000;">DETALLE</th>';
+            t += '<th style="text-align:right;padding:2px;width:20%;font-size:11pt;font-weight:900;color:#000;">P.U.</th>';
+            t += '<th style="text-align:right;padding:2px;width:24%;font-size:11pt;font-weight:900;color:#000;">TOTAL</th>';
+            t += '</tr></thead><tbody>';
+
+            // FILAS DE ITEMS
+            if (regs.length) {
+              regs.forEach(function (r) {
+                t += '<tr>';
+                t += '<td style="text-align:center;padding:1px 2px;"><b>' + r.tanques + '</b></td>';
+                t += '<td style="padding:1px 3px;"><b>' + Utils.fmtFecha(r.fecha) + '<br>' + r.dia + ' ' + r.turno + '</b></td>';
+                t += '<td style="text-align:right;padding:1px 2px;"><b>' + Number(r.precio).toFixed(0) + '</b></td>';
+                t += '<td style="text-align:right;padding:1px 2px;"><b>' + Number(r.monto).toFixed(0) + '</b></td>';
+                t += '</tr>';
+              });
+            } else {
+              t += '<tr><td colspan="4" style="text-align:center;padding:4px;font-size:10pt;"><b>SIN REGISTROS</b></td></tr>';
+            }
+            t += '</tbody></table>';
+            t += '<div style="border-bottom:1px dashed #000;margin:3px 0;"></div>';
+
+            // TOTALES
+            t += '<table style="width:100%;border-collapse:collapse;font-size:10pt;font-weight:bold;color:#000;margin:0;line-height:1.15;">';
+            t += '<tr><td style="padding:0;"><b>SUBTOTAL:</b></td><td style="text-align:right;padding:0;"><b>' + nota.tanques + ' tanques</b></td></tr>';
+            t += '</table>';
+            t += '<div style="border-top:3px double #000;border-bottom:3px double #000;padding:2px 0;margin:4px 0;">';
+            t += '<table style="width:100%;border-collapse:collapse;"><tr>';
+            t += '<td style="font-size:13pt;padding:0;"><b>TOTAL COBRADO:</b></td>';
+            t += '<td style="text-align:right;font-size:13pt;padding:0;"><b>' + Number(nota.monto).toFixed(0) + ' Bs</b></td>';
+            t += '</tr></table></div>';
+            t += '<div style="font-size:9pt;font-weight:bold;margin:2px 0;">SON: ' + Math.floor(nota.monto) + ' BOLIVIANOS</div>';
+            t += '<div style="border-bottom:1px dashed #000;margin:3px 0;"></div>';
+
+            // PIE
+            t += '<div style="text-align:center;font-size:10pt;font-weight:bold;margin-top:6px;">' + cfg.mensaje + '</div>';
+            t += '<div style="margin-top:20px;text-align:center;font-size:10pt;font-weight:bold;">________________________<br>FIRMA CASERO</div>';
+            t += '<div style="margin-top:20px;text-align:center;font-size:10pt;font-weight:bold;">________________________<br>FIRMA ENCARGADO</div>';
+
+            t += '</div>';
+            return t;
+          };
+
+          var ticketHTML = buildTicket(cfg, nota, c, suc, regs, metodoPago, periodo, semana);
+
+          // Vista previa: mostrar ticket formateado
+          document.getElementById('nota-preview').innerHTML = '<div class="ticket-container" style="display:block!important;margin:0 auto;border:1px dashed #ccc;background:#fff;max-width:320px;padding:2mm">' + ticketHTML + '</div>';
+
+          // Ticket para impresion: a nivel body, sin bordes extra
+          document.getElementById('ticket-print').innerHTML = '<div class="ticket-container">' + ticketHTML + '</div>';
+
+          UI.toast('Nota generada: ' + nota.numero);
+          this.renderList();
+        },
+
+        imprimir() {
+          var el = document.getElementById('ticket-print');
+          if (!el || !el.innerHTML.trim()) { UI.toast('Genera una nota primero', 'warn'); return; }
+          var htmlTicket = el.innerHTML;
+          var ventana = window.open('','_blank','width=400,height=650,scrollbars=yes');
+          if (!ventana) { window.print(); return; }
+          ventana.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Nota de Pago</title>'+
+            '<style>'+
+            '@page{size:80mm auto;margin:0;}'+
+            'html{margin:0;padding:0;width:80mm;}'+
+            'body{margin:0 auto;padding:1mm 2mm;width:80mm;box-sizing:border-box;height:auto;'+
+              'font-family:\'Courier New\',monospace;-webkit-print-color-adjust:exact;print-color-adjust:exact;}'+
+            'body>div{display:block;page-break-inside:avoid!important;break-inside:avoid-page!important;'+
+              'page-break-before:avoid!important;page-break-after:avoid!important;orphans:9999;widows:9999;}'+
+            '*{page-break-inside:avoid!important;break-inside:avoid-page!important;}'+
+            'table{width:100%;border-collapse:collapse;page-break-inside:avoid!important;}'+
+            'tr{page-break-inside:avoid!important;}'+
+            '</style></head><body>'+htmlTicket+'</body></html>');
+          ventana.document.close();
+          ventana.focus();
+          ventana.onload = function(){
+            ventana.addEventListener('afterprint',function(){ventana.close();});
+            ventana.print();
+            setTimeout(function(){if(!ventana.closed)ventana.close();},1000);
+          };
+        },
+
+        renderList() {
+          UI.populateSelects();
+          const notas = [...NotaService.getAll()].reverse();
+          document.getElementById('tbl-notas').innerHTML = notas.length
+            ? notas.map(function (n) {
+              var c = CaseroService.getById(n.casero_id);
+              return '<tr><td style="font-family:DM Mono;font-size:11px;color:var(--c-primary)">' + n.numero + '</td>' +
+                '<td>' + Utils.fmtFecha(n.fecha) + '</td>' +
+                '<td class="bold">' + c.nombre + '</td>' +
+                '<td><span class="badge bg-blue">' + n.periodo + '</span></td>' +
+                '<td>' + n.tanques + '</td>' +
+                '<td style="font-family:DM Mono;color:var(--c-accent)">' + Utils.fmtBs(n.monto) + '</td>' +
+                '</tr>';
+            }).join('')
+            : '<tr><td colspan="7" class="tbl-empty">Sin notas generadas</td></tr>';
+        }
+      };
+
+      let _editCaseroId = null;
+
+      // ── Caseros ──
+      const CaseroController = {
+        render() {
+          UI.populateSelects();
+          const caseros = CaseroService.getAll();
+          document.getElementById('tbl-caseros').innerHTML = caseros.length
+            ? caseros.map((c, i) => {
+              const s = SucursalService.getById(c.sucursal_id || 0);
+              return `<tr>
+            <td>${UI.mono(i + 1)}</td>
+            <td class="bold">${c.nombre}</td>
+            <td>${c.tel || '—'}</td>
+            <td>${UI.tag(s.nombre)}</td>
+            <td>${UI.badge(c.activo ? 'Activo' : 'Inactivo', c.activo ? 'bg-green' : 'bg-red')}</td>
+            <td style="display:flex;gap:5px">
+              <button class="btn btn-ghost btn-xs" onclick="CaseroController.editar(${c.id})">✏️</button>
+              <button class="btn btn-ghost btn-xs" onclick="CaseroController.toggle(${c.id})">${c.activo ? 'Desact.' : 'Activar'}</button>
+              <button class="btn btn-danger btn-xs" onclick="CaseroController.eliminar(${c.id})">✕</button>
+            </td>
+          </tr>`;
+            }).join('')
+            : UI.emptyRow(6, 'Sin caseros registrados');
+        },
+
+        editar(id) {
+          var c = Repository.getById('caseros', id);
+          if(!c) return;
+          _editCaseroId = id;
+          document.getElementById('c-nombre').value = c.nombre || '';
+          document.getElementById('c-tel').value = c.tel || '';
+          document.getElementById('c-sucursal').value = c.sucursal_id || '';
+          document.getElementById('m-casero').querySelector('.modal-head h3').textContent = '◎ Editar Casero';
+          UI.openModal('m-casero');
+        },
+
+        guardar() {
+          const nombre = document.getElementById('c-nombre').value.trim();
+          if (!nombre) { UI.toast('El nombre es obligatorio', 'error'); return; }
+          var d = {
+            nombre: nombre,
+            tel: document.getElementById('c-tel').value,
+            sucursal_id: parseInt(document.getElementById('c-sucursal').value) || null,
+            precio: 45,
+            codigo: '',
+            ci: ''
+          };
+          if(_editCaseroId){
+            Repository.update('caseros', _editCaseroId, d);
+            UI.toast('Casero actualizado');
+            _editCaseroId = null;
+          } else {
+            CaseroService.create(d);
+            UI.toast('Casero registrado: ' + nombre);
+          }
+          UI.closeModal('m-casero');
+          document.getElementById('m-casero').querySelector('.modal-head h3').textContent = '◎ Nuevo Casero / Proveedor';
+          ['c-nombre', 'c-tel'].forEach(id => document.getElementById(id).value = '');
+          this.render();
+          DashboardController.render();
+        },
+
+        toggle(id) { CaseroService.toggle(id); this.render(); DashboardController.render(); },
+        eliminar(id) {
+          if (!confirm('¿Eliminar este casero?')) return;
+          CaseroService.delete(id); UI.toast('Casero eliminado', 'warn'); this.render();
+        }
+      };
+
+      // ── Sucursales ──
+      const SucursalController = {
+        render() {
+          const suc = SucursalService.getAll();
+          const regs = RegistroService.getAll();
+
+          // cards
+          document.getElementById('suc-cards').innerHTML = suc.map(s => {
+            const sr = regs.filter(r => r.sucursal_id === s.id);
+            const t = sr.reduce((a, r) => a + r.monto, 0);
+            const cas = CaseroService.getAll().filter(c => c.sucursal_id === s.id && c.activo).length;
+            return `<div class="stat primary"><div class="stat-top-bar"></div>
+        <div class="stat-lbl">${s.nombre}</div>
+        <div class="stat-val" style="font-size:18px">${Utils.fmtBs(t)}</div>
+        <div class="stat-sub">${cas} caseros activos</div>
+      </div>`;
+          }).join('');
+
+          document.getElementById('tbl-sucursales').innerHTML = suc.length
+            ? suc.map(s => {
+              const sr = regs.filter(r => r.sucursal_id === s.id);
+              const cas = CaseroService.getAll().filter(c => c.sucursal_id === s.id && c.activo).length;
+              return `<tr>
+            <td class="bold">${UI.tag(s.nombre)}</td>
+            <td>${UI.mono(s.codigo || '—')}</td>
+            <td>${UI.mono(cas)}</td>
+            <td>${UI.mono(sr.reduce((a, r) => a + r.tanques, 0))}</td>
+            <td>${UI.mono(Utils.fmtBs(sr.reduce((a, r) => a + r.monto, 0)), 'var(--c-accent)')}</td>
+            <td>${UI.badge(s.activa ? 'Activa' : 'Inactiva', s.activa ? 'bg-green' : 'bg-red')}</td>
+            <td><button class="btn btn-danger btn-xs" onclick="SucursalController.eliminar(${s.id})">✕</button></td>
+          </tr>`;
+            }).join('')
+            : UI.emptyRow(7);
+        },
+
+        guardar() {
+          const nombre = document.getElementById('s-nombre').value.trim().toUpperCase();
+          if (!nombre) { UI.toast('El nombre es obligatorio', 'error'); return; }
+          SucursalService.create({ nombre, codigo: document.getElementById('s-codigo').value.toUpperCase(), direccion: document.getElementById('s-dir').value });
+          UI.toast('Sucursal registrada');
+          UI.closeModal('m-sucursal');
+          ['s-nombre', 's-codigo', 's-dir'].forEach(id => document.getElementById(id).value = '');
+          this.render();
+        },
+
+        eliminar(id) {
+          if (!confirm('¿Eliminar esta sucursal?')) return;
+          SucursalService.delete(id); UI.toast('Sucursal eliminada', 'warn'); this.render();
+        }
+      };
+
+      // ── Historial ──
+      const HistorialController = {
+        render() {
+          UI.populateSelects();
+          let pagos = [...PagoService.getAll()].reverse();
+          const fCasero = parseInt(document.getElementById('h-casero')?.value) || 0;
+          const fSucursal = parseInt(document.getElementById('h-sucursal')?.value) || 0;
+          const fPeriodo = document.getElementById('h-periodo')?.value || '';
+          if (fCasero) pagos = pagos.filter(p => p.casero_id === fCasero);
+          if (fSucursal) pagos = pagos.filter(p => p.sucursal_id === fSucursal);
+          if (fPeriodo) pagos = pagos.filter(p => p.periodo === fPeriodo);
+          const total = pagos.reduce((a, p) => a + p.monto, 0);
+          document.getElementById('h-total').textContent = total ? Utils.fmtBs(total) : '';
+          const notas = NotaService.getAll();
+          document.getElementById('tbl-historial').innerHTML = pagos.length
+            ? pagos.map(p => {
+              const c = CaseroService.getById(p.casero_id), s = SucursalService.getById(p.sucursal_id);
+              const n = notas.find(x => x.casero_id === p.casero_id && x.periodo === p.periodo);
+              return `<tr>
+            <td>${UI.mono(Utils.fmtFecha(p.fecha))}</td>
+            <td class="bold">${c.nombre}</td>
+            <td>${UI.tag(s.nombre)}</td>
+            <td>${UI.badge(p.periodo, UI.periodoColor[p.periodo] || 'bg-blue')}</td>
+            <td>${UI.mono(p.tanques)}</td>
+            <td>${UI.mono(Utils.fmtBs(p.monto), 'var(--c-accent)')}</td>
+            <td>${n ? UI.mono(n.numero, 'var(--c-primary)') : '—'}</td>
+          </tr>`;
+            }).join('')
+            : UI.emptyRow(7, 'Sin pagos procesados aún');
+        }
+      };
+
+      // ── Reportes ──
+      const ReporteController = {
+        generar() {
+          UI.populateSelects();
+          // Poblar filtro caseros
+          var selC = document.getElementById('rep-casero-f');
+          if (selC && selC.options.length <= 1) {
+            var cs = CaseroService.getAll();
+            cs.forEach(function (c) { var o = document.createElement('option'); o.value = c.id; o.textContent = c.nombre; selC.appendChild(o); });
+          }
+
+          const vista = document.getElementById('rep-vista').value;
+          const caseroF = parseInt(document.getElementById('rep-casero-f')?.value) || 0;
+          const desdeF = document.getElementById('rep-desde-f')?.value || '';
+          const hastaF = document.getElementById('rep-hasta-f')?.value || '';
+          let regs = RegistroService.getAll();
+          if (caseroF) regs = regs.filter(function (r) { return r.casero_id === caseroF; });
+          if (desdeF) regs = regs.filter(function (r) { return r.fecha >= desdeF; });
+          if (hastaF) regs = regs.filter(function (r) { return r.fecha <= hastaF; });
+
+          let html = '';
+          if (vista === 'sucursal') {
+            const data = ReporteService.porSucursal(regs);
+            const max = Math.max(...data.map(d => d.monto), 1);
+            const total = data.reduce((a, d) => a + d.monto, 0);
+            html = `<div class="card">
+        <div class="card-header"><div class="card-title">◈ Reporte por Sucursal</div><div class="c-accent" style="font-family:'DM Mono';font-weight:700">${Utils.fmtBs(total)}</div></div>
+        <div class="card-body-flush"><div class="tbl-wrap"><table>
+          <thead><tr><th>Sucursal</th><th>Tanques</th><th>Total</th><th>Pagado</th><th>Pendiente</th><th>Part. %</th></tr></thead>
+          <tbody>${data.map(d => `<tr>
+            <td>${UI.tag(d.sucursal)}</td>
+            <td>${UI.mono(d.tanques)}</td>
+            <td>${UI.mono(Utils.fmtBs(d.monto), 'var(--c-accent)')}</td>
+            <td>${UI.mono(Utils.fmtBs(d.pagado), 'var(--c-green)')}</td>
+            <td>${UI.mono(Utils.fmtBs(d.monto - d.pagado), 'var(--c-red)')}</td>
+            <td>${UI.mono(total ? Math.round(d.monto / total * 100) + '%' : '0%')}</td>
+          </tr>`).join('')}</tbody>
+        </table></div></div></div>`;
+
+          } else if (vista === 'casero') {
+            const data = ReporteService.porCasero(regs);
+            html = `<div class="card">
+        <div class="card-header"><div class="card-title">◎ Reporte por Casero</div></div>
+        <div class="card-body-flush"><div class="tbl-wrap"><table>
+          <thead><tr><th>Casero</th><th>Código</th><th>Tanques</th><th>Monto</th></tr></thead>
+          <tbody>${data.map(d => `<tr><td class="bold">${d.casero}</td><td>${UI.badge(d.codigo || '—', 'bg-blue')}</td><td>${UI.mono(d.tanques)}</td><td>${UI.mono(Utils.fmtBs(d.monto), 'var(--c-accent)')}</td></tr>`).join('')}</tbody>
+        </table></div></div></div>`;
+
+          } else if (vista === 'periodo') {
+            const data = ReporteService.porPeriodo(regs);
+            html = `<div class="card">
+        <div class="card-header"><div class="card-title">◈ Reporte por Período de Pago</div></div>
+        <div class="card-body-flush"><div class="tbl-wrap"><table>
+          <thead><tr><th>Período</th><th>Tanques</th><th>Monto Total</th></tr></thead>
+          <tbody>${data.map(d => `<tr><td>${UI.badge(d.periodo, UI.periodoColor[d.periodo] || 'bg-blue')}</td><td>${UI.mono(d.tanques)}</td><td>${UI.mono(Utils.fmtBs(d.monto), 'var(--c-accent)')}</td></tr>`).join('')}</tbody>
+        </table></div></div></div>`;
+
+          } else {
+            const data = ReporteService.porSemana(regs);
+            html = `<div class="card">
+        <div class="card-header"><div class="card-title">◷ Reporte por Semana</div></div>
+        <div class="card-body-flush"><div class="tbl-wrap"><table>
+          <thead><tr><th>Semana</th><th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th><th>Tanques</th><th>Total</th></tr></thead>
+          <tbody>${data.map(d => `<tr>
+            <td class="bold">Semana ${d.semana}</td>
+            ${d.dias.map(x => `<td>${UI.mono(Utils.fmtBs(x.m))}</td>`).join('')}
+            <td>${UI.mono(d.tanques)}</td>
+            <td>${UI.mono(Utils.fmtBs(d.monto), 'var(--c-accent)')}</td>
+          </tr>`).join('')}</tbody>
+        </table></div></div></div>`;
+          }
+          document.getElementById('rep-output').innerHTML = html;
+          AuditoriaService.log('REPORTE', `Generado: ${vista} / ${new Date().toLocaleString()}`, 'blue');
+        },
+
+        exportarWord() {
+          var todos = RegistroService.getAll();
+          var pagos = Repository.getAll('pagos');
+          var ahora = new Date().toLocaleString('es-BO');
+          var F = function (n) { return (n || 0).toLocaleString('es-BO', { minimumFractionDigits: 2 }); };
+
+          var H = '<html><head><meta charset="UTF-8"><title>Reporte Coca — Kollita Pro</title>';
+          H += '<style>body{font-family:Arial;color:#222;max-width:900px;margin:20px auto;padding:20px}h1{color:#b8860b;border-bottom:2px solid #b8860b}h2{color:#333;margin-top:24px;border-bottom:1px solid #ddd}table{width:100%;border-collapse:collapse;margin:10px 0;font-size:11px}th{background:#b8860b;color:#fff;padding:6px 8px}td{padding:5px 8px;border-bottom:1px solid #eee}tr:nth-child(even){background:#fafafa}.footer{text-align:center;margin-top:30px;font-size:10px;color:#888}</style></head><body>';
+          H += '<h1>KOLLITA PRO — Reporte Coca</h1><p>' + ahora + '</p>';
+
+          var totReg = todos.reduce(function (s, r) { return s + (r.monto || 0); }, 0);
+          var totPag = pagos.reduce(function (s, p) { return s + (p.monto || 0); }, 0);
+          H += '<h2>Resumen</h2>';
+          H += '<p>Registros: <b>' + todos.length + '</b> — Total: <b>Bs ' + F(totReg) + '</b></p>';
+          H += '<p>Pagos: <b>' + pagos.length + '</b> — Total: <b>Bs ' + F(totPag) + '</b></p>';
+
+          H += '<h2>Pagos</h2><table><tr><th>Fecha</th><th>Casero</th><th>Periodo</th><th>Monto</th><th>Metodo</th></tr>';
+          [...pagos].reverse().slice(0, 50).forEach(function (p) {
+            var c = CaseroService.getById(p.casero_id);
+            H += '<tr><td>' + p.fecha + '</td><td>' + c.nombre + '</td><td>' + p.periodo + '</td><td>Bs ' + F(p.monto) + '</td><td>' + (p.metodo || '—') + '</td></tr>';
+          });
+          H += '</table>';
+
+          H += '<h2>Registros</h2><table><tr><th>Fecha</th><th>Casero</th><th>Tanques</th><th>Monto</th><th>Estado</th></tr>';
+          [...todos].reverse().slice(0, 50).forEach(function (r) {
+            var c = CaseroService.getById(r.casero_id);
+            H += '<tr><td>' + r.fecha + '</td><td>' + c.nombre + '</td><td>' + r.tanques + '</td><td>Bs ' + F(r.monto) + '</td><td>' + (r.pagado ? 'Pagado' : 'Pendiente') + '</td></tr>';
+          });
+          H += '</table>';
+
+          H += '<div class="footer">Kollita Pro © ' + new Date().getFullYear() + ' — Documento generado automáticamente</div></body></html>';
+
+          var blob = new Blob([H], { type: 'application/msword' });
+          var a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'Reporte_Coca_' + (new Date().toISOString().split('T')[0]) + '.doc';
+          a.click();
+          UI.toast('Reporte Word descargado');
+        }
+      };
+
+      // ── Auditoría ──
+      const AuditoriaController = {
+        render() {
+          const entries = AuditoriaService.getAll();
+          const el = document.getElementById('tl-auditoria');
+          el.innerHTML = entries.length
+            ? entries.slice(0, 100).map(e => `
+          <div class="tl-item">
+            <div class="tl-dot ${e.color || 'blue'}"></div>
+            <div class="tl-card">
+              <div class="tl-time">${new Date(e.ts).toLocaleString('es-BO')}</div>
+              <div class="tl-action">${e.action.replace(/_/g, ' ')}</div>
+              <div class="tl-detail">${e.detail}</div>
+            </div>
+          </div>`).join('')
+            : '<div class="text-center c-text3" style="padding:40px">Sin registros de auditoría</div>';
+        },
+        limpiar() {
+          if (!confirm('¿Limpiar todo el log de auditoría?')) return;
+          AuditoriaService.clear();
+          this.render();
+          UI.toast('Log limpiado', 'warn');
+        }
+      };
+
+      /* ═══════════════════════════════════════
+         LAYER 7: App Bootstrap
+      ═══════════════════════════════════════ */
+      const App = {
+        init() {
+          Repository.load();
+          this._seedIfEmpty();
+          this._bindEvents();
+          this._initUI();
+          Router.go('dashboard');
+          AuditoriaService.log('SISTEMA_INICIO', 'Aplicación iniciada correctamente', 'blue');
+        },
+
+        _seedIfEmpty() {
+          if (Repository.getAll('sucursales').length > 0) return;
+          const sNames = ['CUCHILLA', 'COTOCA', 'G77', 'DOBLE VIA', '3 PASOS', 'EQUIPETROL', 'PAURITO'];
+          sNames.forEach(n => SucursalService.create({ nombre: n, codigo: n.replace(/\s/g, '').substring(0, 4), direccion: 'Santa Cruz' }));
+          const seed = [
+            { nombre: 'Cirio Mamani', ci: '4521013', tel: '76543210', precio: 45, codigo: 'A1', s: 1 },
+            { nombre: 'Rosmery Flores', ci: '8834521', tel: '71234567', precio: 45, codigo: 'A2', s: 2 },
+            { nombre: 'Álvaro Vaca', ci: '3321456', tel: '78901234', precio: 45, codigo: 'A2', s: 3 },
+            { nombre: 'Dionicia Chura', ci: '5567890', tel: '79012345', precio: 45, codigo: 'A2', s: 1 },
+            { nombre: 'Esther Mamani', ci: '7890123', tel: '72345678', precio: 45, codigo: 'A2', s: 4 },
+            { nombre: 'Sofía Quispe', ci: '6678901', tel: '73456789', precio: 50, codigo: 'A2', s: 5 },
+            { nombre: 'Efraín Torrez', ci: '9012345', tel: '74567890', precio: 45, codigo: 'A2', s: 6 },
+            { nombre: 'Severino Coata', ci: '2234567', tel: '75678901', precio: 45, codigo: 'A2', s: 2 },
+            { nombre: 'Adriana Colque', ci: '1123456', tel: '76789012', precio: 45, codigo: 'A2', s: 7 },
+            { nombre: 'Óscar Mendoza', ci: '3345678', tel: '77890123', precio: 45, codigo: 'A2', s: 3 },
+            { nombre: 'Javier Ticona', ci: '5567891', tel: '79012346', precio: 45, codigo: 'A2', s: 5 },
+            { nombre: 'Carlos Apaza', ci: '6678902', tel: '70123457', precio: 45, codigo: 'A2', s: 6 },
+            { nombre: 'Simona Laura', ci: '7789013', tel: '71234568', precio: 50, codigo: 'A2', s: 7 },
+          ];
+          seed.forEach(d => {
+            const suc = Repository.getAll('sucursales')[d.s - 1];
+            CaseroService.create({ nombre: d.nombre, ci: d.ci, tel: d.tel, sucursal_id: suc?.id || 1, precio: d.precio, codigo: d.codigo });
+          });
+          // Sample past records
+          const pastDates = [
+            { f: '2026-05-04' }, { f: '2026-05-05' }, { f: '2026-05-06' }, { f: '2026-05-07' },
+            { f: '2026-05-08' }, { f: '2026-05-09' }, { f: '2026-05-10' }, { f: '2026-05-11' },
+          ];
+          const caseros = CaseroService.getAll();
+          const sucucrsals = SucursalService.getAll();
+          pastDates.forEach(({ f }) => {
+            caseros.slice(0, 6).forEach(c => {
+              const t = Math.floor(Math.random() * 7) + 2;
+              RegistroService.create({ casero_id: c.id, sucursal_id: c.sucursal_id || sucucrsals[0].id, fecha: f, turno: 'DIA', tanques: t, precio: c.precio || 45, obs: '' });
+            });
+          });
+          // Mark some as paid
+          const allRegs = RegistroService.getAll();
+          allRegs.filter(r => r.fecha < '2026-05-10').forEach(r => Repository.update('registros', r.id, { pagado: true, fechaPago: '2026-05-10' }));
+        },
+
+        _bindEvents() {
+          // Sidebar navigation
+          document.querySelectorAll('.sb-item[data-page]').forEach(el => {
+            el.addEventListener('click', () => Router.go(el.dataset.page));
+          });
+
+          // Real-time subtotal
+          ['r-tanques', 'r-precio'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', () => {
+              const t = parseFloat(document.getElementById('r-tanques').value) || 0;
+              const p = parseFloat(document.getElementById('r-precio').value) || 0;
+              document.getElementById('r-subtotal').textContent = Utils.fmtBs(t * p);
+            });
+          });
+
+          // Close modal on backdrop click
+          document.querySelectorAll('.overlay').forEach(o => {
+            o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+          });
+
+          // Keyboard ESC
+          document.addEventListener('keydown', e => { if (e.key === 'Escape') UI.closeAllModals(); });
+        },
+
+        _initUI() {
+          // Date in topbar
+          document.getElementById('td').textContent = new Date().toLocaleDateString('es-BO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+          // Próximo pago
+          const pp = Utils.proximoPago();
+          const pnv = document.getElementById('pnv');
+          pnv.textContent = pp.n; pnv.className = 'pay-next-value ' + pp.c;
+          document.getElementById('pns').textContent = pp.p;
+        },
+
+        exportar() {
+          const raw = localStorage.getItem(DB_KEY) || '{}';
+          const blob = new Blob([raw], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a'); a.href = url;
+          a.download = `cocapay_backup_${Utils.hoy()}.json`; a.click();
+          URL.revokeObjectURL(url);
+          AuditoriaService.log('EXPORTAR', `Backup exportado ${Utils.hoy()}`, 'blue');
+          UI.toast('Backup exportado correctamente');
+        }
+      };
+
+      // ── Start ──
+      document.addEventListener('DOMContentLoaded', () => App.init());
+    </script>
+  </body>
+
+  </html>

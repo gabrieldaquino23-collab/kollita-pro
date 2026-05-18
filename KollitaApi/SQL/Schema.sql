@@ -1,0 +1,122 @@
+-- ═══════════════════════════════════════════════
+-- KOLLITA API — SQL SERVER SCHEMA
+-- ═══════════════════════════════════════════════
+
+CREATE DATABASE KollitaDb;
+GO
+
+USE KollitaDb;
+GO
+
+-- PEDIDOS
+CREATE TABLE Pedidos (
+    Id BIGINT PRIMARY KEY,
+    NumeroNota NVARCHAR(10) NOT NULL,
+    Secretario NVARCHAR(100) NOT NULL,
+    Cliente NVARCHAR(200) NOT NULL,
+    Subtotal DECIMAL(18,2) NOT NULL DEFAULT 0,
+    Descuento DECIMAL(18,2) NOT NULL DEFAULT 0,
+    Total DECIMAL(18,2) NOT NULL DEFAULT 0,
+    Fecha NVARCHAR(20) NOT NULL,
+    FechaID NVARCHAR(10) NOT NULL,
+    Hora NVARCHAR(20) NOT NULL,
+    MetodoPago NVARCHAR(20) NULL,
+    PorcentajeDescuento DECIMAL(5,2) NOT NULL DEFAULT 0,
+    Estado NVARCHAR(20) NOT NULL DEFAULT 'PREPARADO',
+
+    EsDelivery BIT NOT NULL DEFAULT 0,
+    MontoDelivery DECIMAL(18,2) NOT NULL DEFAULT 0,
+    RepartidorDelivery NVARCHAR(100) NULL,
+
+    TotalEntregado DECIMAL(18,2) NULL,
+    SaldoCobrado DECIMAL(18,2) NULL,
+    EfectivoPagado DECIMAL(18,2) NULL,
+    QrPagado DECIMAL(18,2) NULL,
+    FechaEntrega NVARCHAR(20) NULL,
+    HoraEntrega NVARCHAR(20) NULL,
+    FechaIDEntrega NVARCHAR(10) NULL,
+    SecretarioEntrega NVARCHAR(100) NULL,
+    EntregadoPor NVARCHAR(100) NULL,
+    TurnoEntrega NVARCHAR(50) NULL,
+
+    Anticipo DECIMAL(18,2) NOT NULL DEFAULT 0,
+    MetodoAnticipo NVARCHAR(20) NULL,
+
+    Origen NVARCHAR(20) NULL,
+    PedidoMovilId BIGINT NULL,
+    NotaMovil NVARCHAR(500) NULL,
+    SucursalMovil NVARCHAR(100) NULL
+);
+CREATE INDEX IX_Pedidos_FechaID ON Pedidos(FechaID);
+CREATE INDEX IX_Pedidos_Estado ON Pedidos(Estado);
+CREATE INDEX IX_Pedidos_Secretario ON Pedidos(Secretario);
+
+-- ITEMS DE PEDIDO
+CREATE TABLE ItemsPedido (
+    Id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    PedidoId BIGINT NOT NULL,
+    Nombre NVARCHAR(200) NOT NULL,
+    Cantidad INT NOT NULL,
+    Precio DECIMAL(18,2) NOT NULL,
+    CONSTRAINT FK_ItemsPedido_Pedidos FOREIGN KEY (PedidoId) REFERENCES Pedidos(Id) ON DELETE CASCADE
+);
+
+-- PENDIENTES (APP MÓVIL)
+CREATE TABLE Pendientes (
+    Id BIGINT PRIMARY KEY,
+    Client NVARCHAR(200) NOT NULL,
+    Branch NVARCHAR(100) NOT NULL,
+    BranchTel NVARCHAR(20) NULL,
+    Method NVARCHAR(20) NOT NULL,
+    Note NVARCHAR(500) NULL,
+    Subtotal DECIMAL(18,2) NOT NULL DEFAULT 0,
+    Discount DECIMAL(18,2) NOT NULL DEFAULT 0,
+    Total DECIMAL(18,2) NOT NULL DEFAULT 0,
+    Time NVARCHAR(10) NOT NULL,
+    Date NVARCHAR(15) NOT NULL,
+    FechaISO NVARCHAR(10) NOT NULL,
+    Estado NVARCHAR(20) NOT NULL DEFAULT 'PENDIENTE',
+    Origen NVARCHAR(20) NOT NULL DEFAULT 'movil',
+    CreadoEn DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+CREATE INDEX IX_Pendientes_Estado ON Pendientes(Estado);
+
+-- ITEMS DE PENDIENTES
+CREATE TABLE ItemsPendiente (
+    Id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    PendienteId BIGINT NOT NULL,
+    Nombre NVARCHAR(200) NOT NULL,
+    Cantidad INT NOT NULL,
+    Precio DECIMAL(18,2) NOT NULL,
+    CONSTRAINT FK_ItemsPendiente_Pendientes FOREIGN KEY (PendienteId) REFERENCES Pendientes(Id) ON DELETE CASCADE
+);
+
+-- CIERRES DE TURNO
+CREATE TABLE Cierres (
+    Id BIGINT PRIMARY KEY,
+    Secretario NVARCHAR(100) NOT NULL,
+    Turno NVARCHAR(20) NOT NULL,
+    FechaCierre NVARCHAR(20) NOT NULL,
+    HoraCierre NVARCHAR(20) NOT NULL,
+    CantidadVentas INT NOT NULL DEFAULT 0,
+    TotalGeneral DECIMAL(18,2) NOT NULL DEFAULT 0,
+    TotalEfectivo DECIMAL(18,2) NOT NULL DEFAULT 0,
+    TotalQR DECIMAL(18,2) NOT NULL DEFAULT 0,
+    TotalMixtoEfectivo DECIMAL(18,2) NOT NULL DEFAULT 0,
+    TotalMixtoQR DECIMAL(18,2) NOT NULL DEFAULT 0,
+    TotalAnticipos DECIMAL(18,2) NOT NULL DEFAULT 0,
+    TotalDescuentos DECIMAL(18,2) NOT NULL DEFAULT 0,
+    Sucursal NVARCHAR(100) NULL,
+    CreadoEn DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+-- CONFIGURACIÓN SUCURSALES
+CREATE TABLE ConfigSucursales (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Sucursal NVARCHAR(100) NOT NULL,
+    Consulta BIT NOT NULL DEFAULT 1,
+    Rapido BIT NOT NULL DEFAULT 1,
+    CONSTRAINT UQ_ConfigSucursales_Sucursal UNIQUE (Sucursal)
+);
+
+GO

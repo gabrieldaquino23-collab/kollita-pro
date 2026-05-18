@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Kollita Pro — Supervisor Senior</title>
+<link rel="stylesheet" href="recursos/css/base.css">
+<style>
+:root{
+  --bg:#060609;--s1:#0f0f16;--s2:#17171f;--s3:#1e1e28;
+  --border:rgba(255,255,255,0.07);--text:#d4d4e0;--text2:#6b6b88;
+  --blue:#4da6ff;--green:#3dd68c;--red:#e05c6e;--purple:#a78bfa;
+  --orange:#f59e42;--senior:#7ee8fa;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+#login-screen{position:fixed;inset:0;z-index:9999;background:radial-gradient(ellipse at 40% 60%,#0c1a2e 0%,#060609 65%);display:flex;align-items:center;justify-content:center;padding:20px;}
+.lcard{background:var(--s1);border:1px solid rgba(126,232,250,.12);border-radius:18px;padding:44px 40px;width:100%;max-width:400px;}
+.lcard-top{text-align:center;margin-bottom:32px;}
+.lcard-icon{font-size:2.4em;margin-bottom:10px;}
+.lcard-title{font-size:1.4em;font-weight:800;color:var(--senior);letter-spacing:1.5px;}
+.lcard-sub{font-size:.68em;color:var(--text2);letter-spacing:3px;text-transform:uppercase;margin-top:5px;}
+.linput{width:100%;padding:13px 16px;border:1px solid var(--border);border-radius:9px;font-size:.93em;background:var(--s2);color:var(--text);outline:none;margin-bottom:14px;transition:border-color .2s;}
+.linput:focus{border-color:var(--senior);}
+.lbtn{width:100%;padding:14px;background:rgba(126,232,250,.12);color:var(--senior);border:1px solid rgba(126,232,250,.25);border-radius:9px;font-size:.95em;font-weight:700;cursor:pointer;}
+.lbtn:hover{background:rgba(126,232,250,.2);}
+.lerr{background:rgba(224,92,110,.08);border:1px solid rgba(224,92,110,.2);border-radius:8px;padding:10px;font-size:.82em;color:var(--red);margin-top:10px;display:none;}
+#app{display:none;}
+.topbar{background:var(--s1);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;}
+.t-logo{font-size:.95em;font-weight:800;color:var(--senior);}
+.t-badge{font-size:.68em;background:rgba(126,232,250,.08);border:1px solid rgba(126,232,250,.18);color:var(--senior);padding:3px 11px;border-radius:20px;margin-left:10px;font-weight:600;}
+.t-logout{background:rgba(224,92,110,.1);color:var(--red);border:1px solid rgba(224,92,110,.2);border-radius:7px;padding:5px 12px;font-size:.75em;font-weight:600;cursor:pointer;}
+.page{padding:24px;max-width:1400px;margin:0 auto;}
+
+/* ── Estilos para el nuevo informe de producción (tomados de Alfa) ── */
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:22px;}
+.sc{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;overflow:hidden;transition:all .3s ease;}
+.sc::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--ac,var(--senior));}
+.sc:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(126,232,250,.15);}
+.sl{font-size:.68em;color:var(--text2);text-transform:uppercase;font-weight:600;letter-spacing:.5px;margin-bottom:7px;}
+.sv{font-size:1.75em;font-weight:800;color:var(--ac,var(--senior));line-height:1;}
+.ss{font-size:.7em;color:var(--text2);margin-top:4px;}
+
+.stats-enhanced{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px;}
+.stat-card-enhanced{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:20px;transition:all .3s ease;}
+.stat-card-enhanced:hover{transform:translateY(-3px);border-color:var(--senior);box-shadow:0 10px 30px rgba(126,232,250,.1);}
+.stat-icon{font-size:1.8em;margin-bottom:8px;}
+.stat-value-large{font-size:2.2em;font-weight:900;color:var(--senior);}
+.stat-label-small{font-size:.7em;color:var(--text2);text-transform:uppercase;}
+
+.stitle{font-size:.78em;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin:22px 0 12px;display:flex;align-items:center;gap:8px;}
+.stitle::after{content:"";flex:1;height:1px;background:var(--border);}
+.tw{background:var(--s1);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:18px;}
+.tw table{width:100%;border-collapse:collapse;}
+.tw th{background:var(--s2);padding:9px 14px;font-size:.68em;color:var(--text2);text-transform:uppercase;font-weight:600;text-align:left;border-bottom:1px solid var(--border);}
+.tw td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:.84em;color:var(--text);vertical-align:middle;}
+.tw tr:last-child td{border-bottom:none;}
+.tw tr:hover td{background:var(--s2);}
+.cw{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:18px;}
+.bi{display:flex;align-items:center;gap:10px;margin-bottom:7px;font-size:.78em;}
+.bl{width:155px;flex-shrink:0;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bt{flex:1;background:var(--s3);border-radius:3px;height:10px;overflow:hidden;}
+.bf{height:100%;border-radius:3px;transition:width .7s ease;}
+.bv{width:50px;text-align:right;color:var(--text2);flex-shrink:0;font-size:.76em;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center;}
+.fi{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:7px 11px;color:var(--text);font-size:.82em;outline:none;}
+.fi:focus{border-color:var(--senior);}
+.fs{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:7px 11px;color:var(--text);font-size:.82em;outline:none;cursor:pointer;}
+.fs option{background:var(--s2);}
+.qa-btn{padding:7px 12px;background:var(--s2);border:1px solid var(--border);border-radius:7px;font-size:.8em;font-weight:600;color:var(--text);cursor:pointer;transition:all .2s ease;}
+.qa-btn:hover{background:var(--s3);border-color:var(--senior);color:var(--senior);}
+.fe-section{display:none;}
+.fe-section.active{display:block;}
+.estado-tabs{display:flex;gap:8px;flex-wrap:wrap;}
+.etab{padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--s2);color:var(--text2);font-size:.78em;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.etab:hover{border-color:var(--senior);color:var(--text);}
+.etab.active{background:var(--senior);color:#000;border-color:var(--senior);}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--s1);border:1px solid var(--senior);color:var(--senior);padding:10px 16px;border-radius:9px;font-weight:600;font-size:.82em;z-index:9999;animation:sli .3s ease;}
+@keyframes sli{from{transform:translateX(200px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+@media(max-width:700px){.g2{grid-template-columns:1fr;}.sg{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="lcard">
+    <div class="lcard-top">
+      <div class="lcard-icon">🌐</div>
+      <div class="lcard-title">SUPERVISOR SENIOR</div>
+      <div class="lcard-sub">Producción Global</div>
+    </div>
+    <input type="password" id="lg-pass" class="linput" placeholder="Contraseña de acceso" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="lbtn" onclick="doLogin()">Ingresar</button>
+    <div class="lerr" id="lg-err"></div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;">
+      <div class="t-logo">🌐 SUPERVISOR SENIOR</div>
+      <div class="t-badge">Producción Global</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span style="font-size:.78em;color:var(--text2);" id="tb-fecha"></span>
+      <button class="t-logout" onclick="doLogout()">Salir</button>
+    </div>
+  </div>
+
+  <div class="page active" id="main-page">
+    <!-- Tabs de navegación -->
+    <div class="estado-tabs" style="margin-bottom:16px;background:var(--s1);padding:10px 14px;border-radius:12px;border:1px solid var(--border);">
+      <button class="etab active" data-sec="dashboard" onclick="cambiarSeccion(this)">📊 Dashboard</button>
+      <button class="etab" data-sec="tendencia" onclick="cambiarSeccion(this)">📈 Producción en el tiempo</button>
+      <button class="etab" data-sec="registros" onclick="cambiarSeccion(this)">📋 Registros de producción</button>
+    </div>
+
+    <!-- Filtros comunes -->
+    <div class="filters">
+      <select class="fs" id="prod-suc-f" onchange="renderProd()">
+        <option value="">Todas las sucursales</option>
+      </select>
+      <select class="fs" id="prod-cat-f" onchange="renderProd()">
+        <option value="">Todas las categorías</option>
+        <option value="TRADICIONAL">Tradicional</option>
+        <option value="ESPECIAL">Especial</option>
+        <option value="PREMIUM">Premium</option>
+      </select>
+      <select class="fs" id="prod-turno-f" onchange="renderProd()">
+        <option value="">Todos los turnos</option>
+        <option value="DIA">☀️ Día</option>
+        <option value="TARDE">🌇 Tarde</option>
+        <option value="NOCHE">🌙 Noche</option>
+      </select>
+      <select class="fs" id="prod-enc-f" onchange="renderProd()">
+        <option value="">Todos los encargados</option>
+      </select>
+      <input type="month" class="fi" id="prod-mes-f" onchange="renderProd()">
+      <input type="date" class="fi" id="prod-desde-f" onchange="renderProd()" placeholder="Desde">
+      <input type="date" class="fi" id="prod-hasta-f" onchange="renderProd()" placeholder="Hasta">
+    </div>
+
+    <!-- SECCIÓN 1: DASHBOARD -->
+    <div class="fe-section active" id="sec-dashboard">
+      <div class="stats-enhanced" id="prod-stats"></div>
+      <div class="g2">
+        <div><div class="stitle">📊 Producción por categoría</div><div class="cw" id="chart-prod-cat"></div></div>
+        <div><div class="stitle">🫙 Sabores más producidos</div><div class="cw" id="chart-prod-sabores"></div></div>
+      </div>
+      <div class="g2">
+        <div><div class="stitle">🏭 Producción por sucursal</div><div class="cw" id="chart-prod-suc"></div></div>
+        <div><div class="stitle">⏰ Producción por turno</div><div class="cw" id="chart-prod-turno"></div></div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 2: PRODUCCIÓN EN EL TIEMPO -->
+    <div class="fe-section" id="sec-tendencia">
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <button class="qa-btn" onclick="cambiarPeriodo(7)">7d</button>
+        <button class="qa-btn" onclick="cambiarPeriodo(14)">14d</button>
+        <button class="qa-btn" onclick="cambiarPeriodo(30)">30d</button>
+      </div>
+      <input type="hidden" id="prod-periodo" value="30">
+      <div class="sg" id="tendencia-stats"></div>
+      <div class="cw" id="chart-prod-tendencia"></div>
+      <div class="g2" style="margin-top:14px;">
+        <div><div class="stitle">👷 Encargados más productivos</div><div class="cw" id="chart-prod-encargados" style="padding:12px;"></div></div>
+        <div><div class="stitle">📦 Producción por tipo</div><div class="cw" id="chart-prod-tipo" style="padding:12px;"></div></div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 3: REGISTROS DE PRODUCCIÓN -->
+    <div class="fe-section" id="sec-registros">
+      <div class="tw" id="prod-tabla"></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="recursos/js/supabase-config.js"></script>
+<script src="recursos/js/utilidades.js"></script>
+<script src="recursos/js/datos.js"></script>
+<script src="recursos/js/auth-global.js"></script>
+<script>
+/* ═══════════════════════════════════════════════
+   SUPERVISOR SENIOR — PRODUCCIÓN GLOBAL
+   ═══════════════════════════════════════════════ */
+
+const PASS_SENIOR = 'senior2024';
+let DATA = null;
+
+// ─── HELPERS: Leer datos reales del encargado ───
+function gProdReal(){
+  try { return JSON.parse(localStorage.getItem('kollita_enc_produccion')||'[]'); } catch(e) { return []; }
+}
+function gCatalogoReal(){
+  try { var c=JSON.parse(localStorage.getItem('kollita_enc_catalogo')||'null'); return c||{}; } catch(e) { return {}; }
+}
+function gEncargados(){
+  try { return JSON.parse(localStorage.getItem('kollita_encargados')||'[]'); } catch(e) { return []; }
+}
+function getPrecio(catalogo, cat, sabor, tipo){
+  var catData=catalogo[cat]||[];
+  var prod=catData.find(function(p){ return p.n===sabor; });
+  if(prod) return tipo==='media'?(prod.pm||0):(prod.pc||0);
+  return tipo==='media'?10:20;
+}
+
+// ─── Fusionar datos mock + reales ───
+function mergeData(){
+  var mock={}; SUCURSALES.forEach(function(s){mock[s]={pedidos:[],cierres:[],reclamos:[],anulaciones:[],produccion:[]};});
+  var reales=gProdReal();
+  var catalogo=gCatalogoReal();
+  if(!reales.length) return { data: mock, catalogo: catalogo, source: 'mock' };
+  var data={};
+  // Inicializar todas las sucursales desde mock
+  SUCURSALES.forEach(function(suc){ data[suc]={ produccion: [] }; });
+  // Agregar registros reales
+  reales.forEach(function(r){
+    var suc=r.suc||r.sucursal||'';
+    if(!data[suc]) data[suc]={ produccion: [] };
+    // Asegurar pm/pc en cada producto
+    var datos={};
+    for(var cat in (r.datos||{})){
+      datos[cat]={};
+      for(var sabor in (r.datos[cat]||{})){
+        var v=r.datos[cat][sabor];
+        datos[cat][sabor]={
+          media: v.media||0, cuartilla: v.cuartilla||0, total: v.total||0,
+          pm: v.pm||getPrecio(catalogo,cat,sabor,'media'),
+          pc: v.pc||getPrecio(catalogo,cat,sabor,'cuartilla')
+        };
+      }
+    }
+    data[suc].produccion.push({
+      fecha: r.fecha, turno: r.turno, encargado: r.encargado||'—',
+      suc: suc, datos: datos, ts: r.ts, _real: true
+    });
+  });
+  // Agregar mock como respaldo si no hay registros reales para una sucursal
+  SUCURSALES.forEach(function(suc){
+    if(!data[suc].produccion.length && mock[suc]?.produccion){
+      data[suc].produccion=mock[suc].produccion;
+    }
+  });
+  return { data: data, catalogo: catalogo, source: reales.length?'real':'mock' };
+}
+
+function doLogin(){
+  const p = document.getElementById('lg-pass').value;
+  const e = document.getElementById('lg-err');
+  e.style.display = 'none';
+  
+  var panelName = 'Supervisor Senior';
+  var pws = [];
+  try { pws = JSON.parse(localStorage.getItem('kollita_system_passwords')||'[]'); } catch(ex){}
+  var myPwObj = pws.find(x => x.panel === panelName);
+  var expected = myPwObj ? myPwObj.pass : 'contra1234';
+
+  if(p !== expected){
+    e.textContent = 'Contraseña incorrecta.';
+    e.style.display = 'block';
+    return;
+  }
+  
+  if(expected === 'contra1234') {
+    mostrarModalCambioPassGlobal(panelName, function(){ completarLoginSenior(); });
+    return;
+  }
+  completarLoginSenior();
+}
+
+function completarLoginSenior() {
+  var merged=mergeData();
+  DATA = merged.data;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('tb-fecha').textContent = new Date().toLocaleDateString('es-BO',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
+  poblarFiltros();
+  renderProd();
+}
+
+function doLogout(){
+  DATA = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('lg-pass').value = '';
+}
+
+function poblarFiltros(){
+  var selSuc = document.getElementById('prod-suc-f');
+  if(selSuc){
+    while(selSuc.options.length > 1) selSuc.remove(1);
+    SUCURSALES.forEach(function(s){ var o=document.createElement('option'); o.value=s; o.textContent=s; selSuc.appendChild(o); });
+  }
+  // Poblar encargados
+  var selEnc=document.getElementById('prod-enc-f');
+  if(selEnc){
+    while(selEnc.options.length > 1) selEnc.remove(1);
+    var encs=gEncargados();
+    var nombres=[];
+    encs.forEach(function(e){ if(nombres.indexOf(e.nombre)===-1) nombres.push(e.nombre); });
+    // También agregar encargados de los datos mock si no hay reales
+    if(!nombres.length){
+      SUCURSALES.forEach(function(suc){
+        if(DATA[suc]&&DATA[suc].produccion){
+          DATA[suc].produccion.forEach(function(r){
+            var n=r.encargado||'';
+            if(n&&nombres.indexOf(n)===-1) nombres.push(n);
+          });
+        }
+      });
+    }
+    nombres.sort().forEach(function(n){
+      var o=document.createElement('option'); o.value=n; o.textContent=n; selEnc.appendChild(o);
+    });
+  }
+  document.getElementById('prod-mes-f').value = MES_ACTUAL;
+}
+
+function cambiarPeriodo(dias){
+  document.getElementById('prod-periodo').value = dias;
+  renderProd();
+}
+
+function cambiarSeccion(btn){
+  document.querySelectorAll('.etab').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.fe-section').forEach(function(s){s.classList.remove('active');});
+  btn.classList.add('active');
+  document.getElementById('sec-'+btn.dataset.sec).classList.add('active');
+}
+
+function regTot(r){
+  var total = 0;
+  var datos = r.datos || {};
+  for(var cat in datos){
+    for(var sabor in (datos[cat]||{})){
+      total += (datos[cat][sabor].total || 0);
+    }
+  }
+  return total;
+}
+
+function regBs(r){
+  var bss = 0;
+  var datos = r.datos || {};
+  for(var cat in datos){
+    for(var sabor in (datos[cat]||{})){
+      var v = datos[cat][sabor];
+      bss += (v.media||0)*(v.pm||0) + (v.cuartilla||0)*(v.pc||0);
+    }
+  }
+  return bss;
+}
+
+function renderProd(){
+  if(!DATA) return;
+
+  var sucF = document.getElementById('prod-suc-f').value;
+  var catF = document.getElementById('prod-cat-f').value;
+  var turnoF = document.getElementById('prod-turno-f').value;
+  var encF = document.getElementById('prod-enc-f')?.value || '';
+  var mesF = document.getElementById('prod-mes-f').value || MES_ACTUAL;
+  var desF = document.getElementById('prod-desde-f').value;
+  var hasF = document.getElementById('prod-hasta-f').value;
+
+  // Recoger registros filtrados
+  var regs = [];
+  var sucs = sucF ? [sucF] : SUCURSALES;
+  sucs.forEach(function(suc){
+    var prod = DATA[suc]?.produccion || [];
+    prod.forEach(function(r){
+      if(!String(r.fecha||'').startsWith(mesF)) return;
+      if(desF && r.fecha < desF) return;
+      if(hasF && r.fecha > hasF) return;
+      if(turnoF && r.turno !== turnoF) return;
+      if(encF && (r.encargado||'') !== encF) return;
+      regs.push({...r, suc: suc});
+    });
+  });
+
+  var totGen = regs.reduce(function(s,r){return s+regTot(r);},0);
+  var totBs = regs.reduce(function(s,r){return s+regBs(r);},0);
+
+  // Totales por categoría
+  var porCat = {};
+  regs.forEach(function(r){
+    for(var cat in (r.datos||{})){
+      porCat[cat] = (porCat[cat]||0);
+      for(var sabor in (r.datos[cat]||{})){
+        porCat[cat] += (r.datos[cat][sabor].total||0);
+      }
+    }
+  });
+
+  // Totales por sucursal
+  var porSuc = {}, porSucBs = {};
+  regs.forEach(function(r){
+    porSuc[r.suc] = (porSuc[r.suc]||0) + regTot(r);
+    porSucBs[r.suc] = (porSucBs[r.suc]||0) + regBs(r);
+  });
+
+  // Totales por sabor
+  var sabTot = {};
+  regs.forEach(function(r){
+    for(var cat in (r.datos||{})){
+      if(catF && cat!==catF) continue;
+      for(var sabor in (r.datos[cat]||{})){
+        sabTot[sabor] = (sabTot[sabor]||0) + (r.datos[cat][sabor].total||0);
+      }
+    }
+  });
+
+  // Totales por turno
+  var porTurno = {DIA:0, TARDE:0, NOCHE:0};
+  regs.forEach(function(r){ porTurno[r.turno] = (porTurno[r.turno]||0) + regTot(r); });
+
+  // Totales por encargado
+  var porEnc = {};
+  regs.forEach(function(r){ var e2=r.encargado||'—'; porEnc[e2]=(porEnc[e2]||0)+regTot(r); });
+
+  // Totales por tipo (media/cuartilla)
+  var porTipo = {media:0, cuartilla:0};
+  regs.forEach(function(r){
+    for(var cat in (r.datos||{})){
+      for(var sabor in (r.datos[cat]||{})){
+        var v=r.datos[cat][sabor];
+        porTipo.media += (v.media||0);
+        porTipo.cuartilla += (v.cuartilla||0);
+      }
+    }
+  });
+
+  // ── KPIs ──
+  var sucCount = Object.keys(porSuc).filter(function(k){return porSuc[k]>0;}).length;
+  var sabCount = Object.keys(sabTot).length;
+  document.getElementById('prod-stats').innerHTML = [
+    {l:'📦 Total Producción', v:totGen.toLocaleString(), s:'Unidades', a:'var(--senior)', icon:'📦'},
+    {l:'💰 Valor Estimado', v:fmt(totBs).replace(' Bs',''), s:'Ingresos estimados', a:'var(--green)', icon:'💰'},
+    {l:'📋 Registros', v:regs.length, s:'Turnos registrados', a:'var(--green)', icon:'📋'},
+    {l:'🏭 Sucursales', v:sucCount, s:'Con producción', a:'var(--senior)', icon:'🏭'},
+    {l:'⚡ Promedio/turno', v:regs.length?Math.round(totGen/regs.length):0, s:'Unidades', a:'var(--purple)', icon:'⚡'},
+    {l:'🫙 Sabores', v:sabCount, s:'Variedades', a:'var(--orange)', icon:'🫙'},
+  ].map(function(c){return '<div class="stat-card-enhanced">'+
+    '<div class="stat-icon" style="color:'+c.a+'">'+c.icon+'</div>'+
+    '<div class="stat-value-large" style="color:'+c.a+'">'+c.v+'</div>'+
+    '<div class="stat-label-small">'+c.l+'</div>'+
+    '<div style="font-size:.68em;color:var(--text2);margin-top:2px;">'+c.s+'</div>'+
+  '</div>';}).join('');
+
+  // ── Gráficos ──
+  document.getElementById('chart-prod-cat').innerHTML = renderBar(
+    Object.entries(porCat).filter(function(e){return e[1]>0;}).sort(function(a,b){return b[1]-a[1];}),
+    'var(--purple)');
+  document.getElementById('chart-prod-sabores').innerHTML = renderBar(
+    Object.entries(sabTot).sort(function(a,b){return b[1]-a[1];}).slice(0,10),
+    'var(--senior)');
+  document.getElementById('chart-prod-suc').innerHTML = renderBar(
+    Object.entries(porSuc).sort(function(a,b){return b[1]-a[1];}).map(function(e){return[e[0].split(' ')[0]+'… ('+fmt(porSucBs[e[0]]||0).replace(' Bs','')+')',e[1]];}),
+    'var(--blue)');
+  document.getElementById('chart-prod-turno').innerHTML = renderBar(
+    [['☀️ Día',porTurno.DIA],['🌇 Tarde',porTurno.TARDE],['🌙 Noche',porTurno.NOCHE]],
+    'var(--green)');
+
+  // ── Tendencia ──
+  var periodo = parseInt(document.getElementById('prod-periodo')?.value || 30);
+  var hoy=new Date(), desde=new Date(); desde.setDate(desde.getDate()-periodo);
+  var porDia={};
+  regs.forEach(function(r){
+    if(r.fecha){
+      porDia[r.fecha]=(porDia[r.fecha]||0)+regTot(r);
+    }
+  });
+  var tendencia=[], maxVal=0, minVal=Infinity, suma=0;
+  for(var i=periodo-1;i>=0;i--){
+    var d=new Date(); d.setDate(d.getDate()-i);
+    var fecha=d.toISOString().split('T')[0];
+    var totDia=porDia[fecha]||0;
+    tendencia.push([fecha.slice(5), totDia]);
+    maxVal=Math.max(maxVal,totDia);
+    if(totDia>0) minVal=Math.min(minVal,totDia);
+    suma+=totDia;
+  }
+  if(minVal===Infinity) minVal=0;
+  var promedio=Math.round(suma/periodo);
+  var ultimo=tendencia[tendencia.length-1]?.[1]||0;
+  var anterior=tendencia[tendencia.length-2]?.[1]||0;
+  var cambio=ultimo>0?Math.round((ultimo-anterior)/ultimo*100):0;
+
+  document.getElementById('tendencia-stats').innerHTML=[
+    {l:'📊 Promedio', v:promedio.toLocaleString(), s:'unidades/día', a:'var(--senior)'},
+    {l:'⬆️ Máximo', v:maxVal.toLocaleString(), s:'unidades', a:'var(--green)'},
+    {l:'⬇️ Mínimo', v:minVal.toLocaleString(), s:'unidades', a:'var(--red)'},
+    {l: cambio>=0?'📈':'📉', v:(cambio>=0?'+':'')+cambio+'%', s:'vs ayer', a:cambio>=0?'var(--green)':'var(--red)'},
+  ].map(function(c){return '<div class="sc" style="--ac:'+c.a+'"><div class="sl">'+c.l+'</div><div class="sv">'+c.v+'</div><div class="ss">'+c.s+'</div></div>';}).join('');
+  document.getElementById('chart-prod-tendencia').innerHTML = renderBar(tendencia, 'var(--orange)');
+
+  // ── Encargados y tipo ──
+  document.getElementById('chart-prod-encargados').innerHTML = renderBar(
+    Object.entries(porEnc).sort(function(a,b){return b[1]-a[1];}).slice(0,8),
+    'var(--green)');
+  document.getElementById('chart-prod-tipo').innerHTML = renderBar(
+    [['📊 Media',porTipo.media],['📄 Cuartilla',porTipo.cuartilla]],
+    'var(--blue)');
+
+  // ── Tabla expandible ──
+  var tbl = '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.85em;">'+
+    '<thead><tr style="background:var(--s2);border-bottom:2px solid var(--border);color:var(--text2);">'+
+      '<th style="padding:10px;">Día</th><th style="padding:10px;">Turno</th><th style="padding:10px;">Sucursal</th>'+
+      '<th style="padding:10px;">Categoría</th><th style="padding:10px;">Producto</th>'+
+      '<th style="padding:10px;text-align:center;">Medias</th><th style="padding:10px;text-align:center;">Cuartillas</th>'+
+      '<th style="padding:10px;text-align:right;">Total U</th><th style="padding:10px;text-align:right;">Bs</th>'+
+    '</tr></thead>';
+
+  var catColorsAll = {TRADICIONAL:'var(--green)',ESPECIAL:'var(--blue)',PREMIUM:'var(--purple)',OTROS:'var(--orange)',PEDIDOS:'var(--red)'};
+  var sum_m=0, sum_c=0, sum_t=0, sum_bs=0;
+  var sortedRegs=regs.sort(function(a,b){return String(b.fecha).localeCompare(String(a.fecha));}).slice(0,100);
+  var tIdx=0;
+
+  sortedRegs.forEach(function(r){
+    var sub_m=0, sub_c=0, sub_t=0, sub_bs=0;
+    var rowsData=[];
+    for(var cat in (r.datos||{})){
+      for(var sabor in (r.datos[cat]||{})){
+        var v=r.datos[cat][sabor];
+        if(v.total>0){
+          rowsData.push({cat:cat, sabor:sabor, m:v.media||0, c:v.cuartilla||0, t:v.total||0, pm:v.pm||0, pc:v.pc||0, bs:(v.media||0)*(v.pm||0)+(v.cuartilla||0)*(v.pc||0)});
+        }
+      }
+    }
+    if(rowsData.length===0) return;
+    rowsData.forEach(function(d){sub_m+=d.m; sub_c+=d.c; sub_t+=d.t; sub_bs+=d.bs;});
+    sum_m+=sub_m; sum_c+=sub_c; sum_t+=sub_t; sum_bs+=sub_bs;
+
+    var rowId='prod-det-'+tIdx+'-'+Date.now();
+    tbl+='<tbody style="border-bottom:2px solid var(--border);"><tr onclick="var r=document.querySelectorAll(\'.'+rowId+'\');r.forEach(function(e){e.style.display=e.style.display===\'none\'?\'table-row\':\'none\';});" style="cursor:pointer;background:var(--s3);">'+
+      '<td style="padding:10px;font-weight:bold;">'+esc(String(r.fecha))+'</td>'+
+      '<td style="padding:10px;"><strong>'+({'DIA':'☀️ Día','TARDE':'🌇 Tarde','NOCHE':'🌙 Noche'}[r.turno]||r.turno)+'</strong><br><span style="font-size:.78em;color:var(--text2);">'+esc(r.encargado||'—')+'</span></td>'+
+      '<td style="padding:10px;font-weight:bold;color:var(--senior);">'+esc(String(r.suc).split(' ')[0])+'</td>'+
+      '<td colspan="2" style="padding:10px;text-align:right;color:var(--text2);font-size:.82em;">Ver +</td>'+
+      '<td style="padding:10px;text-align:center;font-weight:bold;">'+sub_m+'</td>'+
+      '<td style="padding:10px;text-align:center;font-weight:bold;">'+sub_c+'</td>'+
+      '<td style="padding:10px;text-align:right;font-weight:bold;">'+sub_t+'</td>'+
+      '<td style="padding:10px;text-align:right;font-weight:bold;color:var(--green);">'+fmt(sub_bs)+'</td>'+
+    '</tr>';
+
+    rowsData.forEach(function(d){
+      var catColor=catColorsAll[d.cat]||'var(--senior)';
+      tbl+='<tr class="'+rowId+'" style="display:none;border-bottom:1px solid rgba(0,0,0,0.05);background:var(--s1);">'+
+        '<td colspan="3" style="text-align:right;padding:8px;color:var(--text2);font-size:.78em;">↳</td>'+
+        '<td style="padding:8px;color:var(--text2);">'+esc(d.cat||'—')+'</td>'+
+        '<td style="padding:8px;font-weight:600;"><span style="color:'+catColor+';font-weight:700;">●</span> '+esc(d.sabor)+'<br><span style="font-size:.72em;color:var(--text2);">'+fmt(d.pm)+' / '+fmt(d.pc)+'</span></td>'+
+        '<td style="padding:8px;text-align:center;">'+d.m+'</td>'+
+        '<td style="padding:8px;text-align:center;">'+d.c+'</td>'+
+        '<td style="padding:8px;text-align:right;font-weight:bold;">'+d.t+'</td>'+
+        '<td style="padding:8px;text-align:right;color:var(--green);font-weight:600;">'+fmt(d.bs)+'</td>'+
+      '</tr>';
+    });
+    tbl+='</tbody>';
+    tIdx++;
+  });
+
+  if(sum_t===0) tbl+='<tbody><tr><td colspan="9" style="text-align:center;color:var(--text2);padding:30px;">Sin registros de producción</td></tr></tbody>';
+  else tbl+='<tfoot><tr style="background:rgba(126,232,250,0.1);font-weight:800;font-size:1.05em;">'+
+    '<td colspan="5" style="padding:12px;text-align:right;color:var(--senior);">TOTAL GENERAL</td>'+
+    '<td style="padding:12px;text-align:center;color:var(--senior);">'+sum_m+'</td>'+
+    '<td style="padding:12px;text-align:center;color:var(--senior);">'+sum_c+'</td>'+
+    '<td style="padding:12px;text-align:right;color:var(--senior);">'+sum_t+'</td>'+
+    '<td style="padding:12px;text-align:right;color:var(--green);">'+fmt(sum_bs)+'</td>'+
+  '</tr></tfoot>';
+  tbl+='</table></div>';
+  document.getElementById('prod-tabla').innerHTML = tbl;
+}
+</script>
+</body>
+</html>
