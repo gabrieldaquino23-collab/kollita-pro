@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kollita Pro — Portal de Acceso</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 3em;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1em;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(0, 198, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 198, 255, 0.2);
+        }
+        .card-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        .card-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .card-desc {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .badge.admin { background: rgba(255, 45, 85, 0.2); color: #ff2d55; }
+        .badge.super { background: rgba(0, 198, 255, 0.2); color: #00c6ff; }
+        .badge.op { background: rgba(52, 199, 89, 0.2); color: #34c759; }
+
+        footer {
+            margin-top: auto;
+            padding-top: 50px;
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Kollita Pro</h1>
+        <p>Portal Central de Accesos del Sistema</p>
+    </div>
+
+    <div class="grid">
+        <!-- Secretarios -->
+        <a href="kollita_borrador.html" class="card">
+            <div>
+                <span class="badge op">Operativo</span>
+                <div class="card-icon">💻</div>
+                <div class="card-title">Panel de Secretario</div>
+                <div class="card-desc">Registro de pedidos, clientes y cobros. Conexión paracaídas offline habilitada.</div>
+            </div>
+        </a>
+
+        <!-- Encargados -->
+        <a href="encargado.html" class="card">
+            <div>
+                <span class="badge op">Operativo</span>
+                <div class="card-icon">📦</div>
+                <div class="card-title">Panel de Encargado</div>
+                <div class="card-desc">Gestión de producción e inventario por sucursal aislada.</div>
+            </div>
+        </a>
+
+        <!-- Supervisor Alfa -->
+        <a href="supervisor_alfa.html" class="card">
+            <div>
+                <span class="badge super">Supervisión</span>
+                <div class="card-icon">👁️</div>
+                <div class="card-title">Supervisor Alfa</div>
+                <div class="card-desc">Monitoreo y ajustes primarios de sucursales.</div>
+            </div>
+        </a>
+
+        <!-- Supervisor Beta -->
+        <a href="supervisor_beta.html" class="card">
+            <div>
+                <span class="badge super">Supervisión</span>
+                <div class="card-icon">⚡</div>
+                <div class="card-title">Supervisor Beta</div>
+                <div class="card-desc">Administración avanzada y gestión de credenciales del sistema.</div>
+            </div>
+        </a>
+
+        <!-- Senior -->
+        <a href="senior.html" class="card">
+            <div>
+                <span class="badge admin">Dirección</span>
+                <div class="card-icon">📊</div>
+                <div class="card-title">Panel Senior</div>
+                <div class="card-desc">Análisis global, métricas consolidadas y control estadístico.</div>
+            </div>
+        </a>
+
+        <!-- Omega -->
+        <a href="omega.html" class="card">
+            <div>
+                <span class="badge admin">God Mode</span>
+                <div class="card-icon">👑</div>
+                <div class="card-title">Omega Central</div>
+                <div class="card-desc">Acceso total al sistema. Contiene el módulo Coca System Pro.</div>
+            </div>
+        </a>
+
+        <!-- Admin Móvil -->
+        <a href="admin de kollita movil.html" class="card">
+            <div>
+                <span class="badge super">Mobile</span>
+                <div class="card-icon">📱</div>
+                <div class="card-title">Admin Móvil</div>
+                <div class="card-desc">Visualización rápida y ligera optimizada para smartphones.</div>
+            </div>
+        </a>
+    </div>
+
+    <footer>
+        &copy; 2024 Kollita Pro System. Vercel Production Environment.
+    </footer>
+
+</body>
+</html>
