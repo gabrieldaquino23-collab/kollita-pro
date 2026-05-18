@@ -10249,7 +10249,122 @@ function clicSeguro(fn, tiempo){
         }));
     }
 
+    // ── MIGRAR HISTORIAL A SUPABASE ─────────────────────────────
+    window.migrarHistorialASupabase = async function() {
+        const btn = document.getElementById('btn-migrar-historial');
+        const estado = document.getElementById('migracion-estado');
+        if (!btn || !estado) return;
+
+        const sucursalId = getSucursalId();
+        if (!sucursalId) {
+            estado.style.display = 'block';
+            estado.innerHTML = '<span style="color:#c0392b;">❌ No se pudo detectar la sucursal. Ve a Configuración y pon el nombre.</span>';
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = '⏳ Subiendo...';
+        estado.style.display = 'block';
+
+        // Recolectar todos los pedidos: db + archivos históricos
+        let todosPedidos = [];
+        try {
+            const db = JSON.parse(localStorage.getItem('kollita_db') || '[]');
+            todosPedidos = todosPedidos.concat(db);
+        } catch(e) {}
+
+        // Barrer archivos históricos (kollita_archivo_YYYY_MM)
+        for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith('kollita_archivo_')) {
+                try {
+                    const arr = JSON.parse(localStorage.getItem(k) || '[]');
+                    todosPedidos = todosPedidos.concat(arr);
+                } catch(e) {}
+            }
+        }
+
+        const pedidosMap = todosPedidos.map(v => ({
+            id:                   v._id_local || v.id || String(v.numeroNota || Math.random().toString(36).substr(2,9)),
+            sucursal_id:          sucursalId,
+            numero_nota:          String(v.numeroNota || v.id || ''),
+            cliente:              v.cliente || 'CONSUMIDOR FINAL',
+            ci_nit:               v.ci_nit  || '',
+            productos:            v.productos || v.items || [],
+            subtotal:             v.subtotal    || v.total || 0,
+            descuento:            v.descuento   || 0,
+            porcentaje_descuento: v.porcentajeDescuento || 0,
+            total:                v.total       || 0,
+            estado:               (v.estado     || 'PREPARADO').toUpperCase(),
+            metodo_pago:          v.metodoPago  || v.metodo_pago || 'EFECTIVO',
+            efectivo_pagado:      v.efectivoPagado  || 0,
+            qr_pagado:            v.qrPagado        || 0,
+            total_entregado:      v.totalEntregado  || v.total || 0,
+            saldo_cobrado:        v.saldoCobrado    || v.total || 0,
+            anticipo:             v.anticipo         || 0,
+            anticipo_efectivo:    v.anticipoEfectivo || 0,
+            anticipo_qr:          v.anticipoQR       || 0,
+            secretario:           v.secretario || v.secretario_entrega || 'Sistema',
+            turno:                v.turno || 'N/A',
+            hora:                 v.hora || '',
+            created_at:           v.id ? new Date(v.id).toISOString() : new Date().toISOString()
+        }));
+
+        const total = pedidosMap.length;
+        if (total === 0) {
+            estado.innerHTML = '<span style="color:#b76000;">⚠️ No hay pedidos en el sistema local para migrar.</span>';
+            btn.disabled = false; btn.textContent = '🚀 Subir historial a Supabase y liberar espacio';
+            return;
+        }
+
+        // Subir en lotes de 20
+        const chunkSize = 20;
+        let subidos = 0, errores = 0;
+        for (let i = 0; i < pedidosMap.length; i += chunkSize) {
+            const chunk = pedidosMap.slice(i, i + chunkSize);
+            estado.innerHTML = `<div style="color:#b76000;font-weight:600;">⬆️ Subiendo ${Math.min(i+chunkSize, total)} de ${total} pedidos...</div>
+                <div style="background:#e5e7eb;border-radius:6px;height:8px;margin-top:6px;">
+                  <div style="background:#fb8500;height:8px;border-radius:6px;width:${Math.round((i/total)*100)}%;transition:width 0.3s;"></div>
+                </div>`;
+            try {
+                const res = await fetch(`${SUPA_URL}/rest/v1/pedidos`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPA_KEY,
+                        'Authorization': `Bearer ${getTokenActivo()}`,
+                        'Prefer': 'resolution=ignore-duplicates,return=minimal'
+                    },
+                    body: JSON.stringify(chunk)
+                });
+                if (res.ok || res.status === 201 || res.status === 204) {
+                    subidos += chunk.length;
+                } else {
+                    const txt = await res.text();
+                    console.warn('[Migración] Error chunk:', txt);
+                    errores += chunk.length;
+                }
+            } catch(e) {
+                console.warn('[Migración] Sin conexión en chunk', e.message);
+                errores += chunk.length;
+            }
+            // Pequeña pausa para no saturar
+            await new Promise(r => setTimeout(r, 150));
+        }
+
+        if (errores === 0) {
+            estado.innerHTML = `<div style="color:#2d6a4f;font-weight:700;">✅ ${subidos} pedidos subidos a la nube correctamente.</div>`;
+            btn.textContent = '✅ ¡Historial migrado!';
+            mostrarToast(`☁️ ${subidos} pedidos migrados a Supabase`);
+        } else {
+            estado.innerHTML = `<div style="color:#b76000;font-weight:700;">⚠️ ${subidos} subidos, ${errores} fallaron (sin internet o error). Vuelve a intentarlo.</div>`;
+            btn.disabled = false;
+            btn.textContent = '🔁 Reintentar migración';
+        }
+    };
+
     // ── HOOK EN confirmarCierre ────────────────────────────────
+
     // Interceptamos la función original sin modificarla
     const _confirmarCierreOriginal = window.confirmarCierre;
     window.confirmarCierre = function() {
