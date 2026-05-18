@@ -10284,31 +10284,45 @@ function clicSeguro(fn, tiempo){
             }
         }
 
-        const pedidosMap = todosPedidos.map(v => ({
-            id:                   v._id_local || v.id || String(v.numeroNota || Math.random().toString(36).substr(2,9)),
-            sucursal_id:          sucursalId,
-            numero_nota:          String(v.numeroNota || v.id || ''),
-            cliente:              v.cliente || 'CONSUMIDOR FINAL',
-            ci_nit:               v.ci_nit  || '',
-            productos:            v.productos || v.items || [],
-            subtotal:             v.subtotal    || v.total || 0,
-            descuento:            v.descuento   || 0,
-            porcentaje_descuento: v.porcentajeDescuento || 0,
-            total:                v.total       || 0,
-            estado:               (v.estado     || 'PREPARADO').toUpperCase(),
-            metodo_pago:          v.metodoPago  || v.metodo_pago || 'EFECTIVO',
-            efectivo_pagado:      v.efectivoPagado  || 0,
-            qr_pagado:            v.qrPagado        || 0,
-            total_entregado:      v.totalEntregado  || v.total || 0,
-            saldo_cobrado:        v.saldoCobrado    || v.total || 0,
-            anticipo:             v.anticipo         || 0,
-            anticipo_efectivo:    v.anticipoEfectivo || 0,
-            anticipo_qr:          v.anticipoQR       || 0,
-            secretario:           v.secretario || v.secretario_entrega || 'Sistema',
-            turno:                v.turno || 'N/A',
-            hora:                 v.hora || '',
-            created_at:           v.id ? new Date(v.id).toISOString() : new Date().toISOString()
-        }));
+        const pedidosMap = todosPedidos.map(v => {
+            let safeDate = new Date().toISOString();
+            try {
+                if (v.id) {
+                    const d = new Date(v.id);
+                    if (!isNaN(d.getTime())) safeDate = d.toISOString();
+                    else {
+                        const ms = parseInt(v.id);
+                        if (!isNaN(ms) && ms > 1000000000000) safeDate = new Date(ms).toISOString();
+                    }
+                }
+            } catch(e) {}
+
+            return {
+                id:                   v._id_local || v.id || String(v.numeroNota || Math.random().toString(36).substr(2,9)),
+                sucursal_id:          sucursalId,
+                numero_nota:          String(v.numeroNota || v.id || ''),
+                cliente:              v.cliente || 'CONSUMIDOR FINAL',
+                ci_nit:               v.ci_nit  || '',
+                productos:            v.productos || v.items || [],
+                subtotal:             v.subtotal    || v.total || 0,
+                descuento:            v.descuento   || 0,
+                porcentaje_descuento: v.porcentajeDescuento || 0,
+                total:                v.total       || 0,
+                estado:               (v.estado     || 'PREPARADO').toUpperCase(),
+                metodo_pago:          v.metodoPago  || v.metodo_pago || 'EFECTIVO',
+                efectivo_pagado:      v.efectivoPagado  || 0,
+                qr_pagado:            v.qrPagado        || 0,
+                total_entregado:      v.totalEntregado  || v.total || 0,
+                saldo_cobrado:        v.saldoCobrado    || v.total || 0,
+                anticipo:             v.anticipo         || 0,
+                anticipo_efectivo:    v.anticipoEfectivo || 0,
+                anticipo_qr:          v.anticipoQR       || 0,
+                secretario:           v.secretario || v.secretario_entrega || 'Sistema',
+                turno:                v.turno || 'N/A',
+                hora:                 v.hora || '',
+                created_at:           safeDate
+            };
+        });
 
         const total = pedidosMap.length;
         if (total === 0) {
