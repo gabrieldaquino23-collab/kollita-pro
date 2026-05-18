@@ -111,6 +111,14 @@ input[type="number"]{-moz-appearance:textfield}
 .hdr-btn:active{background:var(--dark3);color:#fff}
 .notif-dot{width:7px;height:7px;background:var(--red);border-radius:50%;display:none;box-shadow:0 0 5px var(--red)}
 .notif-dot.on{display:block}
+.hdr-btn-branch{
+  background:rgba(255,45,32,.15);border:1px solid rgba(255,45,32,.35);
+  color:var(--red);padding:0 12px;height:36px;border-radius:10px;
+  display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800;
+  letter-spacing:.5px;cursor:pointer;white-space:nowrap;
+  transition:background .2s,color .2s;
+}
+.hdr-btn-branch:active{background:var(--red);color:#fff}
 
 /* ══════════════════════════════
    STORE TABS
@@ -509,6 +517,9 @@ input[type="number"]{-moz-appearance:textfield}
   </div>
   <div class="hdr-actions">
     <div class="notif-dot" id="notif-dot"></div>
+    <button class="hdr-btn-branch" id="btn-change-branch" onclick="K.changeBranch()" style="display:none">
+      <i class="fa-solid fa-store"></i> SUCURSAL
+    </button>
     <div class="hdr-btn" onclick="K.openHistory()"><i class="fa-solid fa-clock-rotate-left"></i></div>
     <div class="hdr-btn" onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i></div>
   </div>
@@ -1062,6 +1073,8 @@ function renderBranches(){
         $('scr-branch').style.display='none';
         $('hdr-branch').textContent=b.n;
         $('rc-addr').textContent=CFG.storeAddr;
+        const btnCB = $('btn-change-branch');
+        if(btnCB) btnCB.style.display='flex';
         renderMachucaCats();
         renderBebCats();
         setStore('machuca');
@@ -1768,6 +1781,32 @@ function renderHistory(){
   if(cb)cb.addEventListener('click',()=>{history=[];pendingWA=null;$('notif-dot').classList.remove('on');saveHist();renderHistory();});
 }
 
+// ══ CAMBIAR SUCURSAL ══
+function changeBranch(){
+  // Confirmar antes de salir
+  if(!confirm('¿Querés cambiar de sucursal?')) return;
+  // Limpiar estado
+  branch = null;
+  cart = [];
+  store = 'machuca';
+  localStorage.removeItem('kol_movil_sesion');
+  // Resetear UI
+  $('hdr-branch').textContent = '—';
+  const btnCB = $('btn-change-branch');
+  if(btnCB) btnCB.style.display = 'none';
+  $('scr-branch').style.display = '';
+  // Resetear tabs
+  $('tab-machuca').classList.add('on');
+  $('tab-bolo').classList.remove('on');
+  $('tab-bebidas').classList.remove('on');
+  // Limpiar carrito visual
+  updateBadge(); recalc();
+  // Scroll al tope
+  const sa = $('scroll-area'); if(sa) sa.scrollTo({top:0});
+  // Regenerar lista de sucursales
+  renderBranches();
+}
+
 // INIT
 function _initApp(){
   history=readHist();
@@ -1803,6 +1842,8 @@ function _initApp(){
           $('scr-branch').style.display='none';
           $('hdr-branch').textContent=branch.n;
           $('rc-addr').textContent=CFG.storeAddr;
+          const btnCB2 = $('btn-change-branch');
+          if(btnCB2) btnCB2.style.display='flex';
           renderMachucaCats();
           renderBebCats();
           setStore(store);
@@ -1812,7 +1853,7 @@ function _initApp(){
   }
 }
 
-return{openCart,closeCart,openHistory,closeHistory,setPayment,recalc,confirmOrder,closeModal,modalSendWA,modalNewOrder,setStore,boloSetSize,boloSetCafe,boloSetCargada,boloToggleSabor,boloCantDelta,boloAgregar,_initApp};
+return{openCart,closeCart,openHistory,closeHistory,setPayment,recalc,confirmOrder,closeModal,modalSendWA,modalNewOrder,setStore,boloSetSize,boloSetCafe,boloSetCargada,boloToggleSabor,boloCantDelta,boloAgregar,_initApp,changeBranch};
 })();
 K._initApp();
 
