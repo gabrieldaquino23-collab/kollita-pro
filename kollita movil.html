@@ -31,9 +31,9 @@ input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button{-webkit-appearance:none}
 input[type="number"]{-moz-appearance:textfield}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════════════
    PANTALLA SUCURSALES
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════════════ */
 #scr-branch{
   position:fixed;inset:0;z-index:9000;
   background:var(--dark);
@@ -70,9 +70,9 @@ input[type="number"]{-moz-appearance:textfield}
 .br-btn i{color:var(--muted);font-size:12px}
 .br-ver{margin-top:32px;font-size:10px;color:#2a2a2a;letter-spacing:3px;font-weight:700}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════════════
    TOAST
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════════════ */
 #toast{
   position:fixed;bottom:calc(90px + var(--safe));left:50%;
   transform:translateX(-50%) translateY(12px);
@@ -85,9 +85,9 @@ input[type="number"]{-moz-appearance:textfield}
 }
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════════════
    HEADER
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════════════ */
 .hdr{
   background:var(--dark);
   padding:12px 16px;
@@ -112,9 +112,9 @@ input[type="number"]{-moz-appearance:textfield}
 .notif-dot{width:7px;height:7px;background:var(--red);border-radius:50%;display:none;box-shadow:0 0 5px var(--red)}
 .notif-dot.on{display:block}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════════════
    STORE TABS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════════════ */
 .store-tabs{
   background:var(--dark2);
   display:flex;padding:6px;gap:4px;flex-shrink:0
@@ -128,18 +128,18 @@ input[type="number"]{-moz-appearance:textfield}
 }
 .store-tab.on{background:var(--red);color:#fff;box-shadow:0 2px 10px rgba(255,45,32,.4)}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════════════
    ZONA SCROLL (todo el contenido)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════════════ */
 #scroll-area{
   flex:1;overflow-y:auto;overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
   padding-bottom:calc(80px + var(--safe))
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════════════
    BANNERS (scroll horizontal)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════════════ */
 .banners-wrap{padding:14px 16px 0;overflow-x:auto;scrollbar-width:none;display:flex;gap:10px}
 .banners-wrap::-webkit-scrollbar{display:none}
 .banner{
@@ -156,9 +156,9 @@ input[type="number"]{-moz-appearance:textfield}
 .banner-sub{font-size:11px;color:rgba(255,255,255,.6);font-weight:600;margin-top:4px}
 .banner-badge{display:inline-block;margin-top:8px;background:var(--yellow);color:var(--dark);font-size:11px;font-weight:800;padding:4px 10px;border-radius:8px}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════════════
    ZONA MACHUCA
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════════════ */
 .mach-cats{
   display:flex;overflow-x:auto;gap:6px;
   padding:12px 16px 8px;scrollbar-width:none
@@ -224,9 +224,9 @@ input[type="number"]{-moz-appearance:textfield}
 }
 .prod-add:active{background:var(--red-d)}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════════════
    ZONA BEBIDAS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════════════ */
 .beb-search-wrap{padding:12px 16px 8px}
 .beb-search{
   background:var(--card);border:1.5px solid var(--border);
@@ -256,7 +256,7 @@ input[type="number"]{-moz-appearance:textfield}
 }
 .bcat-btn.on{background:var(--dark);color:#fff;border-color:var(--dark)}
 
-/* SecciÃ³n bebidas */
+/* Sección bebidas */
 .beb-section{padding:10px 16px 0}
 .beb-sec-hdr{
   display:flex;align-items:center;gap:8px;
@@ -302,9 +302,9 @@ input[type="number"]{-moz-appearance:textfield}
 }
 .beb-card.in-cart .beb-qty{display:flex}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════════════
    FAB CARRITO
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════════════ */
 #fab-cart{
   position:fixed;bottom:calc(16px + var(--safe));
   left:50%;transform:translateX(-50%);
@@ -323,9 +323,9 @@ input[type="number"]{-moz-appearance:textfield}
   padding:2px 10px;border-radius:50px;min-width:24px;text-align:center
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════════════
    PANELS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════════════ */
 .panel{position:fixed;inset:0;z-index:500;background:var(--bg);display:none;flex-direction:column;overflow:hidden}
 .panel.open{display:flex}
 .panel-hdr{
@@ -342,9 +342,9 @@ input[type="number"]{-moz-appearance:textfield}
 .panel-badge{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;font-family:var(--fb)}
 .panel-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════════════
    RECEIPT
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════════════ */
 .receipt{margin:10px;background:var(--card);border-radius:18px;overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 16px rgba(0,0,0,.07)}
 .rc-store{text-align:center;padding:14px 16px;border-bottom:1px dashed #ddd;background:var(--dark)}
 .rc-store-name{font-family:var(--fd);font-size:22px;color:var(--yellow);letter-spacing:2px}
@@ -372,9 +372,9 @@ input[type="number"]{-moz-appearance:textfield}
 .rc-final-label{font-family:var(--fd);font-size:20px;letter-spacing:2px}
 .rc-final-amount{font-family:var(--fd);font-size:34px;color:var(--red);letter-spacing:1px}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════════════
    ORDER FORM
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════════════ */
 .rc-form{padding:14px;border-top:1px solid var(--border);background:var(--card)}
 .rc-form-title{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:12px}
 .pay-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px}
@@ -396,9 +396,9 @@ input[type="number"]{-moz-appearance:textfield}
 .btn-confirm:active{opacity:.88}
 .btn-confirm i{font-size:20px}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ══════════════════════════════
    HISTORIAL
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+══════════════════════════════ */
 .hist-empty{text-align:center;padding:48px 20px;color:#aaa}
 .hist-empty-icon{font-size:44px;margin-bottom:10px;opacity:.5}
 .hist-empty-txt{font-family:var(--fb);font-size:14px;font-weight:600;letter-spacing:.5px}
@@ -441,9 +441,9 @@ input[type="number"]{-moz-appearance:textfield}
 .btn-clear-hist{margin:10px;width:calc(100% - 20px);background:none;border:1.5px solid var(--border);color:#aaa;padding:11px;border-radius:10px;font-size:13px;font-weight:700;letter-spacing:.5px;cursor:pointer;font-family:var(--fb)}
 .btn-clear-hist:active{background:var(--bg)}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   MODAL CONFIRMACIÃ“N
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ══════════════════════════════
+   MODAL CONFIRMACIÓN
+══════════════════════════════ */
 #modal{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 #modal.open{display:flex}
 .modal-sheet{background:var(--card);border-radius:24px 24px 0 0;padding:28px 22px calc(32px + var(--safe));width:100%;max-width:500px;text-align:center}
@@ -472,24 +472,24 @@ input[type="number"]{-moz-appearance:textfield}
 
 <div id="toast"></div>
 
-<!-- â•â• SUCURSALES â•â• -->
+<!-- ══ SUCURSALES ══ -->
 <div id="scr-branch">
   <div class="br-top">
     <div class="br-logo-wrap" id="br-logo-wrap"><img id="br-logo-img" src="" alt="" style="width:60px;height:60px;object-fit:contain;border-radius:50%;display:none"><i class="fa-solid fa-wine-bottle" id="br-logo-icon"></i></div>
     <div class="br-name">LA KOLLITA</div>
-    <div class="br-tag">Pedidos Online Â· Bolivia</div>
+    <div class="br-tag">Pedidos Online · Bolivia</div>
   </div>
   <div class="br-box">
     <div class="br-label">Seleccione su sucursal</div>
     <div id="branch-list"></div>
   </div>
-  <div class="br-ver">V4.0 Â· 2026</div>
+  <div class="br-ver">V4.0 · 2026</div>
 </div>
 
-<!-- â•â• MODAL â•â• -->
+<!-- ══ MODAL ══ -->
 <div id="modal">
   <div class="modal-sheet">
-    <div class="modal-icon">âœ…</div>
+    <div class="modal-icon">✅</div>
     <div class="modal-title">Pedido Registrado</div>
     <div class="modal-client" id="modal-client"></div>
     <div class="modal-sub">El pedido fue guardado en el historial.</div>
@@ -501,11 +501,11 @@ input[type="number"]{-moz-appearance:textfield}
   </div>
 </div>
 
-<!-- â•â• HEADER â•â• -->
+<!-- ══ HEADER ══ -->
 <div class="hdr">
   <div class="hdr-left">
     <div class="hdr-logo">LA KOLLITA</div>
-    <div class="hdr-branch" id="hdr-branch">â€”</div>
+    <div class="hdr-branch" id="hdr-branch">—</div>
   </div>
   <div class="hdr-actions">
     <div class="notif-dot" id="notif-dot"></div>
@@ -514,36 +514,36 @@ input[type="number"]{-moz-appearance:textfield}
   </div>
 </div>
 
-<!-- â•â• STORE TABS â•â• -->
+<!-- ══ STORE TABS ══ -->
 <div class="store-tabs">
-  <button class="store-tab on" id="tab-machuca" onclick="K.setStore('machuca')">ðŸƒ COCA MACHUCA</button>
-  <button class="store-tab" id="tab-bolo" onclick="K.setStore('bolo')">ðŸ§ƒ ARMAR BOLO</button>
-  <button class="store-tab" id="tab-bebidas" onclick="K.setStore('bebidas')">ðŸ¥¤ BEBIDAS</button>
+  <button class="store-tab on" id="tab-machuca" onclick="K.setStore('machuca')">🍃 COCA MACHUCA</button>
+  <button class="store-tab" id="tab-bolo" onclick="K.setStore('bolo')">🧃 ARMAR BOLO</button>
+  <button class="store-tab" id="tab-bebidas" onclick="K.setStore('bebidas')">🥤 BEBIDAS</button>
 </div>
 
-<!-- â•â• SCROLL AREA (todo lo scrolleable) â•â• -->
+<!-- ══ SCROLL AREA (todo lo scrolleable) ══ -->
 <div id="scroll-area">
 
   <!-- BANNERS (siempre visibles) -->
   <div class="banners-wrap" id="banners-wrap">
     <div class="banner banner-1">
-      <div class="banner-bg-icon">ðŸƒ</div>
-      <div class="banner-chip">â­ Destacado</div>
+      <div class="banner-bg-icon">🍃</div>
+      <div class="banner-chip">⭐ Destacado</div>
       <div class="banner-title">COCA<br>MACHUCA</div>
       <div class="banner-sub">3% OFF pagando en efectivo</div>
-      <div class="banner-badge">Ver catÃ¡logo â†’</div>
+      <div class="banner-badge">Ver catálogo →</div>
     </div>
     <div class="banner banner-2">
-      <div class="banner-bg-icon">ðŸº</div>
-      <div class="banner-chip">ðŸ†• Novedades</div>
+      <div class="banner-bg-icon">🍺</div>
+      <div class="banner-chip">🆕 Novedades</div>
       <div class="banner-title">CERVEZAS<br>& PACKS</div>
-      <div class="banner-sub">PaceÃ±a Â· Corona Â· Conti Â· Huari</div>
+      <div class="banner-sub">Paceña · Corona · Conti · Huari</div>
     </div>
     <div class="banner banner-3">
-      <div class="banner-bg-icon">ðŸ¥ƒ</div>
-      <div class="banner-chip">ðŸ”¥ Premium</div>
+      <div class="banner-bg-icon">🥃</div>
+      <div class="banner-chip">🔥 Premium</div>
       <div class="banner-title">RONES &<br>WHISKYS</div>
-      <div class="banner-sub">Flor de CaÃ±a Â· Havana Â· JW</div>
+      <div class="banner-sub">Flor de Caña · Havana · JW</div>
     </div>
   </div>
 
@@ -562,18 +562,18 @@ input[type="number"]{-moz-appearance:textfield}
   <div id="zone-bolo" style="display:none">
     <div style="padding:14px 16px 0">
 
-      <!-- PASO 1: TamaÃ±o -->
+      <!-- PASO 1: Tamaño -->
       <div style="margin-bottom:14px">
-        <div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">1. ELIGE EL TAMAÃ‘O</div>
+        <div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">1. ELIGE EL TAMAÑO</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
           <div id="bolo-media" onclick="K.boloSetSize('media')" style="background:var(--card);border:2px solid var(--border);border-radius:14px;padding:14px 10px;cursor:pointer;text-align:center;transition:all .14s">
-            <div style="font-size:26px;margin-bottom:5px">ðŸƒ</div>
+            <div style="font-size:26px;margin-bottom:5px">🍃</div>
             <div style="font-family:var(--fd);font-size:17px;letter-spacing:1px;color:var(--dark)">MEDIA</div>
             <div style="font-size:13px;color:var(--red);font-weight:800;margin-top:2px">Bs 15</div>
             <div style="font-size:10px;color:var(--muted);font-weight:600;margin-top:1px">+1Bs por sabor extra</div>
           </div>
           <div id="bolo-cuart" onclick="K.boloSetSize('cuartilla')" style="background:var(--card);border:2px solid var(--border);border-radius:14px;padding:14px 10px;cursor:pointer;text-align:center;transition:all .14s">
-            <div style="font-size:26px;margin-bottom:5px">ðŸƒ</div>
+            <div style="font-size:26px;margin-bottom:5px">🍃</div>
             <div style="font-family:var(--fd);font-size:17px;letter-spacing:1px;color:var(--dark)">CUARTILLA</div>
             <div style="font-size:13px;color:var(--red);font-weight:800;margin-top:2px">Bs 25</div>
             <div style="font-size:10px;color:var(--muted);font-weight:600;margin-top:1px">+2Bs por sabor extra</div>
@@ -582,13 +582,13 @@ input[type="number"]{-moz-appearance:textfield}
         <!-- Despuntada y Despalada: solo visible si se selecciona Cuartilla -->
         <div id="bolo-extra-sizes" style="display:none;grid-template-columns:1fr 1fr;gap:8px">
           <div id="bolo-despuntada" onclick="K.boloSetSize('despuntada')" style="background:var(--card);border:2px solid var(--border);border-radius:14px;padding:14px 10px;cursor:pointer;text-align:center;transition:all .14s">
-            <div style="font-size:26px;margin-bottom:5px">ðŸƒ</div>
+            <div style="font-size:26px;margin-bottom:5px">🍃</div>
             <div style="font-family:var(--fd);font-size:15px;letter-spacing:1px;color:var(--dark)">DESPUNTADA</div>
             <div style="font-size:13px;color:var(--red);font-weight:800;margin-top:2px">Bs 50</div>
             <div style="font-size:10px;color:var(--muted);font-weight:600;margin-top:1px">+2Bs por sabor extra</div>
           </div>
           <div id="bolo-despalada" onclick="K.boloSetSize('despalada')" style="background:var(--card);border:2px solid var(--border);border-radius:14px;padding:14px 10px;cursor:pointer;text-align:center;transition:all .14s">
-            <div style="font-size:26px;margin-bottom:5px">ðŸƒ</div>
+            <div style="font-size:26px;margin-bottom:5px">🍃</div>
             <div style="font-family:var(--fd);font-size:15px;letter-spacing:1px;color:var(--dark)">DESPALADA</div>
             <div style="font-size:13px;color:var(--red);font-weight:800;margin-top:2px">Bs 60</div>
             <div style="font-size:10px;color:var(--muted);font-weight:600;margin-top:1px">+2Bs por sabor extra</div>
@@ -596,18 +596,18 @@ input[type="number"]{-moz-appearance:textfield}
         </div>
       </div>
 
-      <!-- PASO 2: CafÃ© -->
+      <!-- PASO 2: Café -->
       <div style="margin-bottom:14px">
-        <div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">2. Â¿CON O SIN CAFÃ‰?</div>
+        <div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">2. ¿CON O SIN CAFÉ?</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <div id="bolo-sc" onclick="K.boloSetCafe('sc')" style="background:var(--card);border:2px solid var(--border);border-radius:14px;padding:14px;cursor:pointer;text-align:center;transition:all .14s">
-            <div style="font-size:22px;margin-bottom:4px">ðŸŒ¿</div>
-            <div style="font-size:13px;font-weight:800;color:var(--dark)">SIN CAFÃ‰</div>
+            <div style="font-size:22px;margin-bottom:4px">🌿</div>
+            <div style="font-size:13px;font-weight:800;color:var(--dark)">SIN CAFÉ</div>
             <div style="font-size:10px;color:var(--muted);font-weight:600">Sin costo</div>
           </div>
           <div id="bolo-cc" onclick="K.boloSetCafe('cc')" style="background:var(--card);border:2px solid var(--border);border-radius:14px;padding:14px;cursor:pointer;text-align:center;transition:all .14s">
-            <div style="font-size:22px;margin-bottom:4px">â˜•</div>
-            <div style="font-size:13px;font-weight:800;color:var(--dark)">CON CAFÃ‰</div>
+            <div style="font-size:22px;margin-bottom:4px">☕</div>
+            <div style="font-size:13px;font-weight:800;color:var(--dark)">CON CAFÉ</div>
             <div style="font-size:10px;color:var(--muted);font-weight:600">Sin costo</div>
           </div>
         </div>
@@ -615,20 +615,20 @@ input[type="number"]{-moz-appearance:textfield}
 
       <!-- PASO 2B: Cargada (independiente, no reemplaza S/C ni C/C) -->
       <div style="margin-bottom:14px">
-        <div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">2B. Â¿QUIERE CARGADA? <span style="color:var(--green);font-weight:700">(+Bs 3)</span></div>
+        <div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">2B. ¿QUIERE CARGADA? <span style="color:var(--green);font-weight:700">(+Bs 3)</span></div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px">
           <div id="bolo-no-cargada" onclick="K.boloSetCargada('no')" style="background:var(--card);border:2px solid var(--border);border-radius:14px;padding:12px 8px;cursor:pointer;text-align:center;transition:all .14s">
-            <div style="font-size:18px;margin-bottom:3px">ðŸš«</div>
+            <div style="font-size:18px;margin-bottom:3px">🚫</div>
             <div style="font-size:11px;font-weight:800;color:var(--dark)">SIN CARGA</div>
             <div style="font-size:10px;color:var(--muted);font-weight:600">Sin costo</div>
           </div>
           <div id="bolo-cargada-cafe" onclick="K.boloSetCargada('cafe')" style="background:var(--card);border:2px solid var(--border);border-radius:14px;padding:12px 8px;cursor:pointer;text-align:center;transition:all .14s">
-            <div style="font-size:18px;margin-bottom:3px">âš¡â˜•</div>
-            <div style="font-size:11px;font-weight:800;color:var(--dark)">CAFÃ‰</div>
+            <div style="font-size:18px;margin-bottom:3px">⚡☕</div>
+            <div style="font-size:11px;font-weight:800;color:var(--dark)">CAFÉ</div>
             <div style="font-size:10px;color:var(--green);font-weight:700">+Bs 3</div>
           </div>
           <div id="bolo-cargada-esencia" onclick="K.boloSetCargada('esencia')" style="background:var(--card);border:2px solid var(--border);border-radius:14px;padding:12px 8px;cursor:pointer;text-align:center;transition:all .14s">
-            <div style="font-size:18px;margin-bottom:3px">âš¡ðŸŒº</div>
+            <div style="font-size:18px;margin-bottom:3px">⚡🌺</div>
             <div style="font-size:11px;font-weight:800;color:var(--dark)">ESENCIA</div>
             <div style="font-size:10px;color:var(--green);font-weight:700">+Bs 3</div>
           </div>
@@ -648,7 +648,7 @@ input[type="number"]{-moz-appearance:textfield}
       <div style="margin-bottom:14px">
         <div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">4. CANTIDAD</div>
         <div style="display:flex;align-items:center;gap:0;background:var(--card);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;width:fit-content">
-          <button onclick="K.boloCantDelta(-1)" style="width:42px;height:42px;border:none;background:none;font-size:20px;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:900">âˆ’</button>
+          <button onclick="K.boloCantDelta(-1)" style="width:42px;height:42px;border:none;background:none;font-size:20px;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:900">−</button>
           <span id="bolo-cant" style="min-width:36px;text-align:center;font-weight:800;font-size:18px;color:var(--dark)">1</span>
           <button onclick="K.boloCantDelta(1)" style="width:42px;height:42px;border:none;background:none;font-size:20px;cursor:pointer;color:var(--green);display:flex;align-items:center;justify-content:center;font-weight:900">+</button>
         </div>
@@ -656,7 +656,7 @@ input[type="number"]{-moz-appearance:textfield}
 
       <!-- MINI NOTA -->
       <div id="bolo-nota" style="background:var(--dark);border-radius:16px;padding:16px;margin-bottom:14px;display:none">
-        <div style="font-family:var(--fd);font-size:13px;letter-spacing:2px;color:var(--yellow);margin-bottom:10px">â˜… RESUMEN DEL BOLO â˜…</div>
+        <div style="font-family:var(--fd);font-size:13px;letter-spacing:2px;color:var(--yellow);margin-bottom:10px">★ RESUMEN DEL BOLO ★</div>
         <div id="bolo-nota-body" style="font-size:12px;color:#ccc;line-height:1.8"></div>
         <div style="border-top:1px dashed #333;margin-top:10px;padding-top:10px;display:flex;justify-content:space-between;align-items:center">
           <div style="font-family:var(--fd);font-size:16px;letter-spacing:1px;color:#fff">TOTAL</div>
@@ -664,7 +664,7 @@ input[type="number"]{-moz-appearance:textfield}
         </div>
       </div>
 
-      <!-- BOTÃ“N AGREGAR -->
+      <!-- BOTÓN AGREGAR -->
       <button id="bolo-add-btn" onclick="K.boloAgregar()" style="width:100%;background:var(--green);color:#fff;border:none;padding:16px;border-radius:14px;font-family:var(--fb);font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px;opacity:.4;pointer-events:none">
         <i class="fa-solid fa-circle-plus"></i> AGREGAR AL CARRITO
       </button>
@@ -695,17 +695,17 @@ input[type="number"]{-moz-appearance:textfield}
 <!-- CART PANEL -->
 <div id="panel-cart" class="panel">
   <div class="panel-hdr">
-    <button class="panel-back" onclick="K.closeCart()">â† Volver</button>
+    <button class="panel-back" onclick="K.closeCart()">← Volver</button>
     <div class="panel-title">Nota de Venta</div>
     <div class="panel-badge" id="cart-badge">0 items</div>
   </div>
   <div class="panel-body" id="cart-body">
     <div class="receipt">
       <div class="rc-store">
-        <div class="rc-store-name">â˜… LA KOLLITA â˜…</div>
-        <div class="rc-store-addr" id="rc-addr">â€”</div>
+        <div class="rc-store-name">★ LA KOLLITA ★</div>
+        <div class="rc-store-addr" id="rc-addr">—</div>
       </div>
-      <div class="rc-items" id="rc-items"><div class="rc-empty">â€” Carrito vacÃ­o â€”</div></div>
+      <div class="rc-items" id="rc-items"><div class="rc-empty">— Carrito vacío —</div></div>
       <div class="rc-totals" id="rc-totals"></div>
       <div class="rc-form">
         <div class="rc-form-title">Datos del Pedido</div>
@@ -731,7 +731,7 @@ input[type="number"]{-moz-appearance:textfield}
 <!-- HISTORY PANEL -->
 <div id="panel-history" class="panel">
   <div class="panel-hdr">
-    <button class="panel-back" onclick="K.closeHistory()">â† Volver</button>
+    <button class="panel-back" onclick="K.closeHistory()">← Volver</button>
     <div class="panel-title">Historial</div>
     <div class="panel-badge" id="hist-badge">0</div>
   </div>
@@ -759,11 +759,11 @@ function notifySync(type,data){
   try{window.dispatchEvent(new CustomEvent('kollita_sync',{detail:{type,data}}));}catch(e){}
 }
 
-// â”€â”€ SUPABASE SYNC (DESCONECTADO) â”€â”€
+// ── SUPABASE SYNC (DESCONECTADO) ──
 // const SUPA_URL='https://yngeclqhqljnjxvqgbih.supabase.co/rest/v1/kollita_config';
 // const SUPA_KEY='sb_publishable_KjmHILYWY4s40McEN5e-kA_QOE1izkI';
 async function fetchCloud(){}
-// â”€â”€ Solo localStorage â”€â”€
+// ── Solo localStorage ──
 function lg(k,d){
   // if(cloudData&&cloudData[k]!==undefined)return cloudData[k];
   try{const r=localStorage.getItem(k);return r?JSON.parse(r):d;}catch(e){return d;}
@@ -771,9 +771,9 @@ function lg(k,d){
 function readHist(){return lg(HIST_KEY,[]);}
 function saveHist(){try{localStorage.setItem(HIST_KEY,JSON.stringify(history));}catch(e){}}
 
-// â”€â”€â”€ CONFIG â”€â”€â”€
+// ─── CONFIG ───
 const CFG={
-  storeAddr:'Santa Cruz de la Sierra Â· Bolivia',
+  storeAddr:'Santa Cruz de la Sierra · Bolivia',
   branches:[
     {n:'3 PASOS',              tel:'59178501031'},
     {n:'VIRGEN DE COTOCA',     tel:'59169014533'},
@@ -788,38 +788,38 @@ const CFG={
   discMin:100, // descuento solo si total supera este monto
 
   machucaCats:[
-    {id:'trad',name:'TRADICIONAL',emoji:'ðŸƒ',
+    {id:'trad',name:'TRADICIONAL',emoji:'🍃',
      groups:[
-       {price:14,label:'14Bs S/CafÃ©',items:['BICO','ESTEVIA BLANCA','ESTEVIA VERDE']},
-       {price:15,label:'15Bs C/CafÃ©',items:['BICO NESCAFE','BLANCA NESCAFE','VERDE NESCAFE']},
-       {price:25,label:'25Bs S/CafÃ©',items:['BICO','ESTEVIA BLANCA','ESTEVIA VERDE']},
-       {price:25,label:'25Bs C/CafÃ©',items:['BICO NESCAFE','BLANCA NESCAFE','VERDE NESCAFE']}
+       {price:14,label:'14Bs S/Café',items:['BICO','ESTEVIA BLANCA','ESTEVIA VERDE']},
+       {price:15,label:'15Bs C/Café',items:['BICO NESCAFE','BLANCA NESCAFE','VERDE NESCAFE']},
+       {price:25,label:'25Bs S/Café',items:['BICO','ESTEVIA BLANCA','ESTEVIA VERDE']},
+       {price:25,label:'25Bs C/Café',items:['BICO NESCAFE','BLANCA NESCAFE','VERDE NESCAFE']}
      ]
     },
-    {id:'esp',name:'ESPECIAL',emoji:'â­',
+    {id:'esp',name:'ESPECIAL',emoji:'⭐',
      groups:[
-       {price:15,label:'15Bs S/CafÃ©',items:['YOGOBULL','REDBULL','YOGURT MORA','CHICLE','MARACUYA','BANANA','SANDIA','MONSTER','CAPUCCINO','YOGURT','CEDRON','FRUTILLA','ASIA','MENTA','MANGO','LIMON','CHIRIMOYA','NARANJA','CHOCOLATE']},
-       {price:15,label:'15Bs C/CafÃ©',items:['YOGOBULL C/C','REDBULL C/C','YOGURT MORA C/C','CHICLE C/C','MARACUYA C/C','BANANA C/C','SANDIA C/C','MONSTER C/C','CAPUCCINO C/C','YOGURT C/C','CEDRON C/C','FRUTILLA C/C','ASIA C/C','MENTA C/C','MANGO C/C','LIMON C/C','CHIRIMOYA C/C','NARANJA C/C','CHOCOLATE C/C']},
-       {price:25,label:'25Bs S/CafÃ©',items:['YOGOBULL','REDBULL','YOGURT MORA','CHICLE','MARACUYA','BANANA','SANDIA','MONSTER','CAPUCCINO','YOGURT','CEDRON','FRUTILLA','ASIA','MENTA','MANGO','LIMON','CHIRIMOYA','NARANJA','CHOCOLATE']},
-       {price:25,label:'25Bs C/CafÃ©',items:['YOGOBULL C/C','REDBULL C/C','YOGURT MORA C/C','CHICLE C/C','MARACUYA C/C','BANANA C/C','SANDIA C/C','MONSTER C/C','CAPUCCINO C/C','YOGURT C/C','CEDRON C/C','FRUTILLA C/C','ASIA C/C','MENTA C/C','MANGO C/C','LIMON C/C','CHIRIMOYA C/C','NARANJA C/C','CHOCOLATE C/C']}
+       {price:15,label:'15Bs S/Café',items:['YOGOBULL','REDBULL','YOGURT MORA','CHICLE','MARACUYA','BANANA','SANDIA','MONSTER','CAPUCCINO','YOGURT','CEDRON','FRUTILLA','ASIA','MENTA','MANGO','LIMON','CHIRIMOYA','NARANJA','CHOCOLATE']},
+       {price:15,label:'15Bs C/Café',items:['YOGOBULL C/C','REDBULL C/C','YOGURT MORA C/C','CHICLE C/C','MARACUYA C/C','BANANA C/C','SANDIA C/C','MONSTER C/C','CAPUCCINO C/C','YOGURT C/C','CEDRON C/C','FRUTILLA C/C','ASIA C/C','MENTA C/C','MANGO C/C','LIMON C/C','CHIRIMOYA C/C','NARANJA C/C','CHOCOLATE C/C']},
+       {price:25,label:'25Bs S/Café',items:['YOGOBULL','REDBULL','YOGURT MORA','CHICLE','MARACUYA','BANANA','SANDIA','MONSTER','CAPUCCINO','YOGURT','CEDRON','FRUTILLA','ASIA','MENTA','MANGO','LIMON','CHIRIMOYA','NARANJA','CHOCOLATE']},
+       {price:25,label:'25Bs C/Café',items:['YOGOBULL C/C','REDBULL C/C','YOGURT MORA C/C','CHICLE C/C','MARACUYA C/C','BANANA C/C','SANDIA C/C','MONSTER C/C','CAPUCCINO C/C','YOGURT C/C','CEDRON C/C','FRUTILLA C/C','ASIA C/C','MENTA C/C','MANGO C/C','LIMON C/C','CHIRIMOYA C/C','NARANJA C/C','CHOCOLATE C/C']}
      ]
     },
-    {id:'prem',name:'PREMIUM',emoji:'ðŸ’Ž',
+    {id:'prem',name:'PREMIUM',emoji:'💎',
      groups:[
-       {price:15,label:'15Bs S/CafÃ©',items:['3 POLVOS','SUEGRA VENENOSA','SUPER DOSIS','PARALIZADOR','QUITA HEMBRA','7 SABORES','TORCEDURA SEGURA','ZOMBIE','QUITA MACHO','MUTAZO','TRALALERO']},
-       {price:15,label:'15Bs C/CafÃ©',items:['3 POLVOS C/C','SUEGRA VENENOSA C/C','SUPER DOSIS C/C','PARALIZADOR C/C','QUITA HEMBRA C/C','7 SABORES C/C','TORCEDURA SEGURA C/C','ZOMBIE C/C','QUITA MACHO C/C','MUTAZO C/C','TRALALERO C/C']},
-       {price:25,label:'25Bs S/CafÃ©',items:['3 POLVOS','SUEGRA VENENOSA','SUPER DOSIS','PARALIZADOR','QUITA HEMBRA','7 SABORES','TORCEDURA SEGURA','ZOMBIE','QUITA MACHO','MUTAZO','TRALALERO']},
-       {price:25,label:'25Bs C/CafÃ©',items:['3 POLVOS C/C','SUEGRA VENENOSA C/C','SUPER DOSIS C/C','PARALIZADOR C/C','QUITA HEMBRA C/C','7 SABORES C/C','TORCEDURA SEGURA C/C','ZOMBIE C/C','QUITA MACHO C/C','MUTAZO C/C','TRALALERO C/C']}
+       {price:15,label:'15Bs S/Café',items:['3 POLVOS','SUEGRA VENENOSA','SUPER DOSIS','PARALIZADOR','QUITA HEMBRA','7 SABORES','TORCEDURA SEGURA','ZOMBIE','QUITA MACHO','MUTAZO','TRALALERO']},
+       {price:15,label:'15Bs C/Café',items:['3 POLVOS C/C','SUEGRA VENENOSA C/C','SUPER DOSIS C/C','PARALIZADOR C/C','QUITA HEMBRA C/C','7 SABORES C/C','TORCEDURA SEGURA C/C','ZOMBIE C/C','QUITA MACHO C/C','MUTAZO C/C','TRALALERO C/C']},
+       {price:25,label:'25Bs S/Café',items:['3 POLVOS','SUEGRA VENENOSA','SUPER DOSIS','PARALIZADOR','QUITA HEMBRA','7 SABORES','TORCEDURA SEGURA','ZOMBIE','QUITA MACHO','MUTAZO','TRALALERO']},
+       {price:25,label:'25Bs C/Café',items:['3 POLVOS C/C','SUEGRA VENENOSA C/C','SUPER DOSIS C/C','PARALIZADOR C/C','QUITA HEMBRA C/C','7 SABORES C/C','TORCEDURA SEGURA C/C','ZOMBIE C/C','QUITA MACHO C/C','MUTAZO C/C','TRALALERO C/C']}
      ]
     },
-    {id:'despunt',name:'DESPUNTADA',emoji:'âœ‚ï¸',
+    {id:'despunt',name:'DESPUNTADA',emoji:'✂️',
      groups:[
        {price:40,label:'40Bs TRAD.',items:['BICO','ESTEVIA BLANCA','ESTEVIA VERDE']},
        {price:45,label:'45Bs ESP.',items:['YOGOBULL','REDBULL','YOGURT MORA','CHICLE','MARACUYA','BANANA','SANDIA','MONSTER','CAPUCCINO','YOGURT','CEDRON','FRUTILLA','ASIA','MENTA','MANGO','LIMON','CHIRIMOYA','NARANJA','CHOCOLATE']},
        {price:50,label:'50Bs PREM.',items:['3 POLVOS','SUEGRA VENENOSA','SUPER DOSIS','PARALIZADOR','QUITA HEMBRA','7 SABORES','TORCEDURA SEGURA','ZOMBIE','QUITA MACHO','MUTAZO','TRALALERO']}
      ]
     },
-    {id:'despal',name:'DESPALADA',emoji:'ðŸŒ¿',
+    {id:'despal',name:'DESPALADA',emoji:'🌿',
      groups:[
        {price:50,label:'50Bs TRAD.',items:['BICO','ESTEVIA BLANCA','ESTEVIA VERDE']},
        {price:55,label:'55Bs ESP.',items:['YOGOBULL','REDBULL','YOGURT MORA','CHICLE','MARACUYA','BANANA','SANDIA','MONSTER','CAPUCCINO','YOGURT','CEDRON','FRUTILLA','ASIA','MENTA','MANGO','LIMON','CHIRIMOYA','NARANJA','CHOCOLATE']},
@@ -830,185 +830,185 @@ const CFG={
 };
 
 const BEB_CATS=[
-  {id:'all',label:'ðŸ” Todo'},
-  {id:'gaseosas',label:'ðŸ¥¤ Gaseosas'},
-  {id:'aguas',label:'ðŸ’§ Aguas'},
-  {id:'energizantes',label:'âš¡ Energizantes'},
-  {id:'cervezas',label:'ðŸº Cervezas'},
-  {id:'vinos',label:'ðŸ· Vinos'},
-  {id:'rones',label:'ðŸ¥ƒ Rones'},
-  {id:'licores',label:'ðŸ¸ Licores'},
-  {id:'singani',label:'ðŸŒ¿ Singani'},
-  {id:'varios',label:'ðŸ›’ Varios'},
-  {id:'custom',label:'â­ Mis Productos'}
+  {id:'all',label:'🔍 Todo'},
+  {id:'gaseosas',label:'🥤 Gaseosas'},
+  {id:'aguas',label:'💧 Aguas'},
+  {id:'energizantes',label:'⚡ Energizantes'},
+  {id:'cervezas',label:'🍺 Cervezas'},
+  {id:'vinos',label:'🍷 Vinos'},
+  {id:'rones',label:'🥃 Rones'},
+  {id:'licores',label:'🍸 Licores'},
+  {id:'singani',label:'🌿 Singani'},
+  {id:'varios',label:'🛒 Varios'},
+  {id:'custom',label:'⭐ Mis Productos'}
 ];
-const BEB_LABELS={gaseosas:'ðŸ¥¤ Gaseosas & Jugos',aguas:'ðŸ’§ Aguas',energizantes:'âš¡ Energizantes',cervezas:'ðŸº Cervezas',vinos:'ðŸ· Vinos',rones:'ðŸ¥ƒ Rones & Aguardientes',licores:'ðŸ¸ Licores & Spirits',singani:'ðŸŒ¿ Singani',varios:'ðŸ›’ Varios'};
+const BEB_LABELS={gaseosas:'🥤 Gaseosas & Jugos',aguas:'💧 Aguas',energizantes:'⚡ Energizantes',cervezas:'🍺 Cervezas',vinos:'🍷 Vinos',rones:'🥃 Rones & Aguardientes',licores:'🍸 Licores & Spirits',singani:'🌿 Singani',varios:'🛒 Varios'};
 
 const BEBIDAS=[
-  {id:1,cat:'gaseosas',e:'ðŸ¥¤',n:'Coca Cola 3 Lt',p:20},
-  {id:2,cat:'gaseosas',e:'ðŸ¥¤',n:'Coca Cola 2 Lt',p:14},
-  {id:3,cat:'gaseosas',e:'ðŸ¥¤',n:'Coca Cola 1.5 Lt',p:10},
-  {id:4,cat:'gaseosas',e:'ðŸ¥¤',n:'Coca Cola Personal',p:6},
-  {id:5,cat:'gaseosas',e:'ðŸ¥¤',n:'Coca Cola PequeÃ±a',p:4},
-  {id:6,cat:'gaseosas',e:'ðŸ¥¤',n:'Coca Cola Retornable 2.5 Lt',p:12},
-  {id:7,cat:'gaseosas',e:'ðŸŸ ',n:'Fanta / Sprite 3 Lt',p:20},
-  {id:8,cat:'gaseosas',e:'ðŸŸ ',n:'Fanta / Sprite 2 Lt',p:14},
-  {id:9,cat:'gaseosas',e:'ðŸŸ ',n:'Fanta / Sprite Personal',p:6},
-  {id:10,cat:'gaseosas',e:'ðŸŸ ',n:'Fanta / Sprite PequeÃ±a',p:4},
-  {id:11,cat:'gaseosas',e:'ðŸŽ',n:'Simba / Manzana / PiÃ±a / Durazno',p:11},
-  {id:12,cat:'gaseosas',e:'ðŸ‹',n:'CabaÃ±a Limonada 2 Lt',p:14},
-  {id:13,cat:'gaseosas',e:'ðŸ‹',n:'CabaÃ±a Limonada 1 Lt',p:10},
-  {id:14,cat:'gaseosas',e:'ðŸ‹',n:'CabaÃ±a Limonada Personal',p:6},
-  {id:15,cat:'gaseosas',e:'ðŸ«',n:'Del Valle 3 Lt',p:20},
-  {id:16,cat:'gaseosas',e:'ðŸ«',n:'Del Valle 2 Lt',p:14},
-  {id:17,cat:'gaseosas',e:'ðŸ«',n:'Del Valle Personal',p:6},
-  {id:18,cat:'gaseosas',e:'ðŸ«',n:'Del Valle PequeÃ±a',p:4},
-  {id:19,cat:'gaseosas',e:'ðŸ',n:'Aquario Pera/Pomelo 3 Lt',p:20},
-  {id:20,cat:'gaseosas',e:'ðŸ',n:'Aquario Pera/Pomelo 2 Lt',p:14},
-  {id:21,cat:'gaseosas',e:'ðŸ',n:'Aquario Personal',p:6},
-  {id:22,cat:'gaseosas',e:'ðŸ',n:'Aquario PequeÃ±a',p:4},
-  {id:23,cat:'gaseosas',e:'ðŸŸ£',n:'Pepsi 3 Lt',p:15},
-  {id:24,cat:'gaseosas',e:'ðŸŸ£',n:'Pepsi 2 Lt',p:12},
-  {id:25,cat:'gaseosas',e:'ðŸŸ£',n:'Pepsi 1 Lt',p:7},
-  {id:26,cat:'gaseosas',e:'ðŸŸ£',n:'Pepsi PequeÃ±a 250 ml',p:3},
-  {id:27,cat:'gaseosas',e:'ðŸ¥¤',n:'Cuba Libre 3 Lt',p:40},
-  {id:28,cat:'gaseosas',e:'ðŸ¥¤',n:'Cuba Libre 2 Lt',p:30},
-  {id:29,cat:'gaseosas',e:'ðŸ¥¤',n:'Cuba Libre 1 Lt',p:15},
-  {id:30,cat:'gaseosas',e:'ðŸ¥¤',n:'Cuba Libre Personal',p:10},
-  {id:31,cat:'gaseosas',e:'ðŸ¥¤',n:'Cuba Libre PequeÃ±a',p:5},
-  {id:32,cat:'gaseosas',e:'ðŸ¥¤',n:'Cuba Libre Lata',p:10},
-  {id:50,cat:'aguas',e:'ðŸ’§',n:'Agua Vital 3 Lt',p:10},
-  {id:51,cat:'aguas',e:'ðŸ’§',n:'Agua con Gas / sin Gas 2 Lt',p:8},
-  {id:52,cat:'aguas',e:'ðŸ’§',n:'Agua 1 Lt',p:6},
-  {id:53,cat:'aguas',e:'ðŸ’§',n:'Agua Personal 600 ml',p:5},
-  {id:54,cat:'aguas',e:'ðŸ’ª',n:'Activade 1 Lt',p:10},
-  {id:60,cat:'energizantes',e:'âš¡',n:'Volt 350 ml',p:5},
-  {id:61,cat:'energizantes',e:'âš¡',n:'Volt Lata 473 ml',p:12},
-  {id:62,cat:'energizantes',e:'âš«',n:'Black 330 ml',p:8},
-  {id:63,cat:'energizantes',e:'ðŸŒ€',n:'CiclÃ³n Botella 500 ml',p:8},
-  {id:64,cat:'energizantes',e:'ðŸŒ€',n:'CiclÃ³n Botella 350 ml',p:6},
-  {id:65,cat:'energizantes',e:'ðŸŒ€',n:'CiclÃ³n Lata 473 ml',p:14},
-  {id:66,cat:'energizantes',e:'ðŸŒ€',n:'CiclÃ³n Lata 269 ml',p:10},
-  {id:67,cat:'energizantes',e:'ðŸŸ¢',n:'Monster (Negro/Blanco/Celeste)',p:20},
-  {id:68,cat:'energizantes',e:'ðŸ‚',n:'Red Bull',p:18},
-  {id:69,cat:'energizantes',e:'ðŸŒ¿',n:'Sante 500 ml',p:8},
-  {id:70,cat:'energizantes',e:'ðŸŒ¿',n:'Sante 1 Lt',p:12},
-  {id:71,cat:'energizantes',e:'ðŸŒ¾',n:'Malta',p:7},
-  {id:72,cat:'energizantes',e:'ðŸŒ¾',n:'MaltÃ­n',p:8},
-  {id:73,cat:'energizantes',e:'ðŸŒµ',n:'Aloe Vera',p:10},
-  {id:74,cat:'energizantes',e:'â­',n:'Rockstar',p:6},
-  {id:75,cat:'energizantes',e:'ðŸ’ª',n:'Power Rojo/Azul 1 Lt',p:12},
-  {id:76,cat:'energizantes',e:'ðŸ§‰',n:'Yerba Mate Black',p:40},
-  {id:77,cat:'energizantes',e:'ðŸ’Š',n:'Suero Surtido',p:15},
-  {id:78,cat:'energizantes',e:'â˜•',n:'NescafÃ© en Sachet',p:2},
-  {id:80,cat:'cervezas',e:'ðŸº',n:'PaceÃ±a Palito 269 cc',p:8},
-  {id:81,cat:'cervezas',e:'ðŸº',n:'PaceÃ±a Lata 354 cc',p:10},
-  {id:82,cat:'cervezas',e:'ðŸº',n:'PaceÃ±a Lata Grande',p:12},
-  {id:83,cat:'cervezas',e:'ðŸº',n:'PaceÃ±a Botella PequeÃ±a Ret.',p:6},
-  {id:84,cat:'cervezas',e:'ðŸº',n:'PaceÃ±a Botella 350 ml',p:10},
-  {id:85,cat:'cervezas',e:'ðŸ“¦',n:'Pack PaceÃ±a Palito x24',p:190,pack:'Pack x24'},
-  {id:86,cat:'cervezas',e:'ðŸ“¦',n:'Pack PaceÃ±a Lata x24',p:220,pack:'Pack x24'},
-  {id:87,cat:'cervezas',e:'ðŸº',n:'Quilmes',p:12},
-  {id:88,cat:'cervezas',e:'ðŸ“¦',n:'Pack Quilmes x24',p:250,pack:'Pack x24'},
-  {id:89,cat:'cervezas',e:'ðŸº',n:'Conti Lata 269 cc',p:7},
-  {id:90,cat:'cervezas',e:'ðŸº',n:'Conti Lata Gordita 350 cc',p:8},
-  {id:91,cat:'cervezas',e:'ðŸº',n:'Conti Lata 410 cc',p:10},
-  {id:92,cat:'cervezas',e:'ðŸ“¦',n:'Pack Conti 269 x24',p:160,pack:'Pack x24'},
-  {id:93,cat:'cervezas',e:'ðŸº',n:'Huari Lata 269 cc',p:9},
-  {id:94,cat:'cervezas',e:'ðŸº',n:'Huari Miel Lata 269 cc',p:9},
-  {id:95,cat:'cervezas',e:'ðŸº',n:'Huari Miel Botellita',p:15},
-  {id:96,cat:'cervezas',e:'ðŸ“¦',n:'Pack Huari x24',p:210,pack:'Pack x24'},
-  {id:97,cat:'cervezas',e:'ðŸº',n:'Corona Botellita 330 ml',p:15},
-  {id:98,cat:'cervezas',e:'ðŸ“¦',n:'Pack Corona x24',p:340,pack:'Pack x24'},
-  {id:99,cat:'cervezas',e:'ðŸº',n:'Ducal Lata 269 cc',p:7},
-  {id:100,cat:'cervezas',e:'ðŸº',n:'Ducal Lata 310 cc',p:9},
-  {id:200,cat:'cervezas',e:'ðŸ“¦',n:'Pack Ducal x24',p:150,pack:'Pack x24'},
-  {id:201,cat:'cervezas',e:'ðŸº',n:'Golden Skol 410 cc',p:10},
-  {id:202,cat:'cervezas',e:'ðŸº',n:'Golden Skol 269 cc',p:7},
-  {id:203,cat:'cervezas',e:'ðŸº',n:'Amstel 269 cc',p:7},
-  {id:204,cat:'cervezas',e:'ðŸº',n:'Amstel 473 cc',p:10},
-  {id:205,cat:'cervezas',e:'ðŸº',n:'Ice 51 Surtida',p:15},
-  {id:206,cat:'cervezas',e:'ðŸº',n:'Cerveza Burguesa 269 cc',p:8},
-  {id:207,cat:'cervezas',e:'ðŸº',n:'Budweiser 269 cc',p:8},
-  {id:208,cat:'cervezas',e:'ðŸº',n:'Samba Palito 269 ml',p:6},
-  {id:300,cat:'vinos',e:'ðŸ·',n:'Vino Kolberg Tinto/Blanco',p:30},
-  {id:301,cat:'vinos',e:'ðŸ·',n:'Vino Campos de Solana',p:30},
-  {id:302,cat:'vinos',e:'ðŸ·',n:'Vino TerruÃ±o Tinto/Blanco',p:30},
-  {id:303,cat:'vinos',e:'ðŸ·',n:'Vino ViÃ±a de Balbo',p:30},
-  {id:304,cat:'vinos',e:'ðŸ·',n:'Vino Toro Viejo Botella',p:40},
-  {id:305,cat:'vinos',e:'ðŸ“¦',n:'Vino Toro Viejo CartÃ³n',p:70,pack:'CartÃ³n'},
-  {id:400,cat:'rones',e:'ðŸ¥ƒ',n:'Flor de CaÃ±a 1 Lt',p:100},
-  {id:401,cat:'rones',e:'ðŸ¥ƒ',n:'Flor de CaÃ±a 1.75 Lt',p:150},
-  {id:402,cat:'rones',e:'ðŸ¥ƒ',n:'Ron Abuelo 1 Lt',p:120},
-  {id:403,cat:'rones',e:'ðŸ¥ƒ',n:'Ron Abuelo 1.75 Lt',p:190},
-  {id:404,cat:'rones',e:'ðŸ¥ƒ',n:'Havana Club 7 AÃ±os',p:180},
-  {id:405,cat:'rones',e:'ðŸ¥ƒ',n:'Havana Club 3 AÃ±os',p:130},
-  {id:406,cat:'rones',e:'ðŸ¥ƒ',n:'Havana Club Especial',p:140},
-  {id:407,cat:'rones',e:'ðŸ¥ƒ',n:'Havana Club Reserva',p:150},
-  {id:408,cat:'rones',e:'ðŸ¥ƒ',n:'Ron PampeÃ±o',p:25},
-  {id:409,cat:'rones',e:'ðŸ¥ƒ',n:'Bacardi LimÃ³n Surtido',p:140},
-  {id:410,cat:'rones',e:'ðŸ¥ƒ',n:'Ron Kayana',p:50},
-  {id:411,cat:'rones',e:'ðŸ¥ƒ',n:'Ron 37 Lengua',p:90},
-  {id:500,cat:'licores',e:'ðŸ¸',n:'Fernet Branca 750 ml',p:110},
-  {id:501,cat:'licores',e:'ðŸ¸',n:'Fernet Branca 1 Lt',p:130},
-  {id:502,cat:'licores',e:'ðŸ¸',n:'Fernet Menta 750 ml',p:100},
-  {id:503,cat:'licores',e:'ðŸ¸',n:'Fernet Bhuero Negro',p:100},
-  {id:504,cat:'licores',e:'ðŸ¸',n:'Vodka Skyy Surtido',p:130},
-  {id:505,cat:'licores',e:'ðŸ¸',n:'Vodka LimÃ³n',p:25},
-  {id:506,cat:'licores',e:'ðŸŒµ',n:'Tequila Jose Cuervo 750 ml',p:150},
-  {id:507,cat:'licores',e:'ðŸŒµ',n:'Tequila Jose Cuervo 375 ml',p:90},
-  {id:508,cat:'licores',e:'ðŸŒµ',n:'Tequila Olmeca',p:175},
-  {id:509,cat:'licores',e:'ðŸŒµ',n:'Tequila Jarana',p:190},
-  {id:510,cat:'licores',e:'ðŸ¥ƒ',n:'Whisky Grants',p:140},
-  {id:511,cat:'licores',e:'ðŸ¥ƒ',n:'Johnnie Walker Rojo',p:170},
-  {id:512,cat:'licores',e:'ðŸ¥ƒ',n:'Johnnie Walker Negro',p:340},
-  {id:513,cat:'licores',e:'ðŸ¥ƒ',n:'Old Par',p:340},
-  {id:514,cat:'licores',e:'ðŸ¥ƒ',n:'Chivas Regal',p:380},
-  {id:515,cat:'licores',e:'ðŸ¸',n:'Beefeater 1Â¼ Lt',p:250},
-  {id:516,cat:'licores',e:'ðŸ¸',n:'Beefeater 750 ml',p:200},
-  {id:517,cat:'licores',e:'ðŸ¸',n:'Tanqueray 1 Lt',p:300},
-  {id:518,cat:'licores',e:'ðŸ¸',n:'Tanqueray 750 ml',p:260},
-  {id:519,cat:'licores',e:'ðŸ¸',n:'Amarula 750 ml',p:160},
-  {id:520,cat:'licores',e:'ðŸ¸',n:'Belho Barreiro',p:60},
-  {id:521,cat:'licores',e:'ðŸ¸',n:'Agua Ardiente AntioqueÃ±o',p:170},
-  {id:522,cat:'licores',e:'ðŸ¸',n:'Four Loko Grande',p:45},
-  {id:523,cat:'licores',e:'ðŸ¸',n:'Four Loko Mediano',p:35},
-  {id:524,cat:'licores',e:'ðŸ¸',n:'3 Plumas Seco Chico',p:12},
-  {id:525,cat:'licores',e:'ðŸ¸',n:'3 Plumas Seco 1 Lt',p:50},
-  {id:526,cat:'licores',e:'ðŸ¸',n:'3 Plumas Menta Chico',p:12},
-  {id:527,cat:'licores',e:'ðŸ¸',n:'3 Plumas Menta 1 Lt',p:50},
-  {id:528,cat:'licores',e:'â˜•',n:'CafÃ© CoÃ±ac Chico',p:12},
-  {id:529,cat:'licores',e:'â˜•',n:'CafÃ© CoÃ±ac 1 Lt',p:50},
-  {id:530,cat:'licores',e:'ðŸ¸',n:'Doble V Chico',p:12},
-  {id:531,cat:'licores',e:'ðŸ¸',n:'Doble V 1 Lt',p:50},
-  {id:600,cat:'singani',e:'ðŸŒ¿',n:'Singani 3 Estrellas Roja',p:35},
-  {id:601,cat:'singani',e:'ðŸŒ¿',n:'Singani 3 Estrellas Negra',p:35},
-  {id:602,cat:'singani',e:'ðŸŒ¿',n:'Singani Casa Real Rojo',p:60},
-  {id:603,cat:'singani',e:'ðŸŒ¿',n:'Singani Casa Real Negro',p:95},
-  {id:604,cat:'singani',e:'ðŸŒ¿',n:'Singani Casa Real Azul',p:40},
-  {id:605,cat:'singani',e:'ðŸŒ¿',n:'Chanceler',p:65},
-  {id:606,cat:'singani',e:'ðŸŒ¿',n:'Old Red',p:70},
-  {id:607,cat:'singani',e:'ðŸŒ¿',n:'Black Stone',p:60},
-  {id:608,cat:'singani',e:'ðŸŒ¿',n:'Singani Insignia Negro',p:120},
-  {id:609,cat:'singani',e:'ðŸŒ¿',n:'Singani Insignia Rojo',p:110},
-  {id:700,cat:'varios',e:'ðŸš¬',n:'Cigarro Bohem',p:15},
-  {id:701,cat:'varios',e:'ðŸš¬',n:'Cigarro Hills',p:8},
-  {id:702,cat:'varios',e:'ðŸš¬',n:'Cigarro Changer',p:21},
-  {id:703,cat:'varios',e:'ðŸ¬',n:'Chicle Grosso',p:1},
-  {id:704,cat:'varios',e:'ðŸ¬',n:'Chicle Beldent Negro/Verde',p:5},
-  {id:705,cat:'varios',e:'ðŸ¬',n:'Chicle Cloret',p:1},
-  {id:706,cat:'varios',e:'ðŸ§»',n:'Papel HigiÃ©nico 6 Rollos',p:12},
-  {id:707,cat:'varios',e:'ðŸ§»',n:'Papel HigiÃ©nico 1 Rollo',p:2},
-  {id:708,cat:'varios',e:'ðŸ’Š',n:'Preservativo Pantera',p:8},
-  {id:709,cat:'varios',e:'ðŸ’Š',n:'Alikal',p:8},
-  {id:710,cat:'varios',e:'ðŸ’Š',n:'Digestan',p:5},
-  {id:711,cat:'varios',e:'ðŸ’Š',n:'Ressaka',p:6},
-  {id:712,cat:'varios',e:'ðŸ”¥',n:'Encendedor Chispa',p:2},
-  {id:713,cat:'varios',e:'ðŸ”¥',n:'Encendedor PresiÃ³n',p:3},
-  {id:714,cat:'varios',e:'ðŸ”¥',n:'Encendedor Rompeviento',p:4}
+  {id:1,cat:'gaseosas',e:'🥤',n:'Coca Cola 3 Lt',p:20},
+  {id:2,cat:'gaseosas',e:'🥤',n:'Coca Cola 2 Lt',p:14},
+  {id:3,cat:'gaseosas',e:'🥤',n:'Coca Cola 1.5 Lt',p:10},
+  {id:4,cat:'gaseosas',e:'🥤',n:'Coca Cola Personal',p:6},
+  {id:5,cat:'gaseosas',e:'🥤',n:'Coca Cola Pequeña',p:4},
+  {id:6,cat:'gaseosas',e:'🥤',n:'Coca Cola Retornable 2.5 Lt',p:12},
+  {id:7,cat:'gaseosas',e:'🟠',n:'Fanta / Sprite 3 Lt',p:20},
+  {id:8,cat:'gaseosas',e:'🟠',n:'Fanta / Sprite 2 Lt',p:14},
+  {id:9,cat:'gaseosas',e:'🟠',n:'Fanta / Sprite Personal',p:6},
+  {id:10,cat:'gaseosas',e:'🟠',n:'Fanta / Sprite Pequeña',p:4},
+  {id:11,cat:'gaseosas',e:'🍎',n:'Simba / Manzana / Piña / Durazno',p:11},
+  {id:12,cat:'gaseosas',e:'🍋',n:'Cabaña Limonada 2 Lt',p:14},
+  {id:13,cat:'gaseosas',e:'🍋',n:'Cabaña Limonada 1 Lt',p:10},
+  {id:14,cat:'gaseosas',e:'🍋',n:'Cabaña Limonada Personal',p:6},
+  {id:15,cat:'gaseosas',e:'🫐',n:'Del Valle 3 Lt',p:20},
+  {id:16,cat:'gaseosas',e:'🫐',n:'Del Valle 2 Lt',p:14},
+  {id:17,cat:'gaseosas',e:'🫐',n:'Del Valle Personal',p:6},
+  {id:18,cat:'gaseosas',e:'🫐',n:'Del Valle Pequeña',p:4},
+  {id:19,cat:'gaseosas',e:'🍐',n:'Aquario Pera/Pomelo 3 Lt',p:20},
+  {id:20,cat:'gaseosas',e:'🍐',n:'Aquario Pera/Pomelo 2 Lt',p:14},
+  {id:21,cat:'gaseosas',e:'🍐',n:'Aquario Personal',p:6},
+  {id:22,cat:'gaseosas',e:'🍐',n:'Aquario Pequeña',p:4},
+  {id:23,cat:'gaseosas',e:'🟣',n:'Pepsi 3 Lt',p:15},
+  {id:24,cat:'gaseosas',e:'🟣',n:'Pepsi 2 Lt',p:12},
+  {id:25,cat:'gaseosas',e:'🟣',n:'Pepsi 1 Lt',p:7},
+  {id:26,cat:'gaseosas',e:'🟣',n:'Pepsi Pequeña 250 ml',p:3},
+  {id:27,cat:'gaseosas',e:'🥤',n:'Cuba Libre 3 Lt',p:40},
+  {id:28,cat:'gaseosas',e:'🥤',n:'Cuba Libre 2 Lt',p:30},
+  {id:29,cat:'gaseosas',e:'🥤',n:'Cuba Libre 1 Lt',p:15},
+  {id:30,cat:'gaseosas',e:'🥤',n:'Cuba Libre Personal',p:10},
+  {id:31,cat:'gaseosas',e:'🥤',n:'Cuba Libre Pequeña',p:5},
+  {id:32,cat:'gaseosas',e:'🥤',n:'Cuba Libre Lata',p:10},
+  {id:50,cat:'aguas',e:'💧',n:'Agua Vital 3 Lt',p:10},
+  {id:51,cat:'aguas',e:'💧',n:'Agua con Gas / sin Gas 2 Lt',p:8},
+  {id:52,cat:'aguas',e:'💧',n:'Agua 1 Lt',p:6},
+  {id:53,cat:'aguas',e:'💧',n:'Agua Personal 600 ml',p:5},
+  {id:54,cat:'aguas',e:'💪',n:'Activade 1 Lt',p:10},
+  {id:60,cat:'energizantes',e:'⚡',n:'Volt 350 ml',p:5},
+  {id:61,cat:'energizantes',e:'⚡',n:'Volt Lata 473 ml',p:12},
+  {id:62,cat:'energizantes',e:'⚫',n:'Black 330 ml',p:8},
+  {id:63,cat:'energizantes',e:'🌀',n:'Ciclón Botella 500 ml',p:8},
+  {id:64,cat:'energizantes',e:'🌀',n:'Ciclón Botella 350 ml',p:6},
+  {id:65,cat:'energizantes',e:'🌀',n:'Ciclón Lata 473 ml',p:14},
+  {id:66,cat:'energizantes',e:'🌀',n:'Ciclón Lata 269 ml',p:10},
+  {id:67,cat:'energizantes',e:'🟢',n:'Monster (Negro/Blanco/Celeste)',p:20},
+  {id:68,cat:'energizantes',e:'🐂',n:'Red Bull',p:18},
+  {id:69,cat:'energizantes',e:'🌿',n:'Sante 500 ml',p:8},
+  {id:70,cat:'energizantes',e:'🌿',n:'Sante 1 Lt',p:12},
+  {id:71,cat:'energizantes',e:'🌾',n:'Malta',p:7},
+  {id:72,cat:'energizantes',e:'🌾',n:'Maltín',p:8},
+  {id:73,cat:'energizantes',e:'🌵',n:'Aloe Vera',p:10},
+  {id:74,cat:'energizantes',e:'⭐',n:'Rockstar',p:6},
+  {id:75,cat:'energizantes',e:'💪',n:'Power Rojo/Azul 1 Lt',p:12},
+  {id:76,cat:'energizantes',e:'🧉',n:'Yerba Mate Black',p:40},
+  {id:77,cat:'energizantes',e:'💊',n:'Suero Surtido',p:15},
+  {id:78,cat:'energizantes',e:'☕',n:'Nescafé en Sachet',p:2},
+  {id:80,cat:'cervezas',e:'🍺',n:'Paceña Palito 269 cc',p:8},
+  {id:81,cat:'cervezas',e:'🍺',n:'Paceña Lata 354 cc',p:10},
+  {id:82,cat:'cervezas',e:'🍺',n:'Paceña Lata Grande',p:12},
+  {id:83,cat:'cervezas',e:'🍺',n:'Paceña Botella Pequeña Ret.',p:6},
+  {id:84,cat:'cervezas',e:'🍺',n:'Paceña Botella 350 ml',p:10},
+  {id:85,cat:'cervezas',e:'📦',n:'Pack Paceña Palito x24',p:190,pack:'Pack x24'},
+  {id:86,cat:'cervezas',e:'📦',n:'Pack Paceña Lata x24',p:220,pack:'Pack x24'},
+  {id:87,cat:'cervezas',e:'🍺',n:'Quilmes',p:12},
+  {id:88,cat:'cervezas',e:'📦',n:'Pack Quilmes x24',p:250,pack:'Pack x24'},
+  {id:89,cat:'cervezas',e:'🍺',n:'Conti Lata 269 cc',p:7},
+  {id:90,cat:'cervezas',e:'🍺',n:'Conti Lata Gordita 350 cc',p:8},
+  {id:91,cat:'cervezas',e:'🍺',n:'Conti Lata 410 cc',p:10},
+  {id:92,cat:'cervezas',e:'📦',n:'Pack Conti 269 x24',p:160,pack:'Pack x24'},
+  {id:93,cat:'cervezas',e:'🍺',n:'Huari Lata 269 cc',p:9},
+  {id:94,cat:'cervezas',e:'🍺',n:'Huari Miel Lata 269 cc',p:9},
+  {id:95,cat:'cervezas',e:'🍺',n:'Huari Miel Botellita',p:15},
+  {id:96,cat:'cervezas',e:'📦',n:'Pack Huari x24',p:210,pack:'Pack x24'},
+  {id:97,cat:'cervezas',e:'🍺',n:'Corona Botellita 330 ml',p:15},
+  {id:98,cat:'cervezas',e:'📦',n:'Pack Corona x24',p:340,pack:'Pack x24'},
+  {id:99,cat:'cervezas',e:'🍺',n:'Ducal Lata 269 cc',p:7},
+  {id:100,cat:'cervezas',e:'🍺',n:'Ducal Lata 310 cc',p:9},
+  {id:200,cat:'cervezas',e:'📦',n:'Pack Ducal x24',p:150,pack:'Pack x24'},
+  {id:201,cat:'cervezas',e:'🍺',n:'Golden Skol 410 cc',p:10},
+  {id:202,cat:'cervezas',e:'🍺',n:'Golden Skol 269 cc',p:7},
+  {id:203,cat:'cervezas',e:'🍺',n:'Amstel 269 cc',p:7},
+  {id:204,cat:'cervezas',e:'🍺',n:'Amstel 473 cc',p:10},
+  {id:205,cat:'cervezas',e:'🍺',n:'Ice 51 Surtida',p:15},
+  {id:206,cat:'cervezas',e:'🍺',n:'Cerveza Burguesa 269 cc',p:8},
+  {id:207,cat:'cervezas',e:'🍺',n:'Budweiser 269 cc',p:8},
+  {id:208,cat:'cervezas',e:'🍺',n:'Samba Palito 269 ml',p:6},
+  {id:300,cat:'vinos',e:'🍷',n:'Vino Kolberg Tinto/Blanco',p:30},
+  {id:301,cat:'vinos',e:'🍷',n:'Vino Campos de Solana',p:30},
+  {id:302,cat:'vinos',e:'🍷',n:'Vino Terruño Tinto/Blanco',p:30},
+  {id:303,cat:'vinos',e:'🍷',n:'Vino Viña de Balbo',p:30},
+  {id:304,cat:'vinos',e:'🍷',n:'Vino Toro Viejo Botella',p:40},
+  {id:305,cat:'vinos',e:'📦',n:'Vino Toro Viejo Cartón',p:70,pack:'Cartón'},
+  {id:400,cat:'rones',e:'🥃',n:'Flor de Caña 1 Lt',p:100},
+  {id:401,cat:'rones',e:'🥃',n:'Flor de Caña 1.75 Lt',p:150},
+  {id:402,cat:'rones',e:'🥃',n:'Ron Abuelo 1 Lt',p:120},
+  {id:403,cat:'rones',e:'🥃',n:'Ron Abuelo 1.75 Lt',p:190},
+  {id:404,cat:'rones',e:'🥃',n:'Havana Club 7 Años',p:180},
+  {id:405,cat:'rones',e:'🥃',n:'Havana Club 3 Años',p:130},
+  {id:406,cat:'rones',e:'🥃',n:'Havana Club Especial',p:140},
+  {id:407,cat:'rones',e:'🥃',n:'Havana Club Reserva',p:150},
+  {id:408,cat:'rones',e:'🥃',n:'Ron Pampeño',p:25},
+  {id:409,cat:'rones',e:'🥃',n:'Bacardi Limón Surtido',p:140},
+  {id:410,cat:'rones',e:'🥃',n:'Ron Kayana',p:50},
+  {id:411,cat:'rones',e:'🥃',n:'Ron 37 Lengua',p:90},
+  {id:500,cat:'licores',e:'🍸',n:'Fernet Branca 750 ml',p:110},
+  {id:501,cat:'licores',e:'🍸',n:'Fernet Branca 1 Lt',p:130},
+  {id:502,cat:'licores',e:'🍸',n:'Fernet Menta 750 ml',p:100},
+  {id:503,cat:'licores',e:'🍸',n:'Fernet Bhuero Negro',p:100},
+  {id:504,cat:'licores',e:'🍸',n:'Vodka Skyy Surtido',p:130},
+  {id:505,cat:'licores',e:'🍸',n:'Vodka Limón',p:25},
+  {id:506,cat:'licores',e:'🌵',n:'Tequila Jose Cuervo 750 ml',p:150},
+  {id:507,cat:'licores',e:'🌵',n:'Tequila Jose Cuervo 375 ml',p:90},
+  {id:508,cat:'licores',e:'🌵',n:'Tequila Olmeca',p:175},
+  {id:509,cat:'licores',e:'🌵',n:'Tequila Jarana',p:190},
+  {id:510,cat:'licores',e:'🥃',n:'Whisky Grants',p:140},
+  {id:511,cat:'licores',e:'🥃',n:'Johnnie Walker Rojo',p:170},
+  {id:512,cat:'licores',e:'🥃',n:'Johnnie Walker Negro',p:340},
+  {id:513,cat:'licores',e:'🥃',n:'Old Par',p:340},
+  {id:514,cat:'licores',e:'🥃',n:'Chivas Regal',p:380},
+  {id:515,cat:'licores',e:'🍸',n:'Beefeater 1¼ Lt',p:250},
+  {id:516,cat:'licores',e:'🍸',n:'Beefeater 750 ml',p:200},
+  {id:517,cat:'licores',e:'🍸',n:'Tanqueray 1 Lt',p:300},
+  {id:518,cat:'licores',e:'🍸',n:'Tanqueray 750 ml',p:260},
+  {id:519,cat:'licores',e:'🍸',n:'Amarula 750 ml',p:160},
+  {id:520,cat:'licores',e:'🍸',n:'Belho Barreiro',p:60},
+  {id:521,cat:'licores',e:'🍸',n:'Agua Ardiente Antioqueño',p:170},
+  {id:522,cat:'licores',e:'🍸',n:'Four Loko Grande',p:45},
+  {id:523,cat:'licores',e:'🍸',n:'Four Loko Mediano',p:35},
+  {id:524,cat:'licores',e:'🍸',n:'3 Plumas Seco Chico',p:12},
+  {id:525,cat:'licores',e:'🍸',n:'3 Plumas Seco 1 Lt',p:50},
+  {id:526,cat:'licores',e:'🍸',n:'3 Plumas Menta Chico',p:12},
+  {id:527,cat:'licores',e:'🍸',n:'3 Plumas Menta 1 Lt',p:50},
+  {id:528,cat:'licores',e:'☕',n:'Café Coñac Chico',p:12},
+  {id:529,cat:'licores',e:'☕',n:'Café Coñac 1 Lt',p:50},
+  {id:530,cat:'licores',e:'🍸',n:'Doble V Chico',p:12},
+  {id:531,cat:'licores',e:'🍸',n:'Doble V 1 Lt',p:50},
+  {id:600,cat:'singani',e:'🌿',n:'Singani 3 Estrellas Roja',p:35},
+  {id:601,cat:'singani',e:'🌿',n:'Singani 3 Estrellas Negra',p:35},
+  {id:602,cat:'singani',e:'🌿',n:'Singani Casa Real Rojo',p:60},
+  {id:603,cat:'singani',e:'🌿',n:'Singani Casa Real Negro',p:95},
+  {id:604,cat:'singani',e:'🌿',n:'Singani Casa Real Azul',p:40},
+  {id:605,cat:'singani',e:'🌿',n:'Chanceler',p:65},
+  {id:606,cat:'singani',e:'🌿',n:'Old Red',p:70},
+  {id:607,cat:'singani',e:'🌿',n:'Black Stone',p:60},
+  {id:608,cat:'singani',e:'🌿',n:'Singani Insignia Negro',p:120},
+  {id:609,cat:'singani',e:'🌿',n:'Singani Insignia Rojo',p:110},
+  {id:700,cat:'varios',e:'🚬',n:'Cigarro Bohem',p:15},
+  {id:701,cat:'varios',e:'🚬',n:'Cigarro Hills',p:8},
+  {id:702,cat:'varios',e:'🚬',n:'Cigarro Changer',p:21},
+  {id:703,cat:'varios',e:'🍬',n:'Chicle Grosso',p:1},
+  {id:704,cat:'varios',e:'🍬',n:'Chicle Beldent Negro/Verde',p:5},
+  {id:705,cat:'varios',e:'🍬',n:'Chicle Cloret',p:1},
+  {id:706,cat:'varios',e:'🧻',n:'Papel Higiénico 6 Rollos',p:12},
+  {id:707,cat:'varios',e:'🧻',n:'Papel Higiénico 1 Rollo',p:2},
+  {id:708,cat:'varios',e:'💊',n:'Preservativo Pantera',p:8},
+  {id:709,cat:'varios',e:'💊',n:'Alikal',p:8},
+  {id:710,cat:'varios',e:'💊',n:'Digestan',p:5},
+  {id:711,cat:'varios',e:'💊',n:'Ressaka',p:6},
+  {id:712,cat:'varios',e:'🔥',n:'Encendedor Chispa',p:2},
+  {id:713,cat:'varios',e:'🔥',n:'Encendedor Presión',p:3},
+  {id:714,cat:'varios',e:'🔥',n:'Encendedor Rompeviento',p:4}
 ];
 
-// â”€â”€â”€ ESTADO â”€â”€â”€
+// ─── ESTADO ───
 let history=readHist();
 let cart=[];
 let branch=null;
@@ -1038,7 +1038,7 @@ function toast(msg){
   clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),1700);
 }
 
-// â•â• SUCURSALES â•â•
+// ══ SUCURSALES ══
 function renderBranches(){
   const c=$('branch-list');c.innerHTML='';
   CFG.branches.forEach(b=>{
@@ -1051,7 +1051,7 @@ function renderBranches(){
       // Mostrar pantalla de carga interactiva
       c.innerHTML='<div style="text-align:center;padding:30px;color:#aaa"><i class="fa-solid fa-spinner fa-spin" style="font-size:32px;color:var(--red);margin-bottom:15px"></i><br><b style="font-size:14px;color:#fff">Cargando sucursal...</b></div>';
       
-      // Esperar sincronizaciÃ³n de nube MÃXIMO 2.5 segundos para no dejar al usuario esperando
+      // Esperar sincronización de nube MÁXIMO 2.5 segundos para no dejar al usuario esperando
       if(window._cloudPromise) {
         await Promise.race([window._cloudPromise, new Promise(r=>setTimeout(r, 2500))]);
       }
@@ -1071,7 +1071,7 @@ function renderBranches(){
   });
 }
 
-// â•â• STORE TOGGLE â•â•
+// ══ STORE TOGGLE ══
 function setStore(s){
   store=s;
   $('tab-machuca').classList.toggle('on',s==='machuca');
@@ -1084,7 +1084,7 @@ function setStore(s){
   if(s==='bolo') boloRenderSabores();
 }
 
-// â•â• MACHUCA â•â•
+// ══ MACHUCA ══
 function renderMachucaCats(){
   const nav=$('mach-cats');nav.innerHTML='';
   CFG.machucaCats.forEach((cat,i)=>{
@@ -1130,7 +1130,7 @@ function renderMachucaList(){
     row.className='prod-row';
     row.style.animationDelay=(i*.02)+'s';
     const uid='m_'+i;
-    const catEmoji=mCat?mCat.emoji:'ðŸƒ';
+    const catEmoji=mCat?mCat.emoji:'🍃';
     row.innerHTML=
       '<div class="prod-emoji">'+catEmoji+'</div>'+
       '<div class="prod-name">'+esc(name)+'</div>'+
@@ -1159,8 +1159,8 @@ function renderMachucaList(){
   });
 }
 
-// â•â• BEBIDAS â•â•
-// â”€â”€â”€ Leer categorÃ­as personalizadas del Admin â”€â”€â”€
+// ══ BEBIDAS ══
+// ─── Leer categorías personalizadas del Admin ───
 function _loadCustomCats(){return lg(SHARED_KEY,{});}
 function _getBranchId(){return branch?branch.n:'';}  // match by branch name
 
@@ -1188,7 +1188,7 @@ function renderBebCats(){
     },300);
   });
   
-  // Renderizar contenido por defecto ("Todo") al inicializar la pestaÃ±a
+  // Renderizar contenido por defecto ("Todo") al inicializar la pestaña
   bCat = 'all';
   renderBebContent();
 }
@@ -1254,7 +1254,7 @@ function renderBebContent(){
     sec.appendChild(grid);
     cont.appendChild(sec);
   });
-  // â”€â”€ CategorÃ­as personalizadas del Admin â”€â”€
+  // ── Categorías personalizadas del Admin ──
   if(bCat==='all'||bCat==='custom'){
     const shared=_loadCustomCats();
     const branchCats=shared[_getBranchId()]||[];
@@ -1267,7 +1267,7 @@ function renderBebContent(){
       sec.className='beb-section';
       const hdr=document.createElement('div');
       hdr.className='beb-sec-hdr';
-      hdr.innerHTML='<span>'+esc((cat.emoji||'ðŸ·ï¸')+' '+cat.name)+'</span>';
+      hdr.innerHTML='<span>'+esc((cat.emoji||'🏷️')+' '+cat.name)+'</span>';
       const grid=document.createElement('div');
       grid.className='beb-grid';
       prods.forEach(p=>{
@@ -1279,7 +1279,7 @@ function renderBebContent(){
         card.id='bc_custom_'+p.id;
         card.innerHTML=
           '<div class="beb-qty">'+qty+'</div>'+
-          '<div class="beb-img">'+(p.img?`<img src="${p.img}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px">`:'')+'<span class="beb-emoji-big">'+esc(p.e||'ðŸ“¦')+'</span></div>'+
+          '<div class="beb-img">'+(p.img?`<img src="${p.img}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px">`:'')+'<span class="beb-emoji-big">'+esc(p.e||'📦')+'</span></div>'+
           '<div class="beb-name">'+esc(p.n)+'</div>'+
           (p.pack?'<div class="beb-pack">'+esc(p.pack)+'</div>':'')+
           '<div class="beb-footer">'+
@@ -1288,7 +1288,7 @@ function renderBebContent(){
           '</div>';
         card.addEventListener('click',()=>{
           const ex=cart.find(x=>x._key===key);
-          if(ex)ex.c++;else cart.push({_key:key,n:p.n,p:p.p,e:p.e||'ðŸ“¦',c:1,cat:'bebida'});
+          if(ex)ex.c++;else cart.push({_key:key,n:p.n,p:p.p,e:p.e||'📦',c:1,cat:'bebida'});
           updateBadge();recalc();
           const nc=cart.find(x=>x._key===key);
           if(nc){card.classList.add('in-cart');const qb=card.querySelector('.beb-qty');if(qb){qb.textContent=nc.c;qb.style.display='flex';}}
@@ -1302,18 +1302,18 @@ function renderBebContent(){
   }
 
   if(!found){
-    cont.innerHTML='<div style="text-align:center;padding:48px 20px;color:#aaa"><div style="font-size:40px;margin-bottom:10px">ðŸ”</div><div style="font-size:14px;font-weight:600">Sin resultados</div></div>';
+    cont.innerHTML='<div style="text-align:center;padding:48px 20px;color:#aaa"><div style="font-size:40px;margin-bottom:10px">🔍</div><div style="font-size:14px;font-weight:600">Sin resultados</div></div>';
   }
 }
 
-// â•â• BADGE â•â•
+// ══ BADGE ══
 function updateBadge(){
   $('fab-badge').textContent=cart.reduce((s,i)=>s+i.c,0);
 }
 
-// â•â• RECALC â•â•
+// ══ RECALC ══
 // REGLA: descuento 3% SOLO sobre subtotal de items cat==='machuca', SOLO si payment==='efectivo'
-// Bebidas: NUNCA descuento, sin importar quÃ© mÃ¡s haya en el carrito
+// Bebidas: NUNCA descuento, sin importar qué más haya en el carrito
 function recalc(){
   // Ordenar: machuca primero, luego bebidas
   cart.sort((a,b)=>{
@@ -1339,13 +1339,13 @@ function recalc(){
     html+='<div class="rc-item" style="flex-wrap:wrap;gap:4px">'+
       '<div class="rc-info" style="width:100%;display:flex;align-items:center;justify-content:space-between">'+
         '<div style="min-width:0;flex:1"><div class="rc-name">'+esc(it.n)+cafeLbl+'</div>'+
-        '<div class="rc-meta">'+(it.glabel?esc(it.glabel)+' Â· ':'')+it.c+' Ã— Bs '+it.p+'</div></div>'+
+        '<div class="rc-meta">'+(it.glabel?esc(it.glabel)+' · ':'')+it.c+' × Bs '+it.p+'</div></div>'+
         '<div class="rc-sub">'+s.toFixed(2)+' Bs</div>'+
       '</div>'+
       '<div style="display:flex;align-items:center;gap:6px;width:100%;justify-content:space-between;padding-top:2px">'+
-        '<button class="rc-del" data-idx="'+i+'" style="flex-shrink:0">âœ•</button>'+
+        '<button class="rc-del" data-idx="'+i+'" style="flex-shrink:0">✕</button>'+
         '<div style="display:flex;align-items:center;gap:0;background:#f0f0f5;border-radius:8px;overflow:hidden;border:1px solid #ddd">'+
-          '<button class="rc-qty-btn rc-minus" data-idx="'+i+'" style="width:32px;height:30px;border:none;background:none;font-size:18px;font-weight:900;cursor:pointer;color:#666;display:flex;align-items:center;justify-content:center">âˆ’</button>'+
+          '<button class="rc-qty-btn rc-minus" data-idx="'+i+'" style="width:32px;height:30px;border:none;background:none;font-size:18px;font-weight:900;cursor:pointer;color:#666;display:flex;align-items:center;justify-content:center">−</button>'+
           '<span style="min-width:28px;text-align:center;font-weight:800;font-size:14px;padding:0 2px">'+it.c+'</span>'+
           '<button class="rc-qty-btn rc-plus" data-idx="'+i+'" style="width:32px;height:30px;border:none;background:none;font-size:18px;font-weight:700;cursor:pointer;color:#00A64A;display:flex;align-items:center;justify-content:center">+</button>'+
         '</div>'+
@@ -1353,7 +1353,7 @@ function recalc(){
       '</div>'+
     '</div>';
   });
-  rc.innerHTML=html||'<div class="rc-empty">â€” Carrito vacÃ­o â€”</div>';
+  rc.innerHTML=html||'<div class="rc-empty">— Carrito vacío —</div>';
   rc.querySelectorAll('.rc-del').forEach(btn=>{
     btn.addEventListener('click',()=>{cart.splice(parseInt(btn.dataset.idx),1);updateBadge();recalc();});
   });
@@ -1400,20 +1400,20 @@ function setPayment(m){
   recalc();
 }
 
-// â•â• PANELS â•â•
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══ PANELS ══
+// ══════════════════════════════
 // ARMADOR DE BOLO
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════
 let boloState={size:null,cafe:null,cargada:'no',sabores:[],cant:1};
 
 function boloGetAllFlavors(){
-  // Recopilar todos los sabores Ãºnicos de machuca (sin C/C suffix)
+  // Recopilar todos los sabores únicos de machuca (sin C/C suffix)
   const flavors=new Set();
   CFG.machucaCats.forEach(cat=>{
     cat.groups.forEach(g=>{
       g.items.forEach(item=>{
-        // normalize: quitar " C/C" o " C/CAFÃ‰" suffix
-        const clean=item.replace(/\s+c\/c[aÃ¡]?[fÃ©]?$/i,'').trim();
+        // normalize: quitar " C/C" o " C/CAFÉ" suffix
+        const clean=item.replace(/\s+c\/c[aá]?[fé]?$/i,'').trim();
         flavors.add(clean);
       });
     });
@@ -1459,14 +1459,14 @@ function boloUpdateNota(){
   const extraSabores=Math.max(0,s.sabores.length-1)*extraPerSabor;
   const extraCafe=s.cargada&&s.cargada!=='no'?3:0;
   const sizeLabel=s.size==='media'?'Media Cuartilla':s.size==='cuartilla'?'Cuartilla':s.size==='despuntada'?'Despuntada':'Despalada';
-  const cafeLabel=s.cafe==='cc'?'Con CafÃ© (C/C)':'Sin CafÃ© (S/C)';
-  const cargadaLabel=s.cargada==='cafe'?'Cargada de CafÃ© âš¡â˜•':s.cargada==='esencia'?'Cargada de Esencia âš¡ðŸŒº':'';
-  let body=`<div>ðŸ“ ${sizeLabel} â€” Bs ${base}</div>`;
-  body+=`<div>â˜• ${cafeLabel}</div>`;
-  if(cargadaLabel) body+=`<div style="color:var(--yellow)">âš¡ ${cargadaLabel} â€” +Bs 3</div>`;
-  body+=`<div>ðŸƒ Sabores: ${s.sabores.join(', ')}</div>`;
-  if(extraSabores>0) body+=`<div style="color:var(--yellow)">+ ${s.sabores.length-1} sabor${s.sabores.length>2?'es':''} extra â€” +Bs ${extraSabores}</div>`;
-  if(s.cant>1) body+=`<div>âœ• ${s.cant} bolos</div>`;
+  const cafeLabel=s.cafe==='cc'?'Con Café (C/C)':'Sin Café (S/C)';
+  const cargadaLabel=s.cargada==='cafe'?'Cargada de Café ⚡☕':s.cargada==='esencia'?'Cargada de Esencia ⚡🌺':'';
+  let body=`<div>📐 ${sizeLabel} — Bs ${base}</div>`;
+  body+=`<div>☕ ${cafeLabel}</div>`;
+  if(cargadaLabel) body+=`<div style="color:var(--yellow)">⚡ ${cargadaLabel} — +Bs 3</div>`;
+  body+=`<div>🍃 Sabores: ${s.sabores.join(', ')}</div>`;
+  if(extraSabores>0) body+=`<div style="color:var(--yellow)">+ ${s.sabores.length-1} sabor${s.sabores.length>2?'es':''} extra — +Bs ${extraSabores}</div>`;
+  if(s.cant>1) body+=`<div>✕ ${s.cant} bolos</div>`;
   if($('bolo-nota-body'))$('bolo-nota-body').innerHTML=body;
   if($('bolo-nota-total'))$('bolo-nota-total').textContent='Bs '+total;
   if(nota)nota.style.display='block';
@@ -1482,7 +1482,7 @@ function boloSetSize(size){
     if(extraDiv)extraDiv.style.display='grid';
   } else if(size==='media'){
     if(extraDiv)extraDiv.style.display='none';
-    // Si habÃ­a despuntada o despalada seleccionada, limpiar
+    // Si había despuntada o despalada seleccionada, limpiar
     if(boloState.size==='despuntada'||boloState.size==='despalada'){
       ['despuntada','despalada'].forEach(id=>{
         const el=$('bolo-'+id);if(el)el.classList.remove('bolo-size-sel');
@@ -1545,7 +1545,7 @@ function boloRenderSabores(){
   grid.innerHTML=flavors.map(f=>`
     <button class="bolo-sabor-btn ${boloState.sabores.includes(f)?'sel':''}"
       data-sabor="${esc(f)}" onclick="K.boloToggleSabor('${esc(f)}')">
-      ðŸƒ ${esc(f)}
+      🍃 ${esc(f)}
     </button>`).join('');
 }
 
@@ -1569,7 +1569,7 @@ function boloAgregar(){
   // Sigla de tipo para el nombre del bolo
   const siglaTipo=s.size==='despuntada'?' [DPT]':s.size==='despalada'?' [DPL]':'';
   const cafeTag=s.cafe==='cc'?'C/C':'S/C';
-  const cargadaTag=s.cargada==='cafe'?' Cargada CafÃ©':s.cargada==='esencia'?' Cargada Esencia':'';
+  const cargadaTag=s.cargada==='cafe'?' Cargada Café':s.cargada==='esencia'?' Cargada Esencia':'';
   const base=boloGetBasePrice(s.size);
   const extraPerSabor=s.size==='media'?1:2;
   const extraCafe=s.cargada&&s.cargada!=='no'?3:0;
@@ -1583,7 +1583,7 @@ function boloAgregar(){
     _key:key,
     n:nombre,
     p:precioUnit,
-    e:'ðŸ§ƒ',
+    e:'🧃',
     c:s.cant,
     cat:'machuca',
     cafe:cafeTag,
@@ -1591,7 +1591,7 @@ function boloAgregar(){
     _bolo:true
   });
   updateBadge();recalc();
-  toast('ðŸ§ƒ Bolo agregado'+siglaTipo+' â€” '+s.sabores.length+' sabor'+(s.sabores.length>1?'es':''));
+  toast('🧃 Bolo agregado'+siglaTipo+' — '+s.sabores.length+' sabor'+(s.sabores.length>1?'es':''));
   boloReset();
 }
 
@@ -1600,8 +1600,8 @@ function closeCart(){$('panel-cart').classList.remove('open');}
 function openHistory(){renderHistory();$('panel-history').classList.add('open');}
 function closeHistory(){$('panel-history').classList.remove('open');}
 
-// â•â• CONFIRM â•â•
-// CategorÃ­as que van SOLO por WhatsApp (no al panel del secretario)
+// ══ CONFIRM ══
+// Categorías que van SOLO por WhatsApp (no al panel del secretario)
 const CATS_WA_ONLY=['gaseosas','aguas','energizantes','cervezas','vinos','rones','licores','singani','varios'];
 function esCatBebida(cat){
   return CATS_WA_ONLY.includes((cat||'').toLowerCase());
@@ -1611,7 +1611,7 @@ function confirmOrder(){
   const client=$('inp-client').value.trim();
   const note=$('inp-note').value.trim();
   if(!client)return toast('Ingrese nombre del cliente');
-  if(!cart.length)return toast('El carrito estÃ¡ vacÃ­o');
+  if(!cart.length)return toast('El carrito está vacío');
   if(!branch)return toast('Seleccione una sucursal');
   let sub=cart.reduce((s,i)=>s+i.c*i.p,0);
   const soloMachuca=cart.length>0&&cart.every(i=>i.cat==='machuca');
@@ -1633,12 +1633,12 @@ function confirmOrder(){
   };
   history.unshift(order);pendingWA=order;saveHist();
 
-  // Solo los Ã­tems de COCA MACHUCA van al panel del secretario como pendientes
+  // Solo los ítems de COCA MACHUCA van al panel del secretario como pendientes
   const itemsMachuca=cart.filter(i=>!esCatBebida(i.cat));
   const itemsBebidas=cart.filter(i=>esCatBebida(i.cat));
 
   if(itemsMachuca.length>0){
-    // Crear pedido solo con Ã­tems de machuca para el secretario
+    // Crear pedido solo con ítems de machuca para el secretario
     const orderParaSecretario=Object.assign({},order,{
       items:JSON.parse(JSON.stringify(itemsMachuca)),
       subtotal:itemsMachuca.reduce((s,i)=>s+i.c*i.p,0),
@@ -1678,7 +1678,7 @@ function newOrder(){
   });
 }
 
-// â•â• WHATSAPP â•â•
+// ══ WHATSAPP ══
 function sendWA(o){
   let msg='*LA KOLLITA*%0A'+encodeURIComponent(o.branch)+
     '%0ACliente: '+encodeURIComponent(o.client)+
@@ -1697,15 +1697,15 @@ function sendWA(o){
   if(o.discount&&o.discount>0) msg+='%0ADescuento: -Bs '+o.discount;
   msg+='%0A*TOTAL: Bs '+o.total+'*';
   if(o.note)msg+='%0A%0ANota: '+encodeURIComponent(o.note);
-  msg+='%0A%0A'+o.time+' Â· '+o.date+'%0AGracias por su compra';
+  msg+='%0A%0A'+o.time+' · '+o.date+'%0AGracias por su compra';
   window.open('https://wa.me/'+o.branchTel+'?text='+msg,'_blank');
 }
 
-// â•â• HISTORIAL â•â•
+// ══ HISTORIAL ══
 function renderHistory(){
   const cont=$('hist-body');
   $('hist-badge').textContent=history.length+(history.length===1?' pedido':' pedidos');
-  if(!history.length){cont.innerHTML='<div class="hist-empty"><div class="hist-empty-icon">ðŸ“‹</div><div class="hist-empty-txt">Sin pedidos registrados</div></div>';return;}
+  if(!history.length){cont.innerHTML='<div class="hist-empty"><div class="hist-empty-icon">📋</div><div class="hist-empty-txt">Sin pedidos registrados</div></div>';return;}
   const tSales=history.reduce((s,p)=>s+p.total,0);
   const tItems=history.reduce((s,p)=>s+p.items.reduce((a,i)=>a+i.c,0),0);
   let html='<div class="hist-summary">'+
@@ -1721,7 +1721,7 @@ function renderHistory(){
     order.items.forEach(it=>{
       const lbl=it.cat==='machuca'?'COCA MACHUCA':'BEBIDAS';
       if(it.cat!==lastCat){det+='<div class="od-group">'+lbl+'</div>';lastCat=it.cat;}
-      det+='<div class="od-item"><div><div class="od-name">'+esc(it.e)+' '+esc(it.n)+'</div><span class="od-label">'+it.c+' Ã— Bs '+it.p+'</span></div><div class="od-sub">Bs '+(it.c*it.p).toFixed(2)+'</div></div>';
+      det+='<div class="od-item"><div><div class="od-name">'+esc(it.e)+' '+esc(it.n)+'</div><span class="od-label">'+it.c+' × Bs '+it.p+'</span></div><div class="od-sub">Bs '+(it.c*it.p).toFixed(2)+'</div></div>';
     });
     det+='<div class="od-totals">'+
       '<div class="od-tr"><span>Subtotal</span><span>Bs '+order.subtotal.toFixed(2)+'</span></div>'+
@@ -1731,20 +1731,20 @@ function renderHistory(){
       '<div class="od-tr final"><span>TOTAL</span><span>Bs '+order.total.toFixed(2)+'</span></div>'+
     '</div>';
     det+='<div class="order-actions">'+
-      '<button class="btn-resend" data-idx="'+idx+'">ðŸ“© Reenviar WhatsApp</button>'+
-      '<button class="btn-del-order" data-idx="'+idx+'">ðŸ—‘</button>'+
+      '<button class="btn-resend" data-idx="'+idx+'">📩 Reenviar WhatsApp</button>'+
+      '<button class="btn-del-order" data-idx="'+idx+'">🗑</button>'+
     '</div>';
     html+='<div class="order-card">'+
       '<div class="order-head" data-idx="'+idx+'">'+
         '<div class="order-num">'+(history.length-idx)+'</div>'+
-        '<div class="order-info"><div class="order-client">'+esc(order.client)+'</div><div class="order-meta">'+esc(order.branch)+' Â· '+tp+' prod Â· '+order.method.toUpperCase()+'</div></div>'+
+        '<div class="order-info"><div class="order-client">'+esc(order.client)+'</div><div class="order-meta">'+esc(order.branch)+' · '+tp+' prod · '+order.method.toUpperCase()+'</div></div>'+
         '<div class="order-total"><div class="order-amount">Bs '+order.total.toFixed(2)+'</div><div class="order-time">'+esc(order.time)+'</div></div>'+
-        '<div class="order-arrow" id="oa-'+idx+'">â–¼</div>'+
+        '<div class="order-arrow" id="oa-'+idx+'">▼</div>'+
       '</div>'+
       '<div class="order-detail" id="od-'+idx+'">'+det+'</div>'+
     '</div>';
   });
-  html+='<button class="btn-clear-hist" id="btn-clear-hist">ðŸ—‘ Limpiar historial</button>';
+  html+='<button class="btn-clear-hist" id="btn-clear-hist">🗑 Limpiar historial</button>';
   cont.innerHTML=html;
   cont.querySelectorAll('.order-head').forEach(el=>{
     el.addEventListener('click',()=>{
@@ -1769,47 +1769,51 @@ function renderHistory(){
 }
 
 // INIT
-  function _initApp(){
-    history=readHist();
+function _initApp(){
+  history=readHist();
+  adminCfg=lg('kol_adm_v3',null); // Intentar cargar caché local inmediato
+  const s=lg('kollita_logo','');
+  if(s){const im=document.getElementById('br-logo-img');const ic=document.getElementById('br-logo-icon');if(im&&ic){im.src=s;im.style.display='block';ic.style.display='none';}}
+  renderBranches();recalc();
+  if(history.length)$('notif-dot').classList.add('on');
+  
+  // Buscar en la nube en segundo plano para abrir la app instantáneamente
+  window._cloudPromise = fetchCloud().then(() => {
     adminCfg=lg('kol_adm_v3',null);
-    const s=lg('kollita_logo','');
-    if(s){const im=document.getElementById('br-logo-img');const ic=document.getElementById('br-logo-icon');if(im&&ic){im.src=s;im.style.display='block';ic.style.display='none';}}
+    const s2=lg('kollita_logo','');
+    if(s2){const im=document.getElementById('br-logo-img');const ic=document.getElementById('br-logo-icon');if(im&&ic){im.src=s2;im.style.display='block';ic.style.display='none';}}
     
-    renderBranches();recalc();
-    if(history.length)$('notif-dot').classList.add('on');
-    
-    window._cloudPromise = fetchCloud().then(() => {
-      adminCfg=lg('kol_adm_v3',null);
-      if(branch) {
-        renderBebContent();
-        if(store==='machuca') renderMachucaCats();
-      }
-    });
-
-    // Auto-login movido aquí adentro
-    var ses = localStorage.getItem('kol_movil_sesion');
-    if(ses){
-      try{
-        var sesObj = JSON.parse(ses);
-        if(Date.now() - sesObj.ts < 86400000){
-          branch = CFG.branches.find(function(b){return b.n===sesObj.branch;}) || null;
-          if(branch){
-            store = sesObj.store || 'machuca';
-            $('scr-branch').style.display='none';
-            $('hdr-branch').textContent=branch.n;
-            $('rc-addr').textContent=CFG.storeAddr;
-            renderMachucaCats();
-            renderBebCats();
-            setStore(store);
-          }
-        }
-      }catch(e){}
+    // Si ya ingresamos a la sucursal rápido, refrescar en segundo plano sin interrumpir
+    if(branch) {
+      renderBebContent();
+      // Opcional repintar machuca prices
+      if(store==='machuca') renderMachucaCats();
     }
+  });
+
+  // Auto-login movido aquí adentro
+  var ses = localStorage.getItem('kol_movil_sesion');
+  if(ses){
+    try{
+      var sesObj = JSON.parse(ses);
+      if(Date.now() - sesObj.ts < 86400000){
+        branch = CFG.branches.find(function(b){return b.n===sesObj.branch;}) || null;
+        if(branch){
+          store = sesObj.store || 'machuca';
+          $('scr-branch').style.display='none';
+          $('hdr-branch').textContent=branch.n;
+          $('rc-addr').textContent=CFG.storeAddr;
+          renderMachucaCats();
+          renderBebCats();
+          setStore(store);
+        }
+      }
+    }catch(e){}
   }
+}
 
-  return{openCart,closeCart,openHistory,closeHistory,setPayment,recalc,confirmOrder,closeModal,modalSendWA,modalNewOrder,setStore,boloSetSize,boloSetCafe,boloSetCargada,boloToggleSabor,boloCantDelta,boloAgregar,_initApp};
+return{openCart,closeCart,openHistory,closeHistory,setPayment,recalc,confirmOrder,closeModal,modalSendWA,modalNewOrder,setStore,boloSetSize,boloSetCafe,boloSetCargada,boloToggleSabor,boloCantDelta,boloAgregar,_initApp};
 })();
-
 K._initApp();
 
 window.addEventListener('storage', function(e){
