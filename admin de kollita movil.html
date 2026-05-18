@@ -953,16 +953,16 @@ async function login(){
   const p=$('lp').value;
   const lb=document.querySelector('.lb');
 
-  var panelName = 'Admin Kollita M�vil';
-  var pws = [];
-  try { pws = JSON.parse(localStorage.getItem('kollita_system_passwords')||'[]'); } catch(ex){}
-  var myPwObj = pws.find(x => x.panel === panelName);
-  var expected = myPwObj ? myPwObj.pass : DEF_PASS;
+  // Leer contraseña desde Supabase (o fallback a local)
+  let expected = await getPasswordFromCloud();
+  if (!expected) {
+    expected = localStorage.getItem('Admin Kollita Movil_pass') || DEF_PASS;
+  }
 
   if(p!==expected){$('le').classList.add('on');$('lp').value='';return;}
 
   if(expected === 'contra1234') {
-    mostrarModalCambioPassGlobal(panelName, function(){ completarLoginAdminMovil(); });
+    mostrarModalCambioPassGlobal('Admin Kollita Movil', function(){ completarLoginAdminMovil(); });
     return;
   }
   completarLoginAdminMovil();
@@ -1604,20 +1604,27 @@ function delMGroup(ci,gi){
 }
 
 // ─── CONFIG ───
-function changePass(){
+async function changePass(){
   const op=$('op').value,p1=$('np').value,p2=$('np2').value;
-  const saved=localStorage.getItem(SK.PASS)||DEF_PASS;
+  // Leer contraseña actual desde Supabase o localStorage como fallback
+  let saved = await getPasswordFromCloud();
+  if (!saved) saved = localStorage.getItem('Admin Kollita Movil_pass') || DEF_PASS;
   if(op!==saved){toast('⚠️ Contraseña actual incorrecta');return;}
   if(!p1){toast('⚠️ Ingresa la nueva contraseña');return;}
   if(p1.length<4){toast('⚠️ Mínimo 4 caracteres');return;}
   if(p1!==p2){toast('⚠️ Las contraseñas no coinciden');return;}
-  localStorage.setItem(SK.PASS,p1);$('op').value='';$('np').value='';$('np2').value='';
+  // Guardar en Supabase Y localStorage (doble seguridad)
+  await savePasswordToCloud(p1);
+  localStorage.setItem('Admin Kollita Movil_pass', p1);
+  $('op').value='';$('np').value='';$('np2').value='';
   $('pass-str').style.display='none';$('pass-str-txt').textContent='';
-  toast('✅ Contraseña actualizada');
+  toast('✅ Contraseña actualizada en la nube');
 }
 function restorePass(){
-  openConfirm('Restaurar contraseña','¿Volver a la contraseña predeterminada "1234"? Se perderá tu contraseña actual.',()=>{
-    localStorage.removeItem(SK.PASS);toast('✅ Contraseña restaurada a 1234');
+  openConfirm('Restaurar contraseña','¿Volver a la contraseña predeterminada? Se perderá tu contraseña actual.',async ()=>{
+    await savePasswordToCloud(DEF_PASS);
+    localStorage.removeItem('Admin Kollita Movil_pass');
+    toast('✅ Contraseña restaurada - refleja en todos los dispositivos');
   });
 }
 function togglePass(id,btn){
