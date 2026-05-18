@@ -35,6 +35,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("KollitaCors", policy =>
     {
         policy.WithOrigins(
+                "https://kollita-pro-bice.vercel.app",
                 "https://kollita-pro.vercel.app",
                 "https://kollita.vercel.app",
                 "http://localhost:5500",
