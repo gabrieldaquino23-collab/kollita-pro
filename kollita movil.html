@@ -786,6 +786,34 @@ async function postToSupabase(tabla, data) {
     console.error(`Supabase network error:`, e);
   }
 }
+
+// ── CATÁLOGO DINÁMICO DESDE SUPABASE ──
+let cloudBebidas = null; // null = no cargado aún, [] = nube vacía, [...] = datos reales
+async function loadCatalogoCloud() {
+  try {
+    const r = await fetch(`${SUPA_URL}/rest/v1/catalogo_productos?activo=eq.true&order=orden.asc`, {
+      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY }
+    });
+    if (!r.ok) return;
+    const data = await r.json();
+    if (!Array.isArray(data) || data.length === 0) return;
+    // Mapear columnas de Supabase al formato interno del app
+    cloudBebidas = data.map((p, i) => ({
+      id: 'cloud_' + (p.id || i),
+      cat: (p.categorias || p['categorías'] || 'varios').toLowerCase().replace(/\s+/g, '_'),
+      e: p.emoji || '🛒',
+      n: p.nombre || p.name || 'Producto',
+      p: Number(p.precio_media || p.precio || p.price || 0),
+      img: p.img_url || p.imagen || p.foto || ''
+    }));
+    // Refrescar vista si ya estamos en bebidas
+    if (store === 'bebidas') renderBebContent();
+    console.log('[Kollita] Catálogo cargado desde Supabase:', cloudBebidas.length, 'productos');
+  } catch (e) {
+    console.warn('[Kollita] No se pudo cargar catálogo desde nube, usando datos locales.', e);
+  }
+}
+
 // ── Solo localStorage ──
 function lg(k,d){
   // if(cloudData&&cloudData[k]!==undefined)return cloudData[k];
@@ -1224,7 +1252,9 @@ function renderBebContent(){
   const cats=bCat==='all'?BEB_CATS.filter(c=>c.id!=='all').map(c=>c.id):[bCat];
   let found=false;
   cats.forEach(catId=>{
-    let items=BEBIDAS.filter(p=>p.cat===catId);
+    // Usar datos de nube si están disponibles, si no el paracaídas local
+    const catalogoActual = (cloudBebidas && cloudBebidas.length > 0) ? cloudBebidas : BEBIDAS;
+    let items=catalogoActual.filter(p=>p.cat===catId);
     if(bSearch)items=items.filter(p=>p.n.toLowerCase().includes(bSearch.toLowerCase()));
     if(!items.length)return;
     found=true;
@@ -1838,6 +1868,9 @@ function _initApp(){
   renderBranches();recalc();
   if(history.length)$('notif-dot').classList.add('on');
   
+  // Cargar catálogo de productos desde Supabase (no bloquea la UI)
+  loadCatalogoCloud();
+
   // Buscar en la nube en segundo plano para abrir la app instantáneamente
   window._cloudPromise = fetchCloud().then(() => {
     adminCfg=lg('kol_adm_v3',null);

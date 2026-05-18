@@ -655,10 +655,39 @@ const SK={CFG:'kol_adm_v3',HIST:'kollita_v4_hist',PASS:'kol_pass_v3'};
 const DEF_PASS='contra1234';
 
 // ── SUPABASE SYNC (DESCONECTADO) ──
-// const SUPA_URL='https://yngeclqhqljnjxvqgbih.supabase.co/rest/v1/kollita_config';
-// const SUPA_KEY='sb_publishable_KjmHILYWY4s40McEN5e-kA_QOE1izkI';
+const SUPA_URL = 'https://wsqhzatsuymjoebzfhpg.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzcWh6YXRzdXltam9lYnpmaHBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTUyMTMsImV4cCI6MjA5NDYzMTIxM30.bFCJBY9PAa8WviEwE8HdO2TjE3ytYM3sD6qFgxJ0pPM';
 async function fetchCloud(){}
 function saveCloud(){}
+
+// ── SYNC PRODUCTOS A SUPABASE ──
+async function syncProductToSupabase(prod, isDelete) {
+  isDelete = isDelete || false;
+  const payload = {
+    id: String(prod.id),
+    nombre: prod.n,
+    categorias: prod.cat,
+    emoji: prod.e,
+    precio_media: prod.p,
+    activo: isDelete ? false : (prod.active !== false),
+    img_url: prod.img || null,
+    orden: prod.id
+  };
+  try {
+    const r = await fetch('https://wsqhzatsuymjoebzfhpg.supabase.co/rest/v1/catalogo_productos', {
+      method: 'POST',
+      headers: {
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzcWh6YXRzdXltam9lYnpmaHBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTUyMTMsImV4cCI6MjA5NDYzMTIxM30.bFCJBY9PAa8WviEwE8HdO2TjE3ytYM3sD6qFgxJ0pPM',
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzcWh6YXRzdXltam9lYnpmaHBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTUyMTMsImV4cCI6MjA5NDYzMTIxM30.bFCJBY9PAa8WviEwE8HdO2TjE3ytYM3sD6qFgxJ0pPM',
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify(payload)
+    });
+    if (r.ok || r.status === 201) console.log('[Admin] Sync OK:', prod.n);
+    else console.warn('[Admin] Sync error:', r.status);
+  } catch(e) { console.warn('[Admin] Sin conexion - guardado local'); }
+}
 // ── Solo localStorage ──
 function lg(k,d){
   // if(cloudData&&cloudData[k]!==undefined)return cloudData[k];
@@ -924,7 +953,7 @@ async function login(){
   const p=$('lp').value;
   const lb=document.querySelector('.lb');
 
-  var panelName = 'Admin Kollita M�vil';
+  var panelName = 'Admin Kollita M�vil';
   var pws = [];
   try { pws = JSON.parse(localStorage.getItem('kollita_system_passwords')||'[]'); } catch(ex){}
   var myPwObj = pws.find(x => x.panel === panelName);
@@ -1756,11 +1785,13 @@ function saveGlobalProd(editIdx){
       const pp=b.products.find(x=>x.id===pid);
       if(pp){pp.n=n;pp.p=p;pp.e=emoji;pp.cat=cat;pp.pack=pack;pp.img=img;}
     });
+    syncProductToSupabase({id:pid,n,p,e:emoji,cat,img,active:true});
     toast('✅ Producto actualizado en todas las sucursales');
   } else {
     const img=window._gProdImgB64||'';
     const newProd={id:Date.now(),n,p,e:emoji,cat,pack,active:true,img};
     cfg.branches.forEach(b=>{b.products.push(JSON.parse(JSON.stringify(newProd)));});
+    syncProductToSupabase(newProd);
     toast('✅ Producto agregado a todas las sucursales');
   }
   sc();closeModal();renderGlobalProds();
