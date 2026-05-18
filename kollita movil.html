@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -1143,11 +1143,14 @@ function renderMachucaList(){
       const qty=parseInt(inp.value)||1;
       const key=name+'|'+mGroup.label;
       const ex=cart.find(it=>it._key===key);
-      if(ex)ex.c+=qty;
-      // detect s/c or c/c from group label
-      const _lbl=(mGroup.label||'').toLowerCase();
-      const _cafe=_lbl.includes('c/caf')||_lbl.includes('c/c')&&!_lbl.includes('s/c')?'C/C':_lbl.includes('s/caf')||_lbl.includes('s/c')?'S/C':'';
-      else cart.push({_key:key,n:name,p:mGroup.price,e:catEmoji,c:qty,cat:'machuca',cafe:_cafe,glabel:mGroup.label});
+      if(ex){
+        ex.c+=qty;
+      }else{
+        // detect s/c or c/c from group label
+        const _lbl=(mGroup.label||'').toLowerCase();
+        const _cafe=_lbl.includes('c/caf')||_lbl.includes('c/c')&&!_lbl.includes('s/c')?'C/C':_lbl.includes('s/caf')||_lbl.includes('s/c')?'S/C':'';
+        cart.push({_key:key,n:name,p:mGroup.price,e:catEmoji,c:qty,cat:'machuca',cafe:_cafe,glabel:mGroup.label});
+      }
       inp.value='';
       updateBadge();recalc();
       toast('+'+qty+' '+name);
@@ -1787,11 +1790,11 @@ function renderHistory(){
     var ses = localStorage.getItem('kol_movil_sesion');
     if(ses){
       try{
-        var s = JSON.parse(ses);
-        if(Date.now() - s.ts < 86400000){
-          branch = CFG.branches.find(function(b){return b.n===s.branch;}) || null;
+        var sesObj = JSON.parse(ses);
+        if(Date.now() - sesObj.ts < 86400000){
+          branch = CFG.branches.find(function(b){return b.n===sesObj.branch;}) || null;
           if(branch){
-            store = s.store || 'machuca';
+            store = sesObj.store || 'machuca';
             $('scr-branch').style.display='none';
             $('hdr-branch').textContent=branch.n;
             $('rc-addr').textContent=CFG.storeAddr;
