@@ -822,19 +822,19 @@
     <div class="sidebar-item" onclick="abrirModalExportImport(); toggleSidebar();">💾 EXPORTAR / IMPORTAR DATOS</div>
     <div class="sidebar-item" onclick="mostrarUsoAlmacenamiento(); toggleSidebar();">📊 USO DE ALMACENAMIENTO</div>
     <div style="border-top:2px solid rgba(255,255,255,0.3); margin:8px 0; padding:8px 20px 4px; font-size:0.7em; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:1px;">— Nuevos Módulos —</div>
-    <div class="sidebar-item" onclick="abrirModulo('mod-clientes'); toggleSidebar();">?? BASE DE CLIENTES</div>
-    <div class="sidebar-item" onclick="abrirModulo('mod-reclamos'); toggleSidebar();">?? RECLAMOS / OBSEQUIOS</div>
-    <div class="sidebar-item" onclick="abrirModulo('mod-anulaciones'); toggleSidebar();">?? HISTORIAL DE ANULACIONES</div>
+    <div class="sidebar-item" onclick="abrirModulo('mod-clientes'); toggleSidebar();">👥 BASE DE CLIENTES</div>
+    <div class="sidebar-item" onclick="abrirModulo('mod-reclamos'); toggleSidebar();">📋 RECLAMOS / OBSEQUIOS</div>
+    <div class="sidebar-item" onclick="abrirModulo('mod-anulaciones'); toggleSidebar();">📜 HISTORIAL DE ANULACIONES</div>
 </div>
 
 <div class="navbar">
     <div id="btn-venta" class="nav-btn active" onclick="verTab('venta')">Rápida</div>
     <div id="btn-catalogo" class="nav-btn" onclick="verTab('catalogo')">Catálogo</div>
-    <div id="btn-consulta" class="nav-btn" onclick="verTab('consulta')">?? Consulta</div>
+    <div id="btn-consulta" class="nav-btn" onclick="verTab('consulta')">🔍 Consulta</div>
     <div id="btn-historial" class="nav-btn" onclick="verTab('historial')">Historial<span id="alerta-24h-badge" style="display:none;background:var(--red);color:#fff;border-radius:20px;padding:2px 10px;font-size:.7em;font-weight:700;margin-left:8px;animation:pulse 1.5s infinite;"></span></div>
     <div id="btn-traspaso" class="nav-btn" onclick="verTab('traspaso')">📦 Traspaso</div>
     <div class="secretario-badge">
-        <span class="badge-nombre">?? <span id="secretario-actual">Gabriel</span></span>
+        <span class="badge-nombre">👤 <span id="secretario-actual">Gabriel</span></span>
         <span class="badge-turno" id="turno-actual-badge">— sin turno —</span>
     </div>
 </div>
@@ -844,7 +844,7 @@
         <div id="vista-venta">
             <div class="tarjeta">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                    <h3 style="margin:0; border:none; padding:0;">?? Productos de Agrupación</h3>
+                    <h3 style="margin:0; border:none; padding:0;">📦 Productos de Agrupación</h3>
                     <button id="btn-toggle-agrupacion" onclick="toggleSeccionAgrupacion()"
                         style="display:flex; align-items:center; gap:5px; border:none; border-radius:20px; padding:6px 14px; cursor:pointer; font-weight:700; font-size:0.8em; transition:all 0.2s;">
                     </button>
@@ -860,10 +860,10 @@
 
         <div id="vista-catalogo" style="display:none;">
             <div class="tarjeta" style="display:flex; flex-direction:column; position:sticky; top:60px; max-height:calc(100vh - 80px); overflow:hidden;">
-                <h3 style="flex-shrink:0;">?? Catálogo por Sabores</h3>
+                <h3 style="flex-shrink:0;">🍹 Catálogo por Sabores</h3>
                 <!-- BÚSQUEDA RÁPIDA DE PRODUCTOS -->
                 <div id="busqueda-catalogo-box" style="flex-shrink:0; margin-bottom:14px; background:#f0f4ff; border:2px solid var(--azul); border-radius:10px; padding:12px;">
-                    <div style="font-weight:700; color:var(--azul); margin-bottom:8px; font-size:0.95em;">?? Búsqueda Rápida de Producto</div>
+                    <div style="font-weight:700; color:var(--azul); margin-bottom:8px; font-size:0.95em;">🔍 Búsqueda Rápida de Producto</div>
                     <div style="display:flex; gap:8px; align-items:center;">
                         <input type="text" id="input-busqueda-cat" class="input-cliente" style="margin:0; flex:1;"
                             placeholder="Escribe el nombre del producto..."
@@ -919,7 +919,7 @@
                         <button id="btn-ver-perfil-cliente" onclick="abrirPerfilClienteActual()"
                             title="Ver / Registrar cliente"
                             style="background:var(--azul); color:white; border:none; border-radius:8px; padding:10px 14px; cursor:pointer; font-size:1.1em; white-space:nowrap; flex-shrink:0;">
-                            ??
+                            🔍
                         </button>
                     </div>
                     <div id="sugerencias-cliente" style="display:none; position:absolute; top:100%; left:0; right:46px; background:white; border:2px solid var(--azul); border-top:none; border-radius:0 0 10px 10px; z-index:600; max-height:200px; overflow-y:auto; box-shadow:0 8px 20px rgba(0,0,0,0.15);"></div>
@@ -932,7 +932,7 @@
                 <div style="background:#eff6ff; border:2px solid var(--azul); border-radius:10px; padding:12px; margin-bottom:10px;">
                     <div class="form-row" style="margin-bottom:8px;">
                         <div>
-                            <label class="form-label" style="font-size:0.82em;">?? Sucursal Origen:</label>
+                            <label class="form-label" style="font-size:0.82em;">🏪 Sucursal Origen:</label>
                             <select id="t-origen" class="form-control">
                                 <option value="">— Seleccionar —</option>
                                 <option>3 Pasos</option>
@@ -945,7 +945,7 @@
                             </select>
                         </div>
                         <div>
-                            <label class="form-label" style="font-size:0.82em;">?? Sucursal Destino:</label>
+                            <label class="form-label" style="font-size:0.82em;">🏪 Sucursal Destino:</label>
                             <select id="t-destino" class="form-control">
                                 <option value="">— Seleccionar —</option>
                                 <option>3 Pasos</option>
@@ -959,7 +959,7 @@
                         </div>
                     </div>
                     <div style="margin-bottom:8px;">
-                        <label class="form-label" style="font-size:0.82em;">?? Motivo:</label>
+                        <label class="form-label" style="font-size:0.82em;">📝 Motivo:</label>
                         <select id="t-motivo" class="form-control" onchange="toggleTMotivoOtro()">
                             <option value="">— Seleccionar —</option>
                             <option>Reposición de stock</option>
@@ -974,11 +974,11 @@
                         <textarea id="t-motivo-otro" class="form-control" rows="2" placeholder="Especifica el motivo..."></textarea>
                     </div>
                     <div>
-                        <label class="form-label" style="font-size:0.82em;">?? Responsable:</label>
+                        <label class="form-label" style="font-size:0.82em;">👤 Responsable:</label>
                         <input type="text" id="t-responsable" class="form-control" placeholder="Nombre del responsable">
                     </div>
                     <div style="margin-top:8px;">
-                        <label class="form-label" style="font-size:0.82em;">?? Observaciones (opcional):</label>
+                        <label class="form-label" style="font-size:0.82em;">📌 Observaciones (opcional):</label>
                         <input type="text" id="t-observaciones" class="form-control" placeholder="Notas adicionales...">
                     </div>
                 </div>
@@ -1038,7 +1038,7 @@
 
             <!-- BOTONES MODO VENTA -->
             <div id="botones-venta">
-                <button id="btn-aplicar-descuento" class="btn" style="background:var(--naranja); color:white; display:none;" onclick="aplicarDesc()">?? Aplicar Descuento <span id="porcentaje-btn-texto">2</span>%</button>
+                <button id="btn-aplicar-descuento" class="btn" style="background:var(--naranja); color:white; display:none;" onclick="aplicarDesc()">🏷️ Aplicar Descuento <span id="porcentaje-btn-texto">2</span>%</button>
                 <button class="btn" style="background:var(--rojo); color:white" onclick="if(this.disabled)return;this.disabled=true;setTimeout(()=>this.disabled=false,1500);guardarVenta()">💾 GUARDAR VENTA</button>
                 <button class="btn" style="background:#6c63ff; color:white" onclick="if(this.disabled)return;this.disabled=true;setTimeout(()=>this.disabled=false,1500);guardarEImprimir()">🖨️ GUARDAR E IMPRIMIR</button>
                 <button class="btn" style="background:#888; color:white" onclick="confirmarLimpiarNota()">🗑️ Vaciar Nota</button>
@@ -1058,7 +1058,7 @@
             <!-- BOTONES MODO TRASPASO -->
             <div id="botones-traspaso" style="display:none;">
                 <button class="btn" style="background:var(--azul); color:white; border-radius:10px;" onclick="if(this.disabled)return;this.disabled=true;setTimeout(()=>this.disabled=false,1500);guardarTraspasoDesdeNota()">? REGISTRAR TRASPASO</button>
-                <button class="btn" style="background:#888; color:white" onclick="confirmarLimpiarNota()">??? Vaciar</button>
+                <button class="btn" style="background:#888; color:white" onclick="confirmarLimpiarNota()">🗑️ Vaciar</button>
             </div>
 
         </div>
@@ -1067,12 +1067,12 @@
 
 <div id="vista-consulta" style="display:none; max-width: 960px; margin: 20px auto; padding: 0 15px;">
     <div class="tarjeta">
-        <h3 style="margin:0 0 4px 0;">?? Consulta de Precios</h3>
+        <h3 style="margin:0 0 4px 0;">🔍 Consulta de Precios</h3>
         <p style="color:#666; font-size:0.85em; margin:0 0 15px 0;">Lista de referencia con precios sugeridos de venta — actualizado 12/01/2026</p>
 
         <!-- Buscador -->
         <div style="position:relative; margin-bottom:16px;">
-            <span style="position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:1.1em; pointer-events:none;">??</span>
+            <span style="position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:1.1em; pointer-events:none;">🔍</span>
             <input id="consulta-search" type="text" placeholder="Buscar producto..." oninput="filtrarConsulta()"
                 style="width:100%; box-sizing:border-box; padding:10px 12px 10px 38px; border:2px solid #ddd; border-radius:8px; font-size:1em; outline:none; transition:border 0.2s;"
                 onfocus="this.style.borderColor='var(--azul)'" onblur="this.style.borderColor='#ddd'">
@@ -1088,8 +1088,8 @@
                     <tr style="background:linear-gradient(135deg,var(--azul) 0%,#0d3b6e 100%); color:white;">
                         <th style="text-align:left; padding:11px 14px; border-radius:8px 0 0 0;">Producto</th>
                         <th style="padding:11px 14px; text-align:center; white-space:nowrap;">Unid. x Caja/Pq</th>
-                        <th style="padding:11px 14px; text-align:center; white-space:nowrap; border-radius:0 8px 0 0;">?? P. Venta x Unidad</th>
-                        <th style="padding:11px 14px; text-align:center; white-space:nowrap;">?? P. Venta x Caja/Pq</th>
+                        <th style="padding:11px 14px; text-align:center; white-space:nowrap; border-radius:0 8px 0 0;">💵 P. Venta x Unidad</th>
+                        <th style="padding:11px 14px; text-align:center; white-space:nowrap;">💵 P. Venta x Caja/Pq</th>
                     </tr>
                 </thead>
                 <tbody id="consulta-tbody"></tbody>
@@ -1097,7 +1097,7 @@
         </div>
 
         <div id="consulta-empty" style="display:none; text-align:center; padding:40px; color:#aaa;">
-            <div style="font-size:2.5em; margin-bottom:10px;">??</div>
+            <div style="font-size:2.5em; margin-bottom:10px;">🔍</div>
             <div style="font-size:1em;">No se encontraron productos</div>
         </div>
     </div>
@@ -1107,16 +1107,16 @@
     <div class="tarjeta">
         <!-- FILTROS DE ESTADO -->
         <div style="margin-bottom: 20px;">
-            <label class="form-label">?? Filtrar por Estado:</label>
+            <label class="form-label">🔽 Filtrar por Estado:</label>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                 <button class="btn-cat active" id="filtro-todos" onclick="filtrarPorEstado('TODOS')" style="flex: 1; min-width: 120px;">
-                    ?? TODOS
+                    📋 TODOS
                 </button>
                 <button class="btn-cat" id="filtro-pendiente" onclick="filtrarPorEstado('PENDIENTE')" style="flex: 1; min-width: 120px;">
-                    ?? PENDIENTES <span id="badge-pendientes" style="background:#ff9500;color:#000;padding:1px 7px;border-radius:10px;font-size:0.7em;display:none;">0</span>
+                    ⏳ PENDIENTES <span id="badge-pendientes" style="background:#ff9500;color:#000;padding:1px 7px;border-radius:10px;font-size:0.7em;display:none;">0</span>
                 </button>                
                 <button class="btn-cat" id="filtro-preparado" onclick="filtrarPorEstado('PREPARADO')" style="flex: 1; min-width: 120px;">
-                    ?? PREPARADOS
+                    ✅ PREPARADOS
                 </button>
                 <button class="btn-cat" id="filtro-entregado" onclick="filtrarPorEstado('ENTREGADO')" style="flex: 1; min-width: 120px;">
                     ? ENTREGADOS
@@ -1126,7 +1126,7 @@
         </div>
 
         <div class="secretario-filter">
-            <label class="form-label">?? Filtrar por Secretario:</label>
+            <label class="form-label">👤 Filtrar por Secretario:</label>
             <select id="filtro-secretario" class="form-control" onchange="renderHistorial()">
                 <option value="">Todos los secretarios</option>
             </select>
@@ -1142,7 +1142,7 @@
             </div>
         </div>
         <div style="display:flex; gap:10px;">
-            <input type="text" id="h-busca" class="input-cliente" placeholder="?? Buscar cliente..." onkeyup="renderHistorial()">
+            <input type="text" id="h-busca" class="input-cliente" placeholder="🔍 Buscar cliente..." onkeyup="renderHistorial()">
         </div>
         <h2 id="h-total" style="text-align:center; color:var(--azul);">Total Día: 0 Bs</h2>
     </div>
@@ -1153,7 +1153,7 @@
 <div id="vista-traspaso" style="display:none; max-width: 960px; margin: 20px auto; padding: 0 15px;">
 
     <div class="tarjeta">
-        <h3>?? Historial de Traspasos</h3>
+        <h3>📦 Historial de Traspasos</h3>
         <p style="color:#666; font-size:0.85em; margin:-8px 0 16px 0;">Para registrar un traspaso usa las pestañas <strong>Rápida</strong> o <strong>Catálogo</strong> y cambia el modo a 📦 Traspaso.</p>
 
         <!-- FILTROS -->
@@ -1189,20 +1189,20 @@
 <div id="modal-anticipo" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 style="margin:0">?? Registrar Pago Anticipado</h3>
+            <h3 style="margin:0">💰 Registrar Pago Anticipado</h3>
             <span class="modal-close" onclick="cerrarModal('modal-anticipo')">&times;</span>
         </div>
         <div id="anticipo-nota-info" style="background:#f8f9fa; padding:12px; border-radius:8px; margin-bottom:15px; font-size:0.95em;"></div>
         <p style="font-weight:bold; color:var(--azul); margin-bottom:8px;">Selecciona el método de pago:</p>
         <div class="metodo-pago-grid">
             <div class="btn-metodo efectivo" id="anticipo-btn-efectivo" onclick="seleccionarMetodoAnticipo('EFECTIVO')">
-                ??<br>EFECTIVO<br><small style="color:#fb8500; font-weight:normal;"><span id="anticipo-desc-pct">2</span>% desc.</small>
+                💵<br>EFECTIVO<br><small style="color:#fb8500; font-weight:normal;"><span id="anticipo-desc-pct">2</span>% desc.</small>
             </div>
             <div class="btn-metodo qr" id="anticipo-btn-qr" onclick="seleccionarMetodoAnticipo('QR')">
-                ??<br>QR<br><small style="color:#6c63ff; font-weight:normal;">Sin descuento</small>
+                📱<br>QR<br><small style="color:#6c63ff; font-weight:normal;">Sin descuento</small>
             </div>
             <div class="btn-metodo mixto" id="anticipo-btn-mixto" onclick="seleccionarMetodoAnticipo('MIXTO')">
-                ??<br>MIXTO<br><small style="color:#03045e; font-weight:normal;">Manual</small>
+                🔀<br>MIXTO<br><small style="color:#03045e; font-weight:normal;">Manual</small>
             </div>
         </div>
 
@@ -1211,40 +1211,40 @@
             <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.9em; font-weight:600; color:#92400e;">
                 <input type="checkbox" id="anticipo-aplicar-descuento" checked onchange="calcularResumenAnticipo()"
                     style="width:18px; height:18px; cursor:pointer; accent-color:var(--naranja);">
-                ?? Aplicar descuento de <strong id="anticipo-pct-texto">2</strong>% al pago
+                🏷️ Aplicar descuento de <strong id="anticipo-pct-texto">2</strong>% al pago
             </label>
         </div>
 
         <!-- MONTO EFECTIVO / QR (simple) -->
         <div id="anticipo-form-simple" style="display:none;">
             <div class="form-group">
-                <label class="form-label" id="anticipo-lbl-monto">?? Monto a cobrar (Bs):</label>
+                <label class="form-label" id="anticipo-lbl-monto">💰 Monto a cobrar (Bs):</label>
                 <input type="number" id="anticipo-monto-simple" class="form-control" placeholder="0.00" step="0.50" oninput="calcularResumenAnticipo()">
             </div>
         </div>
 
         <!-- FORMULARIO MIXTO -->
         <div id="anticipo-form-mixto" class="pago-mixto-form">
-            <p style="font-weight:bold; margin:0 0 10px; color:var(--azul);">?? Detalle del pago mixto:</p>
+            <p style="font-weight:bold; margin:0 0 10px; color:var(--azul);">💳 Detalle del pago mixto:</p>
             <div style="background:#e3f2fd; padding:10px; border-radius:6px; margin-bottom:15px; font-size:0.9em;">
                 <strong>Saldo a cubrir: <span id="anticipo-mixto-total">0.00</span> Bs</strong>
             </div>
             <div class="form-group">
-                <label class="form-label">?? Monto en Efectivo (Bs):</label>
+                <label class="form-label">💵 Monto en Efectivo (Bs):</label>
                 <input type="number" id="anticipo-mixto-efectivo" class="form-control" placeholder="0.00" step="0.50" oninput="calcularResumenAnticipo()">
             </div>
             <div class="form-group">
-                <label class="form-label">?? Monto en QR (Bs):</label>
+                <label class="form-label">📱 Monto en QR (Bs):</label>
                 <input type="number" id="anticipo-mixto-qr" class="form-control" placeholder="0.00" step="0.50" oninput="this.dataset.editado='1'; calcularResumenAnticipo()">
             </div>
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; padding:8px 10px; background:#fff8e1; border:1px solid #f59e0b; border-radius:8px;">
                 <input type="checkbox" id="anticipo-mixto-descuento" onchange="calcularResumenAnticipo()" style="width:18px; height:18px; cursor:pointer; accent-color:var(--verde);">
                 <label for="anticipo-mixto-descuento" style="cursor:pointer; font-weight:600; color:#92400e; font-size:0.9em; margin:0;">
-                    ?? Aplicar descuento <span id="anticipo-mixto-pct">2</span>% sobre efectivo (restar del QR)
+                    🏷️ Aplicar descuento <span id="anticipo-mixto-pct">2</span>% sobre efectivo (restar del QR)
                 </label>
             </div>
             <div id="anticipo-mixto-desc-info" style="margin-top:10px; padding:10px; background:#fff3e0; border-radius:6px; display:none;">
-                <strong style="color:var(--naranja);">?? Descuento:</strong>
+                <strong style="color:var(--naranja);">🏷️ Descuento:</strong>
                 <div id="anticipo-mixto-desc-monto" style="font-size:1.1em; margin-top:5px;"></div>
             </div>
             <div id="anticipo-mixto-validacion" style="margin-top:10px;"></div>
@@ -1253,16 +1253,16 @@
         <!-- RESUMEN DEL PAGO -->
         <div id="anticipo-resumen" style="display:none;" class="resumen-pago">
             <div class="resumen-pago-linea"><span>Subtotal Original:</span><span id="ar-total">-</span></div>
-            <div class="resumen-pago-linea" id="ar-efect-linea" style="display:none;"><span>?? Efectivo:</span><span id="ar-efectivo">-</span></div>
-            <div class="resumen-pago-linea" id="ar-desc-linea" style="display:none; color:var(--verde);"><span>?? Descuento:</span><span id="ar-descuento">-</span></div>
-            <div class="resumen-pago-linea" id="ar-qr-linea" style="display:none;"><span>?? QR:</span><span id="ar-qr">-</span></div>
+            <div class="resumen-pago-linea" id="ar-efect-linea" style="display:none;"><span>💵 Efectivo:</span><span id="ar-efectivo">-</span></div>
+            <div class="resumen-pago-linea" id="ar-desc-linea" style="display:none; color:var(--verde);"><span>🏷️ Descuento:</span><span id="ar-descuento">-</span></div>
+            <div class="resumen-pago-linea" id="ar-qr-linea" style="display:none;"><span>📱 QR:</span><span id="ar-qr">-</span></div>
             <div class="resumen-pago-linea total"><span>TOTAL A COBRAR:</span><span id="ar-anticipo">-</span></div>
             <div class="resumen-pago-linea" style="color:var(--purple);"><span>Saldo pendiente tras anticipo:</span><span id="ar-saldo">-</span></div>
         </div>
 
         <div id="anticipo-error" style="color:#dc2626; font-size:0.85em; margin-bottom:10px; display:none;"></div>
         <button id="btn-confirmar-anticipo" class="btn" style="background:linear-gradient(135deg,#6c63ff,#4b44cc); color:white; border-radius:10px; padding:13px; width:100%; display:none;" onclick="confirmarAnticipo()">
-            ?? Confirmar Anticipo
+            ✅ Confirmar Anticipo
         </button>
     </div>
 </div>
@@ -1274,7 +1274,7 @@
         <div style="background:linear-gradient(135deg,var(--azul),#1a0d4d); color:white; padding:18px 20px; border-radius:10px 10px 0 0; margin:-30px -30px 20px -30px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <div>
-                    <div style="font-size:1.2em; font-weight:900;">?? Registrar Cliente</div>
+                    <div style="font-size:1.2em; font-weight:900;">👤 Registrar Cliente</div>
                     <div style="font-size:0.82em; opacity:0.8; margin-top:3px;">Ingresa los datos para registrar al cliente.</div>
                 </div>
                 <span class="modal-close" onclick="cerrarRegistroClienteRapido()" style="color:white;">&times;</span>
@@ -1289,7 +1289,7 @@
             <input type="text" id="reg-cli-tel-pre" class="form-control" placeholder="Ej: 70012345">
         </div>
         <button class="btn" style="background:var(--azul); color:white; margin-top:6px;" onclick="soloRegistrarCliente()">
-            ?? REGISTRAR CLIENTE
+            ✅ REGISTRAR CLIENTE
         </button>
     </div>
 </div>
@@ -1301,7 +1301,7 @@
         <div id="perfil-header" style="background:linear-gradient(135deg,var(--azul),#1a0d4d); color:white; padding:20px 24px; flex-shrink:0;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div>
-                    <div style="font-size:2em; margin-bottom:4px;">??</div>
+                    <div style="font-size:2em; margin-bottom:4px;">⭐</div>
                     <div id="perfil-nombre" style="font-size:1.4em; font-weight:900;"></div>
                     <div id="perfil-telefono" style="font-size:0.9em; opacity:0.8; margin-top:2px;"></div>
                     <div id="perfil-stats" style="margin-top:10px; display:flex; gap:16px; flex-wrap:wrap;"></div>
@@ -1313,19 +1313,19 @@
         <div style="display:flex; border-bottom:2px solid #eee; flex-shrink:0; background:white;">
             <button id="perfil-tab-activos" onclick="cambiarTabPerfil('activos')"
                 style="flex:1; padding:12px; border:none; background:var(--azul); color:white; font-weight:700; cursor:pointer; font-size:0.88em;">
-                ?? Pedidos Activos
+                📋 Pedidos Activos
             </button>
             <button id="perfil-tab-historial" onclick="cambiarTabPerfil('historial')"
                 style="flex:1; padding:12px; border:none; background:white; color:var(--azul); font-weight:700; cursor:pointer; font-size:0.88em; border-left:2px solid #eee;">
-                ?? Historial
+                🕰️ Historial
             </button>
             <button id="perfil-tab-incidencias" onclick="cambiarTabPerfil('incidencias')"
                 style="flex:1; padding:12px; border:none; background:white; color:var(--azul); font-weight:700; cursor:pointer; font-size:0.88em; border-left:2px solid #eee;">
-                ?? Incidencias
+                ⚠️ Incidencias
             </button>
             <button id="perfil-tab-editar" onclick="cambiarTabPerfil('editar')"
                 style="flex:1; padding:12px; border:none; background:white; color:var(--azul); font-weight:700; cursor:pointer; font-size:0.88em; border-left:2px solid #eee;">
-                ?? Editar
+                ✏️ Editar
             </button>
         </div>
         <!-- Contenido del perfil -->
@@ -1336,24 +1336,24 @@
 <!-- MODAL APERTURA -->
 <div id="modal-apertura" class="modal">
     <div class="modal-content">
-        <h3>?? Apertura de Turno</h3>
+        <h3>🌅 Apertura de Turno</h3>
         <select id="user-in" class="selector-secretario">
             <option value="">-- Seleccionar Secretario --</option>
         </select>
 
-        <label class="form-label" style="margin-top:10px;">?? Turno:</label>
+        <label class="form-label" style="margin-top:10px;">☀️ Turno:</label>
         <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:14px;">
             <button id="turno-btn-dia"   onclick="seleccionarTurnoApertura('DÍA')"
                 style="padding:12px 6px; border:2px solid #fb8500; border-radius:10px; background:white; color:#fb8500; font-weight:700; cursor:pointer; font-size:0.85em; transition:all 0.2s;">
-                ?? DÍA
+                ☀️ DÍA
             </button>
             <button id="turno-btn-tarde" onclick="seleccionarTurnoApertura('TARDE')"
                 style="padding:12px 6px; border:2px solid #6c63ff; border-radius:10px; background:white; color:#6c63ff; font-weight:700; cursor:pointer; font-size:0.85em; transition:all 0.2s;">
-                ?? TARDE
+                🌇 TARDE
             </button>
             <button id="turno-btn-noche" onclick="seleccionarTurnoApertura('NOCHE')"
                 style="padding:12px 6px; border:2px solid var(--azul); border-radius:10px; background:white; color:var(--azul); font-weight:700; cursor:pointer; font-size:0.85em; transition:all 0.2s;">
-                ?? NOCHE
+                🌙 NOCHE
             </button>
         </div>
         <div id="apertura-turno-error" style="color:var(--rojo); font-size:0.85em; display:none; margin-bottom:8px;">?? Selecciona el turno antes de iniciar</div>
@@ -1367,7 +1367,7 @@
 <div id="modal-config-ticket" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 style="margin:0">??? Configuración de Ticket</h3>
+            <h3 style="margin:0">🧾 Configuración de Ticket</h3>
             <span class="modal-close" onclick="cerrarModal('modal-config-ticket')">&times;</span>
         </div>
         <div class="form-group">
@@ -1392,7 +1392,7 @@
 Vuelva pronto"></textarea>
         </div>
         <div class="form-group" style="background:#fff3e0; border:2px solid #fb8500; border-radius:8px; padding:14px; margin-bottom:10px;">
-            <label class="form-label" style="color:#b76000;">?? Sucursal (para sincronización):</label>
+            <label class="form-label" style="color:#b76000;">🏪 Sucursal (para sincronización):</label>
             <select id="ticket-sucursal" class="form-control" style="font-weight:700; color:var(--azul);">
                 <option value="">— Seleccionar sucursal —</option>
                 <option value="3 Pasos">3 Pasos</option>
@@ -1403,10 +1403,10 @@ Vuelva pronto"></textarea>
                 <option value="Av. Paurito">Av. Paurito</option>
                 <option value="Virgen de Cotoca">Virgen de Cotoca</option>
             </select>
-            <div style="font-size:0.78em; color:#b76000; margin-top:6px;">?? Solo para identificar la sucursal en Supabase. No aparece en los tickets.</div>
+            <div style="font-size:0.78em; color:#b76000; margin-top:6px;">💡 Solo para identificar la sucursal en Supabase. No aparece en los tickets.</div>
         </div>
-        <button class="btn btn-success" onclick="guardarConfigTicket()">?? Guardar Configuración</button>
-        <button class="btn btn-print" style="margin-top:5px" onclick="previsualizarTicket()">??? Vista Previa</button>
+        <button class="btn btn-success" onclick="guardarConfigTicket()">✅ Guardar Configuración</button>
+        <button class="btn btn-print" style="margin-top:5px" onclick="previsualizarTicket()">👁️ Vista Previa</button>
     </div>
 </div>
 
@@ -1414,7 +1414,7 @@ Vuelva pronto"></textarea>
 <div id="modal-config-impresora" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 style="margin:0">?? Configuración de Impresora</h3>
+            <h3 style="margin:0">🖨️ Configuración de Impresora</h3>
             <span class="modal-close" onclick="cerrarModal('modal-config-impresora')">&times;</span>
         </div>
         <div class="form-group">
@@ -1448,7 +1448,7 @@ Vuelva pronto"></textarea>
                 <option value="10">10mm</option>
             </select>
         </div>
-        <button class="btn btn-success" onclick="guardarConfigImpresora()">?? Guardar Configuración</button>
+        <button class="btn btn-success" onclick="guardarConfigImpresora()">✅ Guardar Configuración</button>
     </div>
 </div>
 
@@ -1456,15 +1456,15 @@ Vuelva pronto"></textarea>
 <div id="modal-config" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 style="margin:0">?? Configuración del Sistema</h3>
+            <h3 style="margin:0">⚙️ Configuración del Sistema</h3>
             <span class="modal-close" onclick="cerrarModal('modal-config'); renderCategorias();">&times;</span>
         </div>
         
         <div class="config-tabs">
             <div class="config-tab active" onclick="cambiarConfigTab('agrupacion',this)">Agrupación</div>
             <div class="config-tab" onclick="cambiarConfigTab('catalogo',this)">Catálogo</div>
-            <div class="config-tab" onclick="cambiarConfigTab('consulta-config',this)">?? Consulta Precios</div>
-            <div class="config-tab" onclick="cambiarConfigTab('panel',this)">?? Panel</div>
+            <div class="config-tab" onclick="cambiarConfigTab('consulta-config',this)">🔍 Consulta Precios</div>
+            <div class="config-tab" onclick="cambiarConfigTab('panel',this)">📋 Panel</div>
         </div>
 
         <!-- CONFIGURACIÓN AGRUPACIÓN -->
@@ -1493,12 +1493,12 @@ Vuelva pronto"></textarea>
 
             <!-- ZONA IMPORTAR EXCEL -->
             <div style="background:linear-gradient(135deg,#1a237e 0%,#0d47a1 100%); border-radius:10px; padding:16px; margin-bottom:18px; color:white;">
-                <div style="font-weight:700; font-size:1em; margin-bottom:6px;">?? Actualizar precios desde Excel</div>
+                <div style="font-weight:700; font-size:1em; margin-bottom:6px;">📥 Actualizar precios desde Excel</div>
                 <div style="font-size:0.82em; opacity:0.88; margin-bottom:12px;">
                     El Excel debe tener: <strong>Col A</strong> = Producto &nbsp;|&nbsp; <strong>Col B</strong> = Unid/Caja &nbsp;|&nbsp; <strong>Col E</strong> = P.Venta Caja &nbsp;|&nbsp; <strong>Col G</strong> = P.Venta Unidad
                 </div>
                 <label id="lbl-excel-consulta" style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.18); border:2px dashed rgba(255,255,255,0.5); border-radius:8px; padding:10px 16px; cursor:pointer; font-size:0.9em; transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.28)'" onmouseout="this.style.background='rgba(255,255,255,0.18)'">
-                    ?? Elegir archivo Excel (.xlsx)
+                    📂 Elegir archivo Excel (.xlsx)
                     <input type="file" accept=".xlsx" style="display:none" onchange="importarExcelConsulta(this)">
                 </label>
                 <div id="excel-consulta-status" style="margin-top:8px; font-size:0.82em; opacity:0.9;"></div>
@@ -1517,11 +1517,11 @@ Vuelva pronto"></textarea>
                         <input id="cc-nuevo-unid" type="number" class="form-control" placeholder="6" min="1" style="text-align:center;">
                     </div>
                     <div>
-                        <label style="font-size:0.8em; color:#555; display:block; margin-bottom:3px;">?? P.Venta/Unidad</label>
+                        <label style="font-size:0.8em; color:#555; display:block; margin-bottom:3px;">💵 P.Venta/Unidad</label>
                         <input id="cc-nuevo-vu" type="number" class="form-control" placeholder="0.00" step="0.5" min="0">
                     </div>
                     <div>
-                        <label style="font-size:0.8em; color:#555; display:block; margin-bottom:3px;">?? P.Venta/Caja</label>
+                        <label style="font-size:0.8em; color:#555; display:block; margin-bottom:3px;">💵 P.Venta/Caja</label>
                         <input id="cc-nuevo-vc" type="number" class="form-control" placeholder="Auto" step="0.5" min="0">
                     </div>
                 </div>
@@ -1530,8 +1530,8 @@ Vuelva pronto"></textarea>
 
             <!-- BUSCADOR + LISTA EDITABLE -->
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
-                <div style="font-weight:700; color:#333;">?? Editar / Eliminar productos (<span id="cc-count">0</span>)</div>
-                <input id="cc-search" type="text" class="form-control" placeholder="?? Buscar..." oninput="ccRenderLista()" style="max-width:220px; padding:7px 12px;">
+                <div style="font-weight:700; color:#333;">✏️ Editar / Eliminar productos (<span id="cc-count">0</span>)</div>
+                <input id="cc-search" type="text" class="form-control" placeholder="🔍 Buscar..." oninput="ccRenderLista()" style="max-width:220px; padding:7px 12px;">
             </div>
             <div id="cc-lista" style="max-height:380px; overflow-y:auto; border:1px solid #e0e0e0; border-radius:8px;"></div>
 
@@ -1539,7 +1539,7 @@ Vuelva pronto"></textarea>
 
         <!-- CONFIGURACIÓN PANEL (Venta Rápida / Consulta) -->
         <div id="config-panel" class="config-section" style="display:none;">
-            <div style="font-weight:700; font-size:1.1em; margin-bottom:16px; color:#333;">?? Controles del Panel</div>
+            <div style="font-weight:700; font-size:1.1em; margin-bottom:16px; color:#333;">⚙️ Controles del Panel</div>
             <div style="display:flex; flex-direction:column; gap:14px;">
                 <div class="item-config" style="display:flex; justify-content:space-between; align-items:center;">
                     <div>
@@ -1553,7 +1553,7 @@ Vuelva pronto"></textarea>
                 </div>
                 <div class="item-config" style="display:flex; justify-content:space-between; align-items:center;">
                     <div>
-                        <div style="font-weight:700;">?? Consulta</div>
+                        <div style="font-weight:700;">🔍 Consulta</div>
                         <div style="font-size:0.82em; color:#666;">Muestra/oculta el botón de Consulta en la barra</div>
                     </div>
                     <label style="position:relative; display:inline-block; width:50px; height:28px; flex-shrink:0;">
@@ -1571,7 +1571,7 @@ Vuelva pronto"></textarea>
 <div id="modal-edit-agrupacion" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 style="margin:0" id="modal-agrup-titulo">?? Editar Producto</h3>
+            <h3 style="margin:0" id="modal-agrup-titulo">✏️ Editar Producto</h3>
             <span class="modal-close" onclick="cerrarModal('modal-edit-agrupacion')">&times;</span>
         </div>
         <div class="form-group">
@@ -1591,7 +1591,7 @@ Vuelva pronto"></textarea>
             <input type="number" id="edit-agrup-precio" class="form-control" step="0.5" min="0" oninput="_agrupActualizarPreview()">
         </div>
         <div style="font-size:0.75em;color:var(--text2);margin-bottom:12px;padding:8px;background:#f8f9fa;border-radius:6px;">
-            ?? <b>Vista previa:</b> <span id="agrup-preview" style="color:var(--azul);"></span>
+            👁️ <b>Vista previa:</b> <span id="agrup-preview" style="color:var(--azul);"></span>
         </div>
         <button class="btn" style="background:var(--verde); color:white" onclick="guardarEdicionAgrupacion()">?? Guardar Cambios</button>
     </div>
@@ -1601,7 +1601,7 @@ Vuelva pronto"></textarea>
 <div id="modal-add-sabores" class="modal">
     <div class="modal-content" style="max-width:500px;">
         <div class="modal-header">
-            <h3 style="margin:0" id="modal-sabores-titulo">?? Agregar Sabores</h3>
+            <h3 style="margin:0" id="modal-sabores-titulo">✨ Agregar Sabores</h3>
             <span class="modal-close" onclick="cerrarModal('modal-add-sabores')">&times;</span>
         </div>
         <div class="form-group">
@@ -1616,7 +1616,7 @@ Vuelva pronto"></textarea>
             </select>
         </div>
         <div class="form-group">
-            <label class="form-label">?? Sabores (uno por línea):</label>
+            <label class="form-label">🍹 Sabores (uno por línea):</label>
             <textarea id="masivo-sabores" class="form-control" rows="8" placeholder="Bico&#10;Estevia Blanca&#10;Estevia Verde&#10;Yogobull&#10;RedBull" oninput="_actualizarPreviewMasivo()"></textarea>
             <div style="font-size:0.75em;color:var(--text2);margin-top:4px;">Escribe cada sabor en una línea nueva. Se agregarán al grupo de precio.</div>
         </div>
@@ -1632,7 +1632,7 @@ Vuelva pronto"></textarea>
 <div id="modal-cierre" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 style="margin:0">?? Cierre de Turno</h3>
+            <h3 style="margin:0">🌙 Cierre de Turno</h3>
             <span class="modal-close" onclick="cerrarModal('modal-cierre')">&times;</span>
         </div>
         <div id="resumen-cierre"></div>
@@ -1644,17 +1644,17 @@ Vuelva pronto"></textarea>
 <!-- MODAL CONFIRMACIÓN POST-CIERRE: ¿Imprimir informe? -->
 <div id="modal-post-cierre" class="modal">
     <div class="modal-content" style="max-width:400px; text-align:center;">
-        <div style="font-size:2.5em; margin-bottom:10px;">??</div>
+        <div style="font-size:2.5em; margin-bottom:10px;">🔍</div>
         <h3 style="color:var(--azul); margin:0 0 8px;">Turno cerrado exitosamente</h3>
         <p style="color:#666; font-size:0.9em; margin-bottom:20px;">¿Deseas imprimir el informe de caja de este turno?</p>
         <button class="btn" style="background:var(--azul); color:white;" onclick="imprimirYAbrirApertura()">
-            ??? SÍ, IMPRIMIR INFORME
+            🖨️ SÍ, IMPRIMIR INFORME
         </button>
         <button class="btn" style="background:#f3f4f6; color:#374151; margin-top:8px;" onclick="soloAbrirApertura()">
-            ?? NO, INICIAR NUEVO TURNO
+            ▶️ NO, INICIAR NUEVO TURNO
         </button>
         <button class="btn" style="background:#fdecea; color:#c0392b; margin-top:8px; border:1.5px solid #c0392b;" onclick="cerrarModal('modal-post-cierre')">
-            ?? SOLO SALIR
+            🚪 SOLO SALIR
         </button>
     </div>
 </div>
@@ -1663,11 +1663,11 @@ Vuelva pronto"></textarea>
 <div id="modal-editar-nota" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 style="margin:0">?? Modificar Cliente de la Nota</h3>
+            <h3 style="margin:0">✏️ Modificar Cliente de la Nota</h3>
             <span class="modal-close" onclick="cerrarModal('modal-editar-nota')">&times;</span>
         </div>
         <div class="form-group" style="position:relative;">
-            <label class="form-label">?? Nombre del Cliente:</label>
+            <label class="form-label">👤 Nombre del Cliente:</label>
             <div style="display:flex; gap:8px; align-items:center;">
                 <div style="position:relative; flex:1;">
                     <input type="text" id="edit-nota-cliente" class="input-cliente"
@@ -1684,7 +1684,7 @@ Vuelva pronto"></textarea>
             <div id="edit-nota-sugerencias" style="display:none; position:absolute; top:100%; left:0; right:0; background:white; border:2px solid var(--azul); border-top:none; border-radius:0 0 10px 10px; z-index:9999; max-height:200px; overflow-y:auto; box-shadow:0 8px 20px rgba(0,0,0,0.15);"></div>
         </div>
         <div id="edit-nota-cliente-info" style="display:none; font-size:0.78em; padding:6px 8px; border-radius:6px; margin-top:4px;"></div>
-        <button class="btn btn-success" style="margin-top:14px;" onclick="guardarEdicionNota()">?? Guardar Cambios</button>
+        <button class="btn btn-success" style="margin-top:14px;" onclick="guardarEdicionNota()">✅ Guardar Cambios</button>
     </div>
 </div>
 
@@ -1702,7 +1702,7 @@ Vuelva pronto"></textarea>
         <!-- MODO CATÁLOGO -->
         <div id="add-modo-catalogo">
         <div class="form-group" style="position:relative;">
-            <label class="form-label">?? Buscar en Catálogo:</label>
+            <label class="form-label">🔍 Buscar en Catálogo:</label>
             <input type="text" id="add-prod-nombre" class="form-control" placeholder="Escribir nombre o seleccionar del catálogo..." autocomplete="off"
                 oninput="buscarEnCatalogoModal(this.value)" onkeydown="onAddProdKey(event)">
             <div id="add-prod-sugerencias" style="display:none; position:absolute; top:100%; left:0; right:0; background:white; border:1px solid #ddd; border-radius:0 0 8px 8px; z-index:9999; max-height:200px; overflow-y:auto; box-shadow:0 4px 12px rgba(0,0,0,0.15);"></div>
@@ -1711,7 +1711,7 @@ Vuelva pronto"></textarea>
         <!-- MODO MANUAL -->
         <div id="add-modo-manual" style="display:none;">
         <div class="form-group">
-            <label class="form-label">?? Nombre del Producto:</label>
+            <label class="form-label">📦 Nombre del Producto:</label>
             <input type="text" id="add-manual-nombre" class="form-control" placeholder="Ej: COCA COLA 2L, SNICKERS...">
         </div>
         </div>
@@ -1728,7 +1728,7 @@ Vuelva pronto"></textarea>
             <input type="number" id="add-prod-precio" class="form-control" step="0.5" placeholder="Precio del catálogo o manual">
         </div>
         <div id="add-prod-preview" style="display:none; background:#f0fdf4; border:1px solid #86efac; border-radius:8px; padding:10px; margin-bottom:10px; font-size:0.88em; color:#166534;"></div>
-        <button class="btn btn-success" onclick="guardarNuevoProducto()">?? Añadir Producto</button>
+        <button class="btn btn-success" onclick="guardarNuevoProducto()">✅ Añadir Producto</button>
     </div>
 </div>
 
@@ -1736,19 +1736,19 @@ Vuelva pronto"></textarea>
 <div id="modal-delivery-prep" class="modal">
     <div class="modal-content" style="max-width:420px;">
         <div class="modal-header">
-            <h3 style="margin:0">?? Activar / Editar Delivery</h3>
+            <h3 style="margin:0">🛵 Activar / Editar Delivery</h3>
             <span class="modal-close" onclick="cerrarModal('modal-delivery-prep')">&times;</span>
         </div>
         <div id="delivery-prep-estado" style="margin-bottom:14px; padding:10px; border-radius:8px; font-size:0.9em; text-align:center;"></div>
         <div class="form-group">
-            <label class="form-label">?? Cargo de Delivery (Bs):</label>
+            <label class="form-label">💰 Cargo de Delivery (Bs):</label>
             <input type="number" id="delivery-prep-monto" class="form-control" step="0.5" min="0" placeholder="Ej: 5, 10, 15">
             <div style="font-size:0.8em; color:#666; margin-top:4px;">
-                ?? <strong>QR:</strong> Se suma al total cobrado &nbsp;|&nbsp; ?? <strong>Efectivo:</strong> El cliente paga por separado
+                📱 <strong>QR:</strong> Se suma al total cobrado &nbsp;|&nbsp; 💵 <strong>Efectivo:</strong> El cliente paga por separado
             </div>
         </div>
         <div class="form-group">
-            <label class="form-label">?? Repartidor (opcional):</label>
+            <label class="form-label">👷 Repartidor (opcional):</label>
             <input type="text" id="delivery-prep-repartidor" class="form-control" placeholder="Nombre del repartidor">
         </div>
         <div style="display:flex; gap:10px; margin-top:10px;">
@@ -1762,7 +1762,7 @@ Vuelva pronto"></textarea>
 <div id="modal-ajustar-cantidad" class="modal">
     <div class="modal-content" style="max-width:380px;">
         <div class="modal-header">
-            <h3 style="margin:0">?? Ajustar Cantidad de Producto</h3>
+            <h3 style="margin:0">🔢 Ajustar Cantidad de Producto</h3>
             <span class="modal-close" onclick="cerrarModal('modal-ajustar-cantidad')">&times;</span>
         </div>
         <div id="ajustar-cant-info" style="background:#eff6ff; border:1px solid #93c5fd; border-radius:8px; padding:10px; margin-bottom:14px; font-size:0.9em;"></div>
@@ -1786,14 +1786,14 @@ Vuelva pronto"></textarea>
 <div id="modal-decision-descuento" class="modal">
     <div class="modal-content" style="max-width:420px;">
         <div style="text-align:center; margin-bottom:16px;">
-            <div style="font-size:2em;">??</div>
+            <div style="font-size:2em;">⭐</div>
             <h3 style="color:var(--azul); margin:8px 0 4px;">Descuento del pedido</h3>
             <p style="color:#666; font-size:0.88em; margin:0;" id="decision-desc-info"></p>
         </div>
         <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:10px;">
             <button onclick="aplicarDecisionDescuento('mantener')"
                 style="padding:14px 16px; border:2px solid var(--azul); border-radius:12px; background:#eff6ff; cursor:pointer; text-align:left;">
-                <div style="font-weight:700; color:var(--azul); font-size:0.95em;">?? Mantener descuento anterior</div>
+                <div style="font-weight:700; color:var(--azul); font-size:0.95em;">🏷️ Mantener descuento anterior</div>
                 <div style="font-size:0.82em; color:#555; margin-top:3px;" id="decision-mantener-detalle"></div>
             </button>
             <button onclick="aplicarDecisionDescuento('actualizar')"
@@ -1817,7 +1817,7 @@ Vuelva pronto"></textarea>
 <div id="modal-delete-producto" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 style="margin:0">??? Eliminar Producto de Nota</h3>
+            <h3 style="margin:0">🗑️ Eliminar Producto de Nota</h3>
             <span class="modal-close" onclick="cerrarModal('modal-delete-producto')">&times;</span>
         </div>
         <div id="lista-productos-eliminar"></div>
@@ -1828,7 +1828,7 @@ Vuelva pronto"></textarea>
 <div id="modal-metodo-pago" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 style="margin:0">?? Modificar Método de Pago</h3>
+            <h3 style="margin:0">💳 Modificar Método de Pago</h3>
             <span class="modal-close" onclick="cerrarModal('modal-metodo-pago')">&times;</span>
         </div>
         <div class="form-group">
@@ -1838,8 +1838,8 @@ Vuelva pronto"></textarea>
             <p style="margin:5px 0;"><strong>EFECTIVO:</strong> Aplica descuento del <span id="desc-pct-info">2</span>% <span id="desc-minimo-info" style="color:#888; font-size:0.9em;">(mínimo 100 Bs)</span></p>
             <p style="margin:5px 0;"><strong>QR:</strong> Sin descuento</p>
         </div>
-        <button class="btn" style="background:var(--naranja); color:white;" onclick="cambiarAEfectivo()">?? CAMBIAR A EFECTIVO</button>
-        <button class="btn" style="background:#6c63ff; color:white;" onclick="cambiarAQR()">?? CAMBIAR A QR</button>
+        <button class="btn" style="background:var(--naranja); color:white;" onclick="cambiarAEfectivo()">💳 CAMBIAR A EFECTIVO</button>
+        <button class="btn" style="background:#6c63ff; color:white;" onclick="cambiarAQR()">💳 CAMBIAR A QR</button>
     </div>
 </div>
 
@@ -1854,13 +1854,13 @@ Vuelva pronto"></textarea>
         <p style="font-weight:bold; color:var(--azul); margin-bottom:8px;">Selecciona el método de pago:</p>
         <div class="metodo-pago-grid">
             <div class="btn-metodo efectivo" onclick="seleccionarMetodoEntrega('EFECTIVO')">
-                ??<br>EFECTIVO<br><small style="color:#fb8500; font-weight:normal;"><span id="desc-pct-entregar">2</span>% desc.</small>
+                💵<br>EFECTIVO<br><small style="color:#fb8500; font-weight:normal;"><span id="desc-pct-entregar">2</span>% desc.</small>
             </div>
             <div class="btn-metodo qr" onclick="seleccionarMetodoEntrega('QR')">
-                ??<br>QR<br><small style="color:#6c63ff; font-weight:normal;">Sin descuento</small>
+                📱<br>QR<br><small style="color:#6c63ff; font-weight:normal;">Sin descuento</small>
             </div>
             <div class="btn-metodo mixto" onclick="seleccionarMetodoEntrega('MIXTO')">
-                ??<br>MIXTO<br><small style="color:#03045e; font-weight:normal;">Manual</small>
+                🔀<br>MIXTO<br><small style="color:#03045e; font-weight:normal;">Manual</small>
             </div>
         </div>
 
@@ -1869,32 +1869,32 @@ Vuelva pronto"></textarea>
             <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.9em; font-weight:600; color:#92400e;">
                 <input type="checkbox" id="entregar-aplicar-desc" checked onchange="recalcularEntregaConDescuento()"
                     style="width:18px; height:18px; cursor:pointer; accent-color:var(--naranja);">
-                ?? Aplicar descuento de <strong id="entregar-desc-pct-val">2</strong>% al pago
+                🏷️ Aplicar descuento de <strong id="entregar-desc-pct-val">2</strong>% al pago
             </label>
         </div>
 
         <!-- FORMULARIO MIXTO -->
         <div id="pago-mixto-form" class="pago-mixto-form">
-            <p style="font-weight:bold; margin:0 0 10px; color:var(--azul);">?? Detalle del pago mixto:</p>
+            <p style="font-weight:bold; margin:0 0 10px; color:var(--azul);">💳 Detalle del pago mixto:</p>
             <div style="background:#e3f2fd; padding:10px; border-radius:6px; margin-bottom:15px; font-size:0.9em;">
                 <strong>Total a cobrar: <span id="total-mixto-mostrar">0.00</span> Bs</strong>
             </div>
             <div class="form-group">
-                <label class="form-label">?? Monto en Efectivo (Bs):</label>
+                <label class="form-label">💵 Monto en Efectivo (Bs):</label>
                 <input type="number" id="mixto-efectivo" class="form-control" placeholder="0.00" step="0.50" oninput="calcularMixtoManual()">
             </div>
             <div class="form-group">
-                <label class="form-label">?? Monto en QR (Bs):</label>
+                <label class="form-label">📱 Monto en QR (Bs):</label>
                 <input type="number" id="mixto-qr" class="form-control" placeholder="0.00" step="0.50" oninput="calcularMixtoManual()">
             </div>
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; padding:8px 10px; background:#fff8e1; border:1px solid #f59e0b; border-radius:8px;">
                 <input type="checkbox" id="mixto-aplicar-descuento" onchange="calcularMixtoManual()" style="width:18px; height:18px; cursor:pointer; accent-color:var(--verde);">
                 <label for="mixto-aplicar-descuento" style="cursor:pointer; font-weight:600; color:#92400e; font-size:0.9em; margin:0;">
-                    ?? Aplicar descuento <span id="mixto-pct-label">2</span>% sobre efectivo (restar del QR)
+                    🏷️ Aplicar descuento <span id="mixto-pct-label">2</span>% sobre efectivo (restar del QR)
                 </label>
             </div>
             <div id="mixto-info-descuento" style="margin-top:10px; padding:10px; background:#fff3e0; border-radius:6px; display:none;">
-                <strong style="color:var(--naranja);">?? Descuento (<span id="desc-pct-mixto">2</span>%):</strong>
+                <strong style="color:var(--naranja);">🏷️ Descuento (<span id="desc-pct-mixto">2</span>%):</strong>
                 <div id="mixto-descuento-calculado" style="font-size:1.1em; margin-top:5px;"></div>
             </div>
             <div id="mixto-validacion" style="margin-top:10px;"></div>
@@ -1903,9 +1903,9 @@ Vuelva pronto"></textarea>
         <!-- RESUMEN DEL PAGO -->
         <div id="resumen-entrega" style="display:none;" class="resumen-pago">
             <div class="resumen-pago-linea"><span>Subtotal Original:</span><span id="re-subtotal">-</span></div>
-            <div class="resumen-pago-linea" id="re-efect-linea" style="display:none;"><span>?? Efectivo:</span><span id="re-efectivo">-</span></div>
-            <div class="resumen-pago-linea" id="re-desc-linea" style="display:none; color:var(--verde);"><span>?? Descuento:</span><span id="re-descuento">-</span></div>
-            <div class="resumen-pago-linea" id="re-qr-linea" style="display:none;"><span>?? QR:</span><span id="re-qr">-</span></div>
+            <div class="resumen-pago-linea" id="re-efect-linea" style="display:none;"><span>💵 Efectivo:</span><span id="re-efectivo">-</span></div>
+            <div class="resumen-pago-linea" id="re-desc-linea" style="display:none; color:var(--verde);"><span>🏷️ Descuento:</span><span id="re-descuento">-</span></div>
+            <div class="resumen-pago-linea" id="re-qr-linea" style="display:none;"><span>📱 QR:</span><span id="re-qr">-</span></div>
             <div class="resumen-pago-linea total"><span>TOTAL A COBRAR:</span><span id="re-total">-</span></div>
         </div>
 
@@ -1923,7 +1923,7 @@ Vuelva pronto"></textarea>
         <div class="modal-header-fixed" style="background: linear-gradient(135deg, var(--verde) 0%, #1b4332 100%); padding: 24px 24px 20px; color: white;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div>
-                    <div style="font-size: 1.6em; margin-bottom: 2px;">??</div>
+                    <div style="font-size: 1.6em; margin-bottom: 2px;">⭐</div>
                     <h3 style="margin: 0; font-size: 1.25em; font-weight: 700; letter-spacing: 0.3px;">Descuento por Efectivo</h3>
                     <p style="margin: 4px 0 0; opacity: 0.85; font-size: 0.85em;">Aplica automáticamente al pagar en efectivo</p>
                 </div>
@@ -2003,7 +2003,7 @@ Vuelva pronto"></textarea>
 <div id="modal-historial-cierres" class="modal">
     <div class="modal-content" style="max-width: 1000px;">
         <div class="modal-header">
-            <h3 style="margin:0;">?? Historial de Cierres de Caja</h3>
+            <h3 style="margin:0;">🕰️ Historial de Cierres de Caja</h3>
             <span class="modal-close" onclick="cerrarModal('modal-historial-cierres')">&times;</span>
         </div>
 
@@ -2011,7 +2011,7 @@ Vuelva pronto"></textarea>
         <div style="margin-bottom: 20px;">
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px;">
                 <div>
-                    <label class="form-label">?? Filtrar por Secretario:</label>
+                    <label class="form-label">👤 Filtrar por Secretario:</label>
                     <select id="filtro-cierre-secretario" class="form-control" onchange="renderHistorialCierres()">
                         <option value="">Todos los secretarios</option>
                     </select>
@@ -2080,7 +2080,7 @@ Vuelva pronto"></textarea>
             <!-- PASO 2: Crear / cambiar clave -->
             <div id="clave-paso-nueva">
                 <div id="clave-sup-estado" style="margin-bottom:16px; padding:12px; border-radius:8px; background:#fef2f2; border-left:4px solid #ef4444; font-size:0.88em; color:#7f1d1d;">
-                    ?? No hay clave configurada aún
+                    ⚠️ No hay clave configurada aún
                 </div>
                 <div class="form-group">
                     <label class="form-label" style="color:#7f1d1d;">Nueva clave:</label>
@@ -2807,7 +2807,7 @@ function clicSeguro(fn, tiempo){
                             ${turno.turno ? `<span style="background:${turno.turno==='DÍA'?'#fb8500':turno.turno==='TARDE'?'#6c63ff':'#03045e'}; color:white; font-size:0.72em; padding:2px 8px; border-radius:10px; margin-left:8px; font-weight:bold;">${turno.turno==='DÍA'?'??':turno.turno==='TARDE'?'??':'??'} ${turno.turno}</span>` : ''}
                         </div>
                         <div class="cierre-fecha">
-                            ?? ${turno.fechaCierreFormato} a las ${turno.horaCierreFormato}
+                            📅 ${turno.fechaCierreFormato} a las ${turno.horaCierreFormato}
                             <span style="color:#999; margin-left:10px;">?? Duración: ${duracionTexto}</span>
                         </div>
                     </div>
@@ -2820,16 +2820,16 @@ function clicSeguro(fn, tiempo){
                         <div class="cierre-stat-value">${turno.cantidadVentas}</div>
                     </div>
                     <div class="cierre-stat-item" style="background:#e8f5e9;">
-                        <div class="cierre-stat-label">?? Efectivo</div>
+                        <div class="cierre-stat-label">💵 Efectivo</div>
                         <div class="cierre-stat-value" style="color:var(--verde);">${((turno.totalEfectivo||0) + (turno.totalMixtoEfectivo||0)).toFixed(2)}</div>
                     </div>
                     <div class="cierre-stat-item" style="background:#e3f2fd;">
-                        <div class="cierre-stat-label">?? QR</div>
+                        <div class="cierre-stat-label">📱 QR</div>
                         <div class="cierre-stat-value" style="color:#6c63ff;">${((turno.totalQR||0) + (turno.totalMixtoQR||0)).toFixed(2)}</div>
                     </div>
                     ${turno.totalDescuentos > 0 ? `
                     <div class="cierre-stat-item" style="background:#fff3e0;">
-                        <div class="cierre-stat-label">?? Descuentos</div>
+                        <div class="cierre-stat-label">🏷️ Descuentos</div>
                         <div class="cierre-stat-value" style="color:var(--naranja);">${turno.totalDescuentos.toFixed(2)}</div>
                     </div>` : ''}
                     ${(turno.cantidadAnticipos || 0) > 0 ? `
@@ -2863,8 +2863,8 @@ function clicSeguro(fn, tiempo){
                         ${turno.totalMixtoEfectivo > 0 || turno.totalMixtoQR > 0 ? `
                         <div style="margin-top:15px; padding-top:15px; border-top:1px solid #ddd;">
                             <strong>?? Detalle Pagos Mixtos:</strong><br>
-                            ?? Efectivo: ${(turno.totalMixtoEfectivo||0).toFixed(2)} Bs | 
-                            ?? QR: ${(turno.totalMixtoQR||0).toFixed(2)} Bs
+                            💵 Efectivo: ${(turno.totalMixtoEfectivo||0).toFixed(2)} Bs | 
+                            📱 QR: ${(turno.totalMixtoQR||0).toFixed(2)} Bs
                         </div>` : ''}
 
                         ${cantAnulados > 0 ? `
@@ -2880,10 +2880,10 @@ function clicSeguro(fn, tiempo){
                                         <div style="color:#333; margin-top:2px;">?? ${a.nota.cliente}</div>
                                         <div style="color:#666; margin-top:3px; font-size:0.92em;">
                                             ?? ${a.nota.metodoPago||'—'} &nbsp;|&nbsp;
-                                            ?? <strong>Motivo:</strong> ${a.motivo}
+                                            ⚠️ <strong>Motivo:</strong> ${a.motivo}
                                         </div>
                                         <div style="color:#888; margin-top:2px; font-size:0.85em;">
-                                            ?? Anulado por: <strong>${a.supervisor}</strong> — ${a.fecha} ${a.hora}
+                                            🚫 Anulado por: <strong>${a.supervisor}</strong> — ${a.fecha} ${a.hora}
                                         </div>
                                     </div>
                                 `).join('')}
@@ -3292,8 +3292,8 @@ function clicSeguro(fn, tiempo){
                 ${entregadasDiasAnteriores.length > 0 ? `<p style="color:var(--verde);">?? <strong>Pedidos anteriores entregados hoy:</strong> ${entregadasDiasAnteriores.length}</p>` : ''}
                 ${preparadas.length > 0 ? `<p style="color:var(--naranja);"><strong>?? Pedidos aún en preparación:</strong> ${preparadas.length} (no se cuentan en el total)</p>` : ''}
                 <hr>
-                ${totalEfectivo > 0 ? `<p>?? <strong>Efectivo:</strong> ${totalEfectivo.toFixed(2)} Bs (${entregadas.filter(v=>v.metodoPago==='EFECTIVO').length} notas)</p>` : ''}
-                ${totalQR > 0 ? `<p>?? <strong>QR:</strong> ${totalQR.toFixed(2)} Bs (${entregadas.filter(v=>v.metodoPago==='QR').length} notas)</p>` : ''}
+                ${totalEfectivo > 0 ? `<p>💵 <strong>Efectivo:</strong> ${totalEfectivo.toFixed(2)} Bs (${entregadas.filter(v=>v.metodoPago==='EFECTIVO').length} notas)</p>` : ''}
+                ${totalQR > 0 ? `<p>📱 <strong>QR:</strong> ${totalQR.toFixed(2)} Bs (${entregadas.filter(v=>v.metodoPago==='QR').length} notas)</p>` : ''}
                 ${mixtas.length > 0 ? `<p>?? <strong>Mixto — Ef:</strong> ${totalMixtoEf.toFixed(2)} Bs / <strong>QR:</strong> ${totalMixtoQR.toFixed(2)} Bs (${mixtas.length} notas)</p>` : ''}
                 ${totalDescuentos > 0 ? `<p style="color:var(--verde);">?? <strong>Total descuentos aplicados:</strong> ${totalDescuentos.toFixed(2)} Bs</p>` : ''}
                 ${totalAnticipos > 0 ? `
@@ -3867,11 +3867,11 @@ function clicSeguro(fn, tiempo){
             <div class='table-responsive'><table style="width:100%; border-collapse:collapse; font-size:10pt; margin:0; line-height:1.0;">
                 <tr><td colspan="2" style="padding:1px 0;"><b>— DETALLE DE PAGO —</b></td></tr>
                 <tr>
-                    <td style="padding:0;">?? Efectivo neto:</td>
+                    <td style="padding:0;">💵 Efectivo neto:</td>
                     <td style="text-align:right; padding:0;"><b>${fmt(nota.efectivoPagado || 0)} Bs</b></td>
                 </tr>
                 <tr>
-                    <td style="padding:0;">?? QR:</td>
+                    <td style="padding:0;">📱 QR:</td>
                     <td style="text-align:right; padding:0;"><b>${fmt(nota.qrPagado || 0)} Bs</b></td>
                 </tr>
             </table></div>
@@ -3928,7 +3928,7 @@ function clicSeguro(fn, tiempo){
     function imprimirSoloDelivery(nota) {
         const htmlDelivery = generarHTMLTicketDelivery(nota);
         const ventana = window.open('', '_blank', 'width=400,height=500,scrollbars=yes');
-        if (!ventana) { mostrarToast('?? Permite ventanas emergentes para imprimir', true); return; }
+        if (!ventana) { mostrarToast('⚠️ Permite ventanas emergentes para imprimir', true); return; }
         ventana.document.write(`<!DOCTYPE html>
 <html><head><meta charset="UTF-8"><title>Ticket Delivery</title>
 <style>
@@ -4575,7 +4575,7 @@ function clicSeguro(fn, tiempo){
                         <div class="detalle-info-item"><div class="detalle-info-label">?? Sucursal</div><div class="detalle-info-value">${p.branch||'—'}</div></div>
                         <div class="detalle-info-item"><div class="detalle-info-label">?? Método</div><div class="detalle-info-value">${(p.method||'').toUpperCase()}</div></div>
                         <div class="detalle-info-item"><div class="detalle-info-label">?? Origen</div><div class="detalle-info-value" style="color:#ff9500;">APP MÓVIL</div></div>
-                        <div class="detalle-info-item"><div class="detalle-info-label">?? Descuento</div><div class="detalle-info-value" style="color:var(--green);">${p.discount > 0 ? '-'+p.discount.toFixed(2)+' Bs' : 'Sin descuento'}</div></div>
+                        <div class="detalle-info-item"><div class="detalle-info-label">🏷️ Descuento</div><div class="detalle-info-value" style="color:var(--green);">${p.discount > 0 ? '-'+p.discount.toFixed(2)+' Bs' : 'Sin descuento'}</div></div>
                         ${p.note ? `<div class="detalle-info-item"><div class="detalle-info-label">?? Nota</div><div class="detalle-info-value">${p.note}</div></div>` : ''}
                     </div>
                     <div class='table-responsive'><table class="tabla-detalle">
@@ -4634,7 +4634,7 @@ function clicSeguro(fn, tiempo){
                     <button class="accion-btn anadir"   onclick="event.stopPropagation(); añadirProductoNota('${n.id}')">? Añadir producto</button>
                     <button class="accion-btn eliminar" onclick="event.stopPropagation(); eliminarProductoNota('${n.id}')">??? Eliminar producto</button>
                     <button class="accion-btn pago"     onclick="event.stopPropagation(); cambiarMetodoPago('${n.id}')">?? Método de pago</button>
-                    <button class="accion-btn" style="background:#fff7ed;color:#b45309;" onclick="event.stopPropagation(); gestionarDeliveryPrep('${n.id}')">${n.esDelivery ? '?? Editar Delivery' : '?? Agregar Delivery'}</button>
+                    <button class="accion-btn" style="background:#fff7ed;color:#b45309;" onclick="event.stopPropagation(); gestionarDeliveryPrep('${n.id}')">${n.esDelivery ? '✏️ Editar Delivery' : '?? Agregar Delivery'}</button>
                 </div>
                 <div id="det-${n.id}" class="nota-detalle">
                     <div class="detalle-header">
@@ -4742,7 +4742,7 @@ function clicSeguro(fn, tiempo){
                                 </div>`;
                             }).join('');
                             return `<div style="margin:4px 0 6px;padding:8px 10px;background:#f0ecff;border-radius:8px;">
-                                <div style="font-weight:700;color:#4b44cc;margin-bottom:5px;font-size:0.85em;">?? Historial de cobros anticipados:</div>
+                                <div style="font-weight:700;color:#4b44cc;margin-bottom:5px;font-size:0.85em;">🕰️ Historial de cobros anticipados:</div>
                                 ${filas}
                             </div>`;
                         })() : ''}
@@ -4780,7 +4780,7 @@ function clicSeguro(fn, tiempo){
                 ${tieneturno ? `<p style="text-align:center; color:#666; font-size:0.9em; margin:5px 0;">
                     ?? ${nombreSecretario} | ? Inicio: ${new Date(turnoActual.inicio).toLocaleTimeString('es-BO')}
                 </p>` : `<p style="text-align:center; color:var(--rojo); font-size:0.9em; margin:5px 0;">
-                    ?? No hay turno activo - Inicia un turno para ver el resumen
+                    ⚠️ No hay turno activo - Inicia un turno para ver el resumen
                 </p>`}
                 <div class="resumen-grid">
                     <div class="resumen-card efectivo">
@@ -4817,7 +4817,7 @@ function clicSeguro(fn, tiempo){
                     ? `<div class="detalle-info-item"><div class="detalle-info-label">?? Entregado por</div><div class="detalle-info-value" style="color:var(--rojo);">${n.entregadoPor}</div></div>` 
                     : '';
                 const infoMixto = n.metodoPago === 'MIXTO' 
-                    ? `<div class="detalle-info-item"><div class="detalle-info-label">?? Efectivo / ?? QR</div><div class="detalle-info-value">${(n.efectivoPagado||0).toFixed(2)} Bs / ${(n.qrPagado||0).toFixed(2)} Bs</div></div>`
+                    ? `<div class="detalle-info-item"><div class="detalle-info-label">💵 Efectivo / 📱 QR</div><div class="detalle-info-value">${(n.efectivoPagado||0).toFixed(2)} Bs / ${(n.qrPagado||0).toFixed(2)} Bs</div></div>`
                     : '';
                 return `<div class="nota-historial entregado" style="opacity:1;">
                     <div class="nota-header" onclick="toggleDet('ent-${n.id}')">
@@ -4841,7 +4841,7 @@ function clicSeguro(fn, tiempo){
                             <div class="detalle-info-item"><div class="detalle-info-label">?? Método de Pago</div><div class="detalle-info-value">${n.metodoPago||'QR'}</div></div>
                             ${infoEntregadoPor}
                             ${infoMixto}
-                            <div class="detalle-info-item"><div class="detalle-info-label">?? Descuento</div><div class="detalle-info-value" style="color:var(--verde);">${n.descuento > 0 ? '-'+(n.descuento||0).toFixed(2)+' Bs' : 'Sin descuento'}</div></div>
+                            <div class="detalle-info-item"><div class="detalle-info-label">🏷️ Descuento</div><div class="detalle-info-value" style="color:var(--verde);">${n.descuento > 0 ? '-'+(n.descuento||0).toFixed(2)+' Bs' : 'Sin descuento'}</div></div>
                             <div class="detalle-info-item"><div class="detalle-info-label">?? Total cobrado</div><div class="detalle-info-value" style="color:var(--verde); font-weight:bold;">${totalMostrar.toFixed(2)} Bs</div></div>
                         </div>
                         <div class='table-responsive'><table class="tabla-detalle">
@@ -4855,7 +4855,7 @@ function clicSeguro(fn, tiempo){
                             <div class="total-line final"><span>TOTAL COBRADO (pedido):</span><span>${n.metodoPago==='QR' ? (totalMostrar-(n.montoDelivery||0)).toFixed(2) : totalMostrar.toFixed(2)} Bs</span></div>
                             <div class="total-line" style="color:#d97706; border-top:1px dashed #f59e0b; margin-top:4px; padding-top:4px;"><span>?? Cargo Delivery:</span><span><strong>+${(n.montoDelivery||0).toFixed(2)} Bs</strong></span></div>
                             <div class="total-line final" style="background:#fff8e1; color:#92400e; font-size:1.05em;"><span>TOTAL CON DELIVERY:</span><span>${n.metodoPago==='QR' ? totalMostrar.toFixed(2) : (totalMostrar+(n.montoDelivery||0)).toFixed(2)} Bs</span></div>
-                            <div style="font-size:0.8em;color:#92400e;margin-top:2px;">${n.metodoPago==='QR'?'?? QR incluye delivery':'?? Delivery cobrado por separado'}</div>
+                            <div style="font-size:0.8em;color:#92400e;margin-top:2px;">${n.metodoPago==='QR'?'📱 QR incluye delivery':'?? Delivery cobrado por separado'}</div>
                             ` : `
                             <div class="total-line final"><span>TOTAL COBRADO:</span><span>${totalMostrar.toFixed(2)} Bs</span></div>
                             `}
@@ -5380,9 +5380,9 @@ function clicSeguro(fn, tiempo){
         const btnEfectivo = document.querySelector('#modal-entregar .btn-metodo.efectivo');
         if (btnEfectivo) {
             if (CONFIG_DESCUENTO.activo) {
-                btnEfectivo.innerHTML = `??<br>EFECTIVO<br><small style="color:#fb8500; font-weight:normal;">${CONFIG_DESCUENTO.porcentaje}% desc.</small>`;
+                btnEfectivo.innerHTML = `💵<br>EFECTIVO<br><small style="color:#fb8500; font-weight:normal;">${CONFIG_DESCUENTO.porcentaje}% desc.</small>`;
             } else {
-                btnEfectivo.innerHTML = `??<br>EFECTIVO<br><small style="color:#999; font-weight:normal;">Sin descuento</small>`;
+                btnEfectivo.innerHTML = `💵<br>EFECTIVO<br><small style="color:#999; font-weight:normal;">Sin descuento</small>`;
             }
         }
         // Construir detalle del anticipo previo
@@ -5399,7 +5399,7 @@ function clicSeguro(fn, tiempo){
             const cobradoRealTotal = cobradoRealEf + cobradoRealQR;
 
             const desglose = nota.metodoAnticipo === 'MIXTO'
-                ? `<br><span style="color:#555; font-size:0.85em;">?? Efectivo cobrado: ${cobradoRealEf.toFixed(2)} Bs &nbsp;|&nbsp; ?? QR cobrado: ${cobradoRealQR.toFixed(2)} Bs${descAnticipoPrev > 0 ? ' &nbsp;|&nbsp; ?? Desc: '+descAnticipoPrev.toFixed(2)+' Bs' : ''}</span>`
+                ? `<br><span style="color:#555; font-size:0.85em;">💵 Efectivo cobrado: ${cobradoRealEf.toFixed(2)} Bs &nbsp;|&nbsp; 📱 QR cobrado: ${cobradoRealQR.toFixed(2)} Bs${descAnticipoPrev > 0 ? ' &nbsp;|&nbsp; ?? Desc: '+descAnticipoPrev.toFixed(2)+' Bs' : ''}</span>`
                 : '';
             detalleAnticipo = `<br><span style="color:#6c63ff; font-size:0.95em; font-weight:bold;">?? Anticipo recibido (${nota.metodoAnticipo||''}): cobrado ${cobradoRealTotal.toFixed(2)} Bs — acreditado ${anticipoYaPagado.toFixed(2)} Bs</span>${desglose}<br><span style="color:#c0392b; font-size:1em; font-weight:bold;">?? Saldo a cobrar: ${saldoPendiente.toFixed(2)} Bs</span>`;
         }
@@ -5576,8 +5576,8 @@ function clicSeguro(fn, tiempo){
             infoDescuentoEl.style.display = 'block';
             descCalcEl.innerHTML = `
                 <div style="font-size:0.9em;color:#555;">
-                    ?? Efectivo: <b>${efectivo.toFixed(2)} Bs</b> · Descuento ${pct}%: <b style="color:var(--verde);">-${descSobreEf.toFixed(2)} Bs</b> (restado del QR)<br>
-                    ?? QR ingresado: <b>${qr.toFixed(2)} Bs</b>
+                    💵 Efectivo: <b>${efectivo.toFixed(2)} Bs</b> · Descuento ${pct}%: <b style="color:var(--verde);">-${descSobreEf.toFixed(2)} Bs</b> (restado del QR)<br>
+                    📱 QR ingresado: <b>${qr.toFixed(2)} Bs</b>
                 </div>`;
         } else {
             infoDescuentoEl.style.display = 'none';
@@ -5797,7 +5797,7 @@ function clicSeguro(fn, tiempo){
                         <div style="color:#666; font-size:0.9em;">${p.p} Bs</div>
                     </div>
                     <div class="item-config-actions">
-                        <button class="btn-small btn-edit" onclick="editarProductoAgrupacion(${idx})">?? Editar</button>
+                        <button class="btn-small btn-edit" onclick="editarProductoAgrupacion(${idx})">✏️ Editar</button>
                         <button class="btn-small btn-delete" onclick="eliminarProductoAgrupacion(${idx})">???</button>
                     </div>
                 </div>
@@ -5818,7 +5818,7 @@ function clicSeguro(fn, tiempo){
     function editarProductoAgrupacion(idx) {
         editandoIndice = idx;
         var p = MENU_COMPLETO[idx];
-        document.getElementById('modal-agrup-titulo').textContent = '?? Editar Producto';
+        document.getElementById('modal-agrup-titulo').textContent = '✏️ Editar Producto';
         // Extraer S/C o C/C del nombre si existe
         var nombreBase = p.n;
         var cafeDetectado = '';
@@ -5930,7 +5930,7 @@ function clicSeguro(fn, tiempo){
                 <div><strong>Precio: ${grupo.p} Bs</strong>${cafeBadge}</div>
                 <div style="color:#666; font-size:0.85em; margin:5px 0;">Sabores: ${grupo.s.join(', ')}</div>
                 <div class="item-config-actions">
-                    <button class="btn-small btn-edit" onclick="editarGrupoPrecios('${cat}', ${idx})">?? Editar</button>
+                    <button class="btn-small btn-edit" onclick="editarGrupoPrecios('${cat}', ${idx})">✏️ Editar</button>
                     <button class="btn-small btn-delete" onclick="eliminarGrupoPrecios('${cat}', ${idx})">???</button>
                 </div>
             </div>`;
@@ -5961,7 +5961,7 @@ function clicSeguro(fn, tiempo){
 
     function abrirModalSaboresMasivo(cat) {
         _masivoCat = cat;
-        document.getElementById('modal-sabores-titulo').textContent = '?? Agregar Sabores a ' + cat;
+        document.getElementById('modal-sabores-titulo').textContent = '✨ Agregar Sabores a ' + cat;
         document.getElementById('masivo-precio').value = '';
         document.getElementById('masivo-cafe').value = 'S/C';
         document.getElementById('masivo-sabores').value = '';
@@ -6043,7 +6043,7 @@ function clicSeguro(fn, tiempo){
             <div class="item-config">
                 <div><strong>${precio.p} Bs (${precio.c})</strong></div>
                 <div class="item-config-actions">
-                    <button class="btn-small btn-edit" onclick="editarPrecioCat('${cat}', ${idx})">?? Editar</button>
+                    <button class="btn-small btn-edit" onclick="editarPrecioCat('${cat}', ${idx})">✏️ Editar</button>
                     <button class="btn-small btn-delete" onclick="eliminarPrecioCat('${cat}', ${idx})">???</button>
                 </div>
             </div>
@@ -6166,7 +6166,7 @@ function clicSeguro(fn, tiempo){
                     <div style="font-weight:700; color:#2d6a4f; margin-bottom:10px;">?? Importar Base de Datos</div>
                     <p style="font-size:0.88em; color:#555; margin:0 0 10px;">Sube un archivo ZIP para restaurar datos. <span style="color:#c0392b; font-weight:600;">?? El sistema analizará el backup y te preguntará antes de importar.</span></p>
                     <div id="import-drop-zone" style="border:3px dashed #2d6a4f; border-radius:10px; padding:30px; text-align:center; cursor:pointer;" onclick="document.getElementById('input-import-zip').click()" ondragover="event.preventDefault(); this.style.background='#d4edda';" ondragleave="this.style.background='transparent';" ondrop="event.preventDefault(); this.style.background='transparent'; handleImportDrop(event);">
-                        <div style="font-size:2em;">??</div><div style="font-weight:600; color:#2d6a4f;">Arrastra el ZIP aquí o haz clic</div>
+                        <div style="font-size:2em;">⭐</div><div style="font-weight:600; color:#2d6a4f;">Arrastra el ZIP aquí o haz clic</div>
                     </div>
                     <input type="file" id="input-import-zip" accept=".zip" style="display:none;" onchange="importarDatosZIP(this.files[0])">
                     <div id="import-status" style="margin-top:10px;"></div>
@@ -6196,7 +6196,7 @@ function clicSeguro(fn, tiempo){
                     <div id="liberar-estado" style="font-size:0.83em; margin-bottom:10px; display:none;"></div>
                     <button onclick="liberarEspacioPorFecha()" id="btn-liberar-fecha"
                         style="background:#6c63ff; color:white; border:none; border-radius:8px; padding:10px 20px; font-weight:700; cursor:pointer; width:100%;">
-                        ??? Subir y liberar rango seleccionado
+                        📤 Subir y liberar rango seleccionado
                     </button>
                 </div>
             </div>`;
@@ -6668,7 +6668,7 @@ function clicSeguro(fn, tiempo){
         ccGuardarDatos();
         ccRenderLista();
         if (document.getElementById('vista-consulta').style.display !== 'none') renderConsulta();
-        mostrarToast('??? Producto eliminado');
+        mostrarToast('?📦 Producto eliminado');
     }
 
     function ccAgregarProducto() {
@@ -6720,7 +6720,7 @@ function clicSeguro(fn, tiempo){
                         importados++;
                     }
 
-                    if (importados === 0) { status.textContent = '?? No se encontraron productos válidos'; return; }
+                    if (importados === 0) { status.textContent = '⚠️ No se encontraron productos válidos'; return; }
 
                     if (confirm(`Se encontraron ${importados} productos.\n\n¿Reemplazar TODA la lista o AGREGAR a la existente?\n\nOK = Reemplazar\nCancelar = Agregar`)) {
                         CONSULTA_PRODUCTOS.length = 0;
@@ -6894,7 +6894,7 @@ function clicSeguro(fn, tiempo){
         CONFIG_DESCUENTO.activo = !CONFIG_DESCUENTO.activo;
         guardarConfigDescuento();
         actualizarUIDescuento();
-        mostrarToast(CONFIG_DESCUENTO.activo ? '? Descuento activado' : '?? Descuento desactivado — todos los descuentos ocultos');
+        mostrarToast(CONFIG_DESCUENTO.activo ? '? Descuento activado' : '🏷️ Descuento desactivado — todos los descuentos ocultos');
     }
 
     function actualizarPorcentajeDescuento() {
@@ -7086,12 +7086,12 @@ function clicSeguro(fn, tiempo){
     function mostrarUsoAlmacenamiento() {
         const mesesLabel = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
         const clavesFijas = [
-            { key: 'kollita_db',               label: '?? Historial activo' },
+            { key: 'kollita_db',               label: '🕰️ Historial activo' },
             { key: 'kollita_menu',              label: '???  Menú' },
             { key: 'kollita_sabores',           label: '?? Catálogo' },
             { key: 'kollita_config_ticket',     label: '?? Config ticket' },
             { key: 'kollita_config_impresora',  label: '???  Config impresora' },
-            { key: 'kollita_consulta_productos',label: '?? Consulta precios' },
+            { key: 'kollita_consulta_productos',label: '🔍 Consulta precios' },
             { key: 'turnos_cerrados_kollita',   label: '?? Turnos cerrados' },
             { key: 'kollita_config_descuento',  label: '?? Config descuento' },
             { key: 'kollita_secretarios',       label: '?? Secretarios' },
@@ -7150,7 +7150,7 @@ function clicSeguro(fn, tiempo){
     function solicitarAnulacionEntregado(id) {
         const claveGuardada = localStorage.getItem('kollita_clave_supervisor');
         if (!claveGuardada) {
-            mostrarToast('?? Primero configura la clave supervisor en el menú lateral', true);
+            mostrarToast('⚠️ Primero configura la clave supervisor en el menú lateral', true);
             return;
         }
 
@@ -7359,7 +7359,7 @@ function clicSeguro(fn, tiempo){
             estadoEl.style.background = '#fef2f2';
             estadoEl.style.borderLeftColor = '#ef4444';
             estadoEl.style.color = '#7f1d1d';
-            estadoEl.innerHTML = '?? No hay clave configurada aún.';
+            estadoEl.innerHTML = '⚠️ No hay clave configurada aún.';
         }
 
         abrirModal('modal-clave-supervisor');
@@ -7564,7 +7564,7 @@ function clicSeguro(fn, tiempo){
                             ?? ${r.origen} ? ?? ${r.destino}
                         </div>
                         <div style="font-size:0.82em; color:#666; margin-top:2px;">
-                            ?? ${r.fecha} ${r.hora} · ?? ${r.responsable}
+                            ?? ${r.fecha} ${r.hora} · 📞 ${r.responsable}
                         </div>
                     </div>
                     <div style="text-align:right;">
@@ -7593,7 +7593,7 @@ function clicSeguro(fn, tiempo){
                         </div>
                     </div>
 
-                    <div style="font-weight:700; color:var(--azul); margin-bottom:8px; font-size:0.9em;">?? Productos traspasados:</div>
+                    <div style="font-weight:700; color:var(--azul); margin-bottom:8px; font-size:0.9em;">📦 Productos traspasados:</div>
                     <div class='table-responsive'><table style="width:100%; border-collapse:collapse; font-size:0.9em; margin-bottom:12px;">
                         <thead>
                             <tr style="background:var(--azul); color:white;">
@@ -7793,7 +7793,7 @@ function clicSeguro(fn, tiempo){
 
         if (metodo === 'EFECTIVO') {
             document.getElementById('anticipo-form-simple').style.display = 'block';
-            document.getElementById('anticipo-lbl-monto').textContent = '?? Monto a cobrar en efectivo (Bs):';
+            document.getElementById('anticipo-lbl-monto').textContent = '💰 Monto a cobrar en efectivo (Bs):';
             document.getElementById('anticipo-monto-simple').value = saldo.toFixed(2);
             document.getElementById('anticipo-monto-simple').placeholder = '0.00';
             if (CONFIG_DESCUENTO.activo) {
@@ -7802,7 +7802,7 @@ function clicSeguro(fn, tiempo){
             document.getElementById('anticipo-aplicar-descuento').checked = CONFIG_DESCUENTO.activo;
         } else if (metodo === 'QR') {
             document.getElementById('anticipo-form-simple').style.display = 'block';
-            document.getElementById('anticipo-lbl-monto').textContent = '?? Monto a cobrar por QR (Bs):';
+            document.getElementById('anticipo-lbl-monto').textContent = '💰 Monto a cobrar por QR (Bs):';
             document.getElementById('anticipo-monto-simple').value = saldo.toFixed(2);
             document.getElementById('anticipo-monto-simple').placeholder = '0.00';
         } else if (metodo === 'MIXTO') {
@@ -8042,7 +8042,7 @@ function clicSeguro(fn, tiempo){
             msgEl.style.color = '#2d6a4f';
             const h = JSON.parse(localStorage.getItem('kollita_db') || '[]');
             const pedidos = h.filter(n => n.cliente && n.cliente.toLowerCase() === exacto.nombre.toLowerCase() && n.estado !== 'ANULADO').length;
-            msgEl.innerHTML = `? Cliente registrado · ?? ${exacto.telefono || 'Sin tel.'} · ?? ${pedidos} pedido(s)`;
+            msgEl.innerHTML = `? Cliente registrado · 📞 ${exacto.telefono || 'Sin tel.'} · 📞 ${pedidos} pedido(s)`;
             return;
         }
 
@@ -8053,7 +8053,7 @@ function clicSeguro(fn, tiempo){
         msgEl.style.display = 'block';
         msgEl.style.background = '#fff3e0';
         msgEl.style.color = '#b76000';
-        msgEl.innerHTML = `?? No registrado — debe registrarse para guardar la nota`;
+        msgEl.innerHTML = `❌ No registrado — debe registrarse para guardar la nota`;
 
         if (sugerencias.length > 0) {
             contenedor.style.display = 'block';
@@ -8065,7 +8065,7 @@ function clicSeguro(fn, tiempo){
                     onmouseover="this.style.background='#f0f4ff'" onmouseout="this.style.background='white'">
                     <div>
                         <div style="font-weight:700; font-size:0.95em;">${c.nombre}</div>
-                        <div style="font-size:0.78em; color:#666;">?? ${c.telefono || 'Sin tel.'} · ?? ${pedidos} pedidos</div>
+                        <div style="font-size:0.78em; color:#666;">?? ${c.telefono || 'Sin tel.'} · 📞 ${pedidos} pedidos</div>
                     </div>
                     <span style="color:var(--azul); font-size:0.75em; font-weight:600;">Seleccionar ?</span>
                 </div>`;
@@ -8112,7 +8112,7 @@ function clicSeguro(fn, tiempo){
         if (!nombre) { mostrarToast('? Ingresa el nombre del cliente', true); return; }
         let clientes = getClientes();
         if (clientes.find(c => c.nombre.toLowerCase() === nombre.toLowerCase())) {
-            mostrarToast('?? Ya existe un cliente con ese nombre', true);
+            mostrarToast('⚠️ Ya existe un cliente con ese nombre', true);
             return;
         }
         clientes.unshift({ id: Date.now(), nombre, telefono: tel, fechaRegistro: new Date().toLocaleDateString('es-BO') });
@@ -8176,7 +8176,7 @@ function clicSeguro(fn, tiempo){
         if (!c) return;
 
         document.getElementById('perfil-nombre').textContent = c.nombre;
-        document.getElementById('perfil-telefono').textContent = c.telefono ? `?? ${c.telefono}` : '?? Sin teléfono';
+        document.getElementById('perfil-telefono').textContent = c.telefono ? `📞 ${c.telefono}` : '?? Sin teléfono';
 
         const h = JSON.parse(localStorage.getItem('kollita_db') || '[]');
         const todas = h.filter(n => n.cliente && n.cliente.toLowerCase() === c.nombre.toLowerCase() && n.estado !== 'ANULADO');
@@ -8295,7 +8295,7 @@ function clicSeguro(fn, tiempo){
             let html = '';
 
             if (reclamos.length > 0) {
-                html += `<div style="font-weight:700; color:#b76000; margin-bottom:10px; font-size:0.9em; text-transform:uppercase;">?? Reclamos · Obsequios · Reposiciones (${reclamos.length})</div>`;
+                html += `<div style="font-weight:700; color:#b76000; margin-bottom:10px; font-size:0.9em; text-transform:uppercase;">📋 Reclamos · Obsequios · Reposiciones (${reclamos.length})</div>`;
                 html += reclamos.map(r => `
                     <div style="background:${colores[r.tipo]||'#f9f9f9'}; border-left:4px solid ${bordes[r.tipo]||'#999'}; border-radius:0 8px 8px 0; padding:10px 14px; margin-bottom:8px;">
                         <div style="font-weight:700; font-size:0.88em;">${iconos[r.tipo]||'??'} ${r.tipo}</div>
@@ -8320,7 +8320,7 @@ function clicSeguro(fn, tiempo){
         } else if (_perfilTabActual === 'editar') {
             contenedor.innerHTML = `
                 <div style="background:#f0f4ff; border:2px solid var(--azul); border-radius:12px; padding:18px;">
-                    <div style="font-weight:700; color:var(--azul); margin-bottom:14px;">?? Editar datos del cliente</div>
+                    <div style="font-weight:700; color:var(--azul); margin-bottom:14px;">✏️ Editar datos del cliente</div>
                     <input type="hidden" id="perfil-edit-id" value="${c.id}">
                     <div class="form-group">
                         <label class="form-label">Nombre completo *</label>
@@ -8411,7 +8411,7 @@ function clicSeguro(fn, tiempo){
                         <span>Subtotal:</span><span>${(n.subtotal||0).toFixed(2)} Bs</span>
                     </div>
                     ${n.descuento > 0 ? `<div style="display:flex; justify-content:space-between; color:var(--verde); padding:2px 0;">
-                        <span>?? Descuento:</span><span>-${n.descuento.toFixed(2)} Bs</span>
+                        <span>🏷️ Descuento:</span><span>-${n.descuento.toFixed(2)} Bs</span>
                     </div>` : ''}
                     <div style="display:flex; justify-content:space-between; font-weight:900; color:var(--azul); border-top:2px solid #dee2e6; margin-top:4px; padding-top:6px; font-size:1.05em;">
                         <span>TOTAL:</span><span>${total} Bs</span>
@@ -8440,7 +8440,7 @@ function clicSeguro(fn, tiempo){
         }
         // Reusar el modal de perfil como visor temporal
         document.getElementById('perfil-nombre').textContent = `Anulaciones — ${turno.secretario}`;
-        document.getElementById('perfil-telefono').textContent = `?? ${turno.fechaCierreFormato} ${turno.horaCierreFormato}`;
+        document.getElementById('perfil-telefono').textContent = `📅 ${turno.fechaCierreFormato} ${turno.horaCierreFormato}`;
         document.getElementById('perfil-stats').innerHTML = `
             <div style="background:rgba(255,255,255,0.15); padding:6px 14px; border-radius:8px;">
                 <div style="font-size:0.7em; opacity:0.8;">Total anulados</div>
@@ -8455,10 +8455,10 @@ function clicSeguro(fn, tiempo){
                         <strong style="color:#c0392b; font-size:1em;">Nota Nº ${a.nota.numeroNota}</strong>
                         <span style="font-weight:900; color:#c0392b;">${(a.nota.total||0).toFixed(2)} Bs</span>
                     </div>
-                    <div style="font-size:0.88em; margin-bottom:4px;">?? <strong>Cliente:</strong> ${a.nota.cliente}</div>
-                    <div style="font-size:0.88em; margin-bottom:4px;">?? <strong>Método:</strong> ${a.nota.metodoPago||'—'} &nbsp;|&nbsp; ?? ${a.nota.fecha} ${a.nota.hora||''}</div>
-                    <div style="font-size:0.88em; margin-bottom:4px; color:#7f1d1d;">?? <strong>Motivo:</strong> ${a.motivo}</div>
-                    <div style="font-size:0.82em; color:#888;">?? Anulado por: <strong>${a.supervisor}</strong> — ${a.fecha} ${a.hora}</div>
+                    <div style="font-size:0.88em; margin-bottom:4px;">👤 <strong>Cliente:</strong> ${a.nota.cliente}</div>
+                    <div style="font-size:0.88em; margin-bottom:4px;">💳 <strong>Método:</strong> ${a.nota.metodoPago||'—'} &nbsp;|&nbsp; ?? ${a.nota.fecha} ${a.nota.hora||''}</div>
+                    <div style="font-size:0.88em; margin-bottom:4px; color:#7f1d1d;">⚠️ <strong>Motivo:</strong> ${a.motivo}</div>
+                    <div style="font-size:0.82em; color:#888;">🚫 Anulado por: <strong>${a.supervisor}</strong> — ${a.fecha} ${a.hora}</div>
                     ${a.nota.items && a.nota.items.length > 0 ? `
                     <div style="margin-top:8px; background:white; border-radius:6px; overflow:hidden;">
                         <div class='table-responsive'><table style="width:100%; border-collapse:collapse; font-size:0.82em;">
@@ -8508,7 +8508,7 @@ function clicSeguro(fn, tiempo){
         mostrarToast(`? Datos actualizados. ${cambiados} nota(s) sincronizadas.`);
         // Actualizar header del perfil
         document.getElementById('perfil-nombre').textContent = nombre;
-        document.getElementById('perfil-telefono').textContent = telefono ? `?? ${telefono}` : '?? Sin teléfono';
+        document.getElementById('perfil-telefono').textContent = telefono ? `📞 ${telefono}` : '?? Sin teléfono';
         // Si la nota actual tenía ese cliente, actualizar el campo
         const campoNom = document.getElementById('cliente-nom');
         if (campoNom && campoNom.value.toLowerCase() === nombreAntiguo.toLowerCase()) {
@@ -8637,7 +8637,7 @@ function clicSeguro(fn, tiempo){
         document.getElementById('cli-nombre').value = c.nombre;
         document.getElementById('cli-telefono').value = c.telefono || '';
         document.getElementById('cli-edit-id').value = c.id;
-        document.getElementById('cli-form-titulo').textContent = '?? Editar Cliente';
+        document.getElementById('cli-form-titulo').textContent = '✏️ Editar Cliente';
         document.getElementById('cli-nombre').focus();
     }
 
@@ -8743,7 +8743,7 @@ function clicSeguro(fn, tiempo){
                 tablaProds.innerHTML = prods.map((p, i) => `
                     <tr style="background:${i===0?'#fffbe6':i===prods.length-1?'#ffeef0':''}">
                         <td style="padding:10px 8px; text-align:left;">
-                            ${i===0?'??':i===1?'??':i===2?'??':'  '}
+                            ${i===0?'🥇':i===1?'🥈':i===2?'🥉':'  '}
                             <strong>${p.nombre}</strong>
                         </td>
                         <td style="padding:10px 4px;">
@@ -8968,7 +8968,7 @@ function clicSeguro(fn, tiempo){
             return;
         }
         const colores = { RECLAMO: '#fdecea', OBSEQUIO: '#e8f5e9', 'REPOSICIÓN': '#e0f2fe', 'PROMOCIÓN': '#fff3e0' };
-        const iconos = { RECLAMO: '??', OBSEQUIO: '??', 'REPOSICIÓN': '??', 'PROMOCIÓN': '???' };
+        const iconos = { RECLAMO: '??', OBSEQUIO: '??', 'REPOSICIÓN': '🔄', 'PROMOCIÓN': '🎉' };
         const bordes = { RECLAMO: '#c0392b', OBSEQUIO: '#2d6a4f', 'REPOSICIÓN': '#0369a1', 'PROMOCIÓN': '#fb8500' };
         lista.innerHTML = filtrados.map(r => `
             <div style="background:${colores[r.tipo]||'#f9f9f9'}; border-radius:10px; padding:14px 16px; margin-bottom:10px; border-left:4px solid ${bordes[r.tipo]||'#999'};">
@@ -9049,9 +9049,9 @@ function clicSeguro(fn, tiempo){
                             <span style="background:${colorBorde}; color:white; padding:3px 10px; border-radius:20px; font-size:0.75em; font-weight:700;">${labelAccion}</span>
                             <strong style="color:${colorBorde};">Nota Nº ${nota.numeroNota || '—'}</strong>
                         </div>
-                        <div style="font-size:0.88em;">?? <strong>Cliente:</strong> ${nota.cliente || '—'}</div>
+                        <div style="font-size:0.88em;">👤 <strong>Cliente:</strong> ${nota.cliente || '—'}</div>
                         <div style="font-size:0.88em;">?? ${nota.metodoPago || '—'} | ????? ${nota.secretario || '—'}</div>
-                        <div style="font-size:0.88em; color:#7f1d1d;">?? <strong>Motivo:</strong> ${a.motivo || '—'}</div>
+                        <div style="font-size:0.88em; color:#7f1d1d;">⚠️ <strong>Motivo:</strong> ${a.motivo || '—'}</div>
                         <div style="font-size:0.82em; color:#888;">?? ${a.supervisor || '—'} — ${a.fecha || ''} ${a.hora || ''}</div>
                     </div>
                     <div style="text-align:right;">
@@ -9187,7 +9187,7 @@ function clicSeguro(fn, tiempo){
     function _verificarClaveYEjecutar(clave, onExito) {
         const claveGuardada = localStorage.getItem('kollita_clave_supervisor');
         if (!claveGuardada) {
-            mostrarToast('?? Primero configura la clave supervisor en el menú lateral', true);
+            mostrarToast('⚠️ Primero configura la clave supervisor en el menú lateral', true);
             return false;
         }
         if (_hashClave(clave) !== claveGuardada) {
@@ -9210,21 +9210,21 @@ function clicSeguro(fn, tiempo){
                 <div class="modal-content" style="max-width:380px; border-radius:16px;">
                     <div class="modal-header" style="background:linear-gradient(135deg,#7f1d1d,#991b1b);">
                         <div>
-                            <h3 style="margin:0; color:white;" id="acceso-sup-titulo">?? Acceso Supervisor</h3>
+                            <h3 style="margin:0; color:white;" id="acceso-sup-titulo">🔐 Acceso Supervisor</h3>
                             <p style="margin:4px 0 0; color:rgba(255,255,255,0.75); font-size:0.8em;">Solo supervisores autorizados</p>
                         </div>
                         <span class="modal-close" style="color:white; font-size:22px; opacity:0.7;"
                             onclick="cerrarModal('modal-acceso-supervisor-generico')">&times;</span>
                     </div>
                     <div style="padding:20px;">
-                        <label class="form-label">?? Clave supervisor:</label>
+                        <label class="form-label">🔑 Clave supervisor:</label>
                         <input type="password" id="acceso-sup-clave" class="form-control"
                             placeholder="Ingresa la clave"
                             style="font-size:1.1em; letter-spacing:2px; margin-top:6px;"
                             onkeydown="if(event.key==='Enter') confirmarAccesoSupervisor()">
                         <div id="acceso-sup-error" style="display:none; color:#c0392b; font-size:0.85em; margin-top:8px; font-weight:bold;"></div>
                         <button class="btn" style="background:linear-gradient(135deg,#7f1d1d,#991b1b); color:white; margin-top:14px;"
-                            onclick="confirmarAccesoSupervisor()">?? Ingresar</button>
+                            onclick="confirmarAccesoSupervisor()">✅ Ingresar</button>
                         <button class="btn" style="background:#f3f4f6; color:#374151; margin-top:8px;"
                             onclick="cerrarModal('modal-acceso-supervisor-generico')">Cancelar</button>
                     </div>
@@ -9249,7 +9249,7 @@ function clicSeguro(fn, tiempo){
         }
         const claveGuardada = localStorage.getItem('kollita_clave_supervisor');
         if (!claveGuardada) {
-            errorEl.textContent = '?? No hay clave configurada. Configúrala primero en el menú.';
+            errorEl.textContent = '⚠️ No hay clave configurada. Configúrala primero en el menú.';
             errorEl.style.display = 'block';
             return;
         }
@@ -9322,7 +9322,7 @@ function clicSeguro(fn, tiempo){
             btn.style.border     = '1.5px solid #2d6a4f';
         } else {
             contenido.style.display = 'none';
-            btn.textContent = '?? Apagado';
+            btn.textContent = '🔴 Apagado';
             btn.style.background = '#fdecea';
             btn.style.color      = '#c0392b';
             btn.style.border     = '1.5px solid #c0392b';
@@ -9387,7 +9387,7 @@ function clicSeguro(fn, tiempo){
                 <td>${ventas.length} notas<br><small style="color:var(--verde); font-weight:bold;">${totalGastado.toFixed(2)} Bs</small></td>
                 <td>
                     ${btnWA}
-                    <button onclick="editarCliente('${c.id}')" style="background:#e8f4fd; color:#1a6fa8; border:none; border-radius:6px; padding:5px 10px; cursor:pointer; font-size:0.8em; font-weight:600; margin:2px;">?? Editar</button>
+                    <button onclick="editarCliente('${c.id}')" style="background:#e8f4fd; color:#1a6fa8; border:none; border-radius:6px; padding:5px 10px; cursor:pointer; font-size:0.8em; font-weight:600; margin:2px;">✏️ Editar</button>
                     <button onclick="verPerfilDesdeTabla('${c.id}')" style="background:#f0ecff; color:#5a2ea6; border:none; border-radius:6px; padding:5px 10px; cursor:pointer; font-size:0.8em; font-weight:600; margin:2px;">?? Perfil</button>
                     <button onclick="eliminarCliente('${c.id}')" style="background:#fdecea; color:#c0392b; border:none; border-radius:6px; padding:5px 10px; cursor:pointer; font-size:0.8em; font-weight:600; margin:2px;">???</button>
                 </td>
@@ -9420,7 +9420,7 @@ function clicSeguro(fn, tiempo){
             mostrarToast('? Cliente actualizado. ' + cambiados + ' nota(s) sincronizadas.');
         } else {
             if (clientes.find(c => c.nombre.toLowerCase() === nombre.toLowerCase())) {
-                mostrarToast('?? Ya existe un cliente con ese nombre', true);
+                mostrarToast('⚠️ Ya existe un cliente con ese nombre', true);
                 return;
             }
             clientes.push({ id: Date.now(), nombre, telefono, fechaRegistro: new Date().toLocaleDateString('es-BO') });
@@ -9453,7 +9453,7 @@ function clicSeguro(fn, tiempo){
                 turnoRef = turnos[0];
                 esTurnoActivo = false;
             } else {
-                mostrarToast('?? No hay turno activo ni cierres registrados', true);
+                mostrarToast('⚠️ No hay turno activo ni cierres registrados', true);
                 return;
             }
         }
@@ -9467,7 +9467,7 @@ function clicSeguro(fn, tiempo){
         }
 
         if (entregados.length === 0) {
-            mostrarToast('?? No hay pedidos entregados en este turno', false);
+            mostrarToast('ℹ️ No hay pedidos entregados en este turno', false);
             return;
         }
 
@@ -9482,7 +9482,7 @@ function clicSeguro(fn, tiempo){
 
         const ventana = window.open('', '_blank', 'width=400,height=600,scrollbars=yes');
         if (!ventana) {
-            mostrarToast('?? Permite ventanas emergentes para imprimir', true);
+            mostrarToast('⚠️ Permite ventanas emergentes para imprimir', true);
             return;
         }
 
@@ -9563,14 +9563,14 @@ function clicSeguro(fn, tiempo){
             if(icon) { icon.textContent = '?'; icon.style.display = 'inline'; }
             const h = JSON.parse(localStorage.getItem('kollita_db') || '[]');
             const pedidos = h.filter(n => n.cliente && n.cliente.toLowerCase() === exacto.nombre.toLowerCase() && n.estado !== 'ANULADO').length;
-            info.innerHTML = '? Cliente registrado · ?? ' + (exacto.telefono || 'Sin tel.') + ' · ?? ' + pedidos + ' pedido(s)';
+            info.innerHTML = '? Cliente registrado · 📞 ' + (exacto.telefono || 'Sin tel.') + ' · 📞 ' + pedidos + ' pedido(s)';
             info.style.cssText = 'display:block; font-size:0.78em; padding:4px 6px; border-radius:6px; background:#e8f5e9; color:#2d6a4f;';
             return;
         }
 
         const sugerencias = clientes.filter(c => c.nombre.toLowerCase().includes(val.toLowerCase())).slice(0, 8);
         if(icon) { icon.textContent = '??'; icon.style.display = 'inline'; }
-        info.innerHTML = '?? No registrado';
+        info.innerHTML = '❌ No registrado';
         info.style.cssText = 'display:block; font-size:0.78em; padding:4px 6px; border-radius:6px; background:#fff3e0; color:#b76000;';
 
         if (sugerencias.length > 0) {
@@ -9578,7 +9578,7 @@ function clicSeguro(fn, tiempo){
             cont.innerHTML = sugerencias.map(c => {
                 const h = JSON.parse(localStorage.getItem('kollita_db') || '[]');
                 const pedidos = h.filter(n => n.cliente && n.cliente.toLowerCase() === c.nombre.toLowerCase() && n.estado !== 'ANULADO').length;
-                return '<div onclick="seleccionarEditNotaCliente(' + c.id + ')" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center;" onmouseover="this.style.background=\'#f0f4ff\'" onmouseout="this.style.background=\'white\'"><div><div style="font-weight:700;font-size:0.95em;">' + c.nombre + '</div><div style="font-size:0.78em;color:#666;">?? ' + (c.telefono || 'Sin tel.') + ' · ?? ' + pedidos + ' pedidos</div></div><span style="color:var(--azul);font-size:0.75em;font-weight:600;">Seleccionar ?</span></div>';
+                return '<div onclick="seleccionarEditNotaCliente(' + c.id + ')" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center;" onmouseover="this.style.background=\'#f0f4ff\'" onmouseout="this.style.background=\'white\'"><div><div style="font-weight:700;font-size:0.95em;">' + c.nombre + '</div><div style="font-size:0.78em;color:#666;">?? ' + (c.telefono || 'Sin tel.') + ' · 📞 ' + pedidos + ' pedidos</div></div><span style="color:var(--azul);font-size:0.75em;font-weight:600;">Seleccionar ?</span></div>';
             }).join('');
         } else { cont.style.display = 'none'; }
     };
@@ -9594,7 +9594,7 @@ function clicSeguro(fn, tiempo){
         const info = document.getElementById('edit-nota-cliente-info');
         const h = JSON.parse(localStorage.getItem('kollita_db') || '[]');
         const pedidos = h.filter(n => n.cliente && n.cliente.toLowerCase() === c.nombre.toLowerCase() && n.estado !== 'ANULADO').length;
-        info.innerHTML = '? Cliente registrado · ?? ' + (c.telefono || 'Sin tel.') + ' · ?? ' + pedidos + ' pedido(s)';
+        info.innerHTML = '? Cliente registrado · 📞 ' + (c.telefono || 'Sin tel.') + ' · 📞 ' + pedidos + ' pedido(s)';
         info.style.cssText = 'display:block; font-size:0.78em; padding:4px 6px; border-radius:6px; background:#e8f5e9; color:#2d6a4f;';
     };
 
@@ -9674,7 +9674,7 @@ function clicSeguro(fn, tiempo){
                  style="padding:10px 14px; cursor:pointer; font-size:0.9em; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center;"
                  onmouseover="this.style.background='#eff6ff'" onmouseout="this.style.background='white'">
                 <span><strong>${c.nombre.replace(/</g,'&lt;')}</strong></span>
-                ${c.telefono ? `<span style="color:#888; font-size:0.82em;">?? ${c.telefono}</span>` : '<span style="color:#ccc; font-size:0.78em;">Sin tel.</span>'}
+                ${c.telefono ? `<span style="color:#888; font-size:0.82em;">📞 ${c.telefono}</span>` : '<span style="color:#ccc; font-size:0.78em;">Sin tel.</span>'}
             </div>`).join('');
         cont.style.display = 'block';
     };
@@ -9736,7 +9736,7 @@ function clicSeguro(fn, tiempo){
         <!-- Header -->
         <div style="background:linear-gradient(135deg,var(--azul),#1a0d4d); color:white; padding:20px 24px; display:flex; justify-content:space-between; align-items:center;">
             <div>
-                <div style="font-size:1.5em; font-weight:900;">?? Base de Clientes</div>
+                <div style="font-size:1.5em; font-weight:900;">👥 Base de Clientes</div>
                 <div style="font-size:0.85em; opacity:0.8; margin-top:3px;">Registro y control de clientes. Los cambios de nombre se sincronizan en todas las notas.</div>
             </div>
             <span onclick="cerrarModulo('mod-clientes')" style="font-size:28px; cursor:pointer; opacity:0.7; line-height:1;">&times;</span>
@@ -9763,7 +9763,7 @@ function clicSeguro(fn, tiempo){
             </div>
             <!-- Buscador + Export -->
             <div style="display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap;">
-                <input type="text" id="cli-buscar" class="form-control" placeholder="?? Buscar por nombre o teléfono..." style="flex:1;" oninput="renderClientes()">
+                <input type="text" id="cli-buscar" class="form-control" placeholder="🔍 Buscar por nombre o teléfono..." style="flex:1;" oninput="renderClientes()">
                 <button onclick="exportarClientesExcel()" style="background:var(--verde); color:white; border:none; border-radius:8px; padding:10px 16px; font-weight:700; cursor:pointer; white-space:nowrap;">?? Exportar Excel</button>
             </div>
             <!-- Tabla -->
@@ -9790,7 +9790,7 @@ function clicSeguro(fn, tiempo){
         <!-- Header -->
         <div style="background:linear-gradient(135deg,var(--azul),#1a0d4d); color:white; padding:20px 24px; display:flex; justify-content:space-between; align-items:center;">
             <div>
-                <div style="font-size:1.5em; font-weight:900;">?? Dashboard de Ventas</div>
+                <div style="font-size:1.5em; font-weight:900;">📊 Dashboard de Ventas</div>
                 <div style="font-size:0.85em; opacity:0.8; margin-top:3px;">Estadísticas, productos más vendidos y gráficas del mes.</div>
             </div>
             <span onclick="cerrarModulo('mod-dashboard')" style="font-size:28px; cursor:pointer; opacity:0.7; line-height:1;">&times;</span>
@@ -9798,7 +9798,7 @@ function clicSeguro(fn, tiempo){
         <div style="padding:20px 24px;">
             <!-- Filtro mes + Exportar -->
             <div style="display:flex; gap:12px; align-items:center; margin-bottom:20px; flex-wrap:wrap;">
-                <label style="font-weight:700; color:var(--azul);">?? Mes:</label>
+                <label style="font-weight:700; color:var(--azul);">📅 Mes:</label>
                 <input type="month" id="dash-mes-select" class="form-control" style="max-width:180px;" onchange="renderDashboard()">
                 <button onclick="exportarDashboardExcel()" style="background:var(--verde); color:white; border:none; border-radius:8px; padding:10px 16px; font-weight:700; cursor:pointer;">?? Exportar Reporte Excel</button>
             </div>
@@ -9807,23 +9807,23 @@ function clicSeguro(fn, tiempo){
             <!-- Tarjetas resumen -->
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-bottom:20px;">
                 <div style="background:linear-gradient(135deg,#03045e,#1a0d4d); color:white; border-radius:12px; padding:16px; text-align:center;">
-                    <div style="font-size:0.75em; opacity:0.8; text-transform:uppercase;">?? Ingresos del Mes</div>
+                    <div style="font-size:0.75em; opacity:0.8; text-transform:uppercase;">💰 Ingresos del Mes</div>
                     <div id="dash-total-ingresos" style="font-size:1.6em; font-weight:900; margin-top:6px;">—</div>
                 </div>
                 <div style="background:linear-gradient(135deg,#2d6a4f,#1b4332); color:white; border-radius:12px; padding:16px; text-align:center;">
-                    <div style="font-size:0.75em; opacity:0.8; text-transform:uppercase;">?? Notas Entregadas</div>
+                    <div style="font-size:0.75em; opacity:0.8; text-transform:uppercase;">📝 Notas Entregadas</div>
                     <div id="dash-total-notas" style="font-size:1.6em; font-weight:900; margin-top:6px;">—</div>
                 </div>
                 <div style="background:linear-gradient(135deg,#fb8500,#d46000); color:white; border-radius:12px; padding:16px; text-align:center;">
-                    <div style="font-size:0.75em; opacity:0.8; text-transform:uppercase;">?? Descuentos</div>
+                    <div style="font-size:0.75em; opacity:0.8; text-transform:uppercase;">🏷️ Descuentos</div>
                     <div id="dash-total-descuentos" style="font-size:1.6em; font-weight:900; margin-top:6px;">—</div>
                 </div>
                 <div style="background:linear-gradient(135deg,#2d6a4f,#40916c); color:white; border-radius:12px; padding:16px; text-align:center;">
-                    <div style="font-size:0.75em; opacity:0.8; text-transform:uppercase;">?? Efectivo</div>
+                    <div style="font-size:0.75em; opacity:0.8; text-transform:uppercase;">💵 Efectivo</div>
                     <div id="dash-total-efectivo" style="font-size:1.6em; font-weight:900; margin-top:6px;">—</div>
                 </div>
                 <div style="background:linear-gradient(135deg,#6c63ff,#4b44cc); color:white; border-radius:12px; padding:16px; text-align:center;">
-                    <div style="font-size:0.75em; opacity:0.8; text-transform:uppercase;">?? QR</div>
+                    <div style="font-size:0.75em; opacity:0.8; text-transform:uppercase;">📱 QR</div>
                     <div id="dash-total-qr" style="font-size:1.6em; font-weight:900; margin-top:6px;">—</div>
                 </div>
             </div>
@@ -9835,7 +9835,7 @@ function clicSeguro(fn, tiempo){
             <!-- Dos columnas: productos + clientes top -->
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; flex-wrap:wrap;">
                 <div>
-                    <div style="font-weight:700; color:var(--azul); margin-bottom:10px;">?? Productos Más / Menos Vendidos</div>
+                    <div style="font-weight:700; color:var(--azul); margin-bottom:10px;">📦 Productos Más / Menos Vendidos</div>
                     <div style="overflow:auto; max-height:320px; border-radius:10px; border:1px solid #eee;">
                         <div class='table-responsive'><table style="width:100%; border-collapse:collapse;">
                             <thead><tr style="background:var(--azul); color:white; position:sticky; top:0;">
@@ -9849,7 +9849,7 @@ function clicSeguro(fn, tiempo){
                     </div>
                 </div>
                 <div>
-                    <div style="font-weight:700; color:var(--azul); margin-bottom:10px;">?? Clientes Frecuentes</div>
+                    <div style="font-weight:700; color:var(--azul); margin-bottom:10px;">👥 Clientes Frecuentes</div>
                     <div style="overflow:auto; max-height:320px; border-radius:10px; border:1px solid #eee;">
                         <div class='table-responsive'><table style="width:100%; border-collapse:collapse;">
                             <thead><tr style="background:var(--verde); color:white; position:sticky; top:0;">
@@ -9874,7 +9874,7 @@ function clicSeguro(fn, tiempo){
         <!-- Header -->
         <div style="background:linear-gradient(135deg,#c0392b,#96281b); color:white; padding:20px 24px; display:flex; justify-content:space-between; align-items:center;">
             <div>
-                <div style="font-size:1.5em; font-weight:900;">?? Reclamos · Obsequios · Promociones</div>
+                <div style="font-size:1.5em; font-weight:900;">📋 Reclamos · Obsequios · Promociones</div>
                 <div style="font-size:0.85em; opacity:0.8; margin-top:3px;">Registra incidencias, obsequios y promociones dadas a clientes.</div>
             </div>
             <span onclick="cerrarModulo('mod-reclamos')" style="font-size:28px; cursor:pointer; opacity:0.7; line-height:1;">&times;</span>
@@ -9887,10 +9887,10 @@ function clicSeguro(fn, tiempo){
                     <div>
                         <label style="font-size:0.8em; font-weight:600; color:#555;">Tipo *</label>
                         <select id="rec-tipo" class="form-control" style="margin-top:4px;">
-                            <option value="RECLAMO">?? Reclamo</option>
-                            <option value="OBSEQUIO">?? Obsequio / Regalo</option>
-                            <option value="REPOSICIÓN">?? Reposición</option>
-                            <option value="PROMOCIÓN">??? Promoción</option>
+                            <option value="RECLAMO">😤 Reclamo</option>
+                            <option value="OBSEQUIO">🎁 Obsequio / Regalo</option>
+                            <option value="REPOSICIÓN">🔄 Reposición</option>
+                            <option value="PROMOCIÓN">🎉 Promoción</option>
                         </select>
                     </div>
                     <div style="position:relative;">
@@ -9915,8 +9915,8 @@ function clicSeguro(fn, tiempo){
             </div>
             <!-- Contadores rápidos -->
             <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:8px; margin-bottom:16px;">
-                <div style="background:#fdecea; border-radius:10px; padding:10px; text-align:center;"><div style="font-size:0.7em; color:#c0392b; font-weight:700; text-transform:uppercase;">?? Reclamos</div><div id="rec-cnt-reclamos" style="font-size:1.6em; font-weight:900; color:#c0392b;">0</div></div>
-                <div style="background:#e8f5e9; border-radius:10px; padding:10px; text-align:center;"><div style="font-size:0.7em; color:#2d6a4f; font-weight:700; text-transform:uppercase;">?? Obsequios</div><div id="rec-cnt-obsequios" style="font-size:1.6em; font-weight:900; color:#2d6a4f;">0</div></div>
+                <div style="background:#fdecea; border-radius:10px; padding:10px; text-align:center;"><div style="font-size:0.7em; color:#c0392b; font-weight:700; text-transform:uppercase;">😤 Reclamos</div><div id="rec-cnt-reclamos" style="font-size:1.6em; font-weight:900; color:#c0392b;">0</div></div>
+                <div style="background:#e8f5e9; border-radius:10px; padding:10px; text-align:center;"><div style="font-size:0.7em; color:#2d6a4f; font-weight:700; text-transform:uppercase;">🎁 Obsequios</div><div id="rec-cnt-obsequios" style="font-size:1.6em; font-weight:900; color:#2d6a4f;">0</div></div>
                 <div style="background:#e0f2fe; border-radius:10px; padding:10px; text-align:center;"><div style="font-size:0.7em; color:#0369a1; font-weight:700; text-transform:uppercase;">?? Repos.</div><div id="rec-cnt-reposiciones" style="font-size:1.6em; font-weight:900; color:#0369a1;">0</div></div>
                 <div style="background:#fff3e0; border-radius:10px; padding:10px; text-align:center;"><div style="font-size:0.7em; color:#fb8500; font-weight:700; text-transform:uppercase;">??? Promos</div><div id="rec-cnt-promos" style="font-size:1.6em; font-weight:900; color:#fb8500;">0</div></div>
                 <div style="background:#f0ecff; border-radius:10px; padding:10px; text-align:center;"><div style="font-size:0.7em; color:#5a2ea6; font-weight:700; text-transform:uppercase;">?? Monto</div><div id="rec-cnt-monto" style="font-size:1.1em; font-weight:900; color:#5a2ea6;">0 Bs</div></div>
@@ -9925,10 +9925,10 @@ function clicSeguro(fn, tiempo){
             <div style="display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap;">
                 <select id="rec-filtro-tipo" class="form-control" style="max-width:180px;" onchange="renderReclamos()">
                     <option value="">Todos los tipos</option>
-                    <option value="RECLAMO">?? Reclamos</option>
-                    <option value="OBSEQUIO">?? Obsequios</option>
-                    <option value="REPOSICIÓN">?? Reposiciones</option>
-                    <option value="PROMOCIÓN">??? Promociones</option>
+                    <option value="RECLAMO">😤 Reclamos</option>
+                    <option value="OBSEQUIO">🎁 Obsequios</option>
+                    <option value="REPOSICIÓN">🔄 Reposiciones</option>
+                    <option value="PROMOCIÓN">🎉 Promociones</option>
                 </select>
                 <input type="month" id="rec-filtro-mes" class="form-control" style="max-width:180px;" onchange="renderReclamos()">
             </div>
@@ -9942,7 +9942,7 @@ function clicSeguro(fn, tiempo){
 <div id="mod-anulaciones" class="modulo-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:5000; justify-content:center; align-items:flex-start; overflow-y:auto; padding:20px; box-sizing:border-box;">
     <div style="background:white; border-radius:16px; width:100%; max-width:900px; margin:auto; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4);">
         <div style="background:linear-gradient(135deg,#c0392b,#7f1d1d); color:white; padding:20px 24px; display:flex; justify-content:space-between; align-items:center;">
-            <div><div style="font-size:1.5em; font-weight:900;">?? Historial de Anulaciones</div><div style="font-size:0.85em; opacity:0.8; margin-top:3px;">Registro completo de pedidos anulados y traspasos</div></div>
+            <div><div style="font-size:1.5em; font-weight:900;">📜 Historial de Anulaciones</div><div style="font-size:0.85em; opacity:0.8; margin-top:3px;">Registro completo de pedidos anulados y traspasos</div></div>
             <span onclick="cerrarModulo('mod-anulaciones')" style="font-size:28px; cursor:pointer; opacity:0.7; line-height:1;">&times;</span>
         </div>
         <div style="padding:20px 24px;">
@@ -9955,7 +9955,7 @@ function clicSeguro(fn, tiempo){
             <div style="display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap; align-items:center;">
                 <select id="anul-filtro-tipo" class="form-control" style="max-width:180px;" onchange="renderAnulaciones()"><option value="">Todas</option><option value="anular">? Anulaciones</option><option value="traspasar">📦 Traspasos</option></select>
                 <input type="month" id="anul-filtro-mes" class="form-control" style="max-width:180px;" onchange="renderAnulaciones()">
-                <input type="text" id="anul-filtro-buscar" class="form-control" style="max-width:200px;" placeholder="?? Buscar..." oninput="renderAnulaciones()">
+                <input type="text" id="anul-filtro-buscar" class="form-control" style="max-width:200px;" placeholder="🔍 Buscar..." oninput="renderAnulaciones()">
                 <button onclick="exportarAnulacionesCSV()" style="background:var(--verde); color:white; border:none; border-radius:8px; padding:8px 14px; font-weight:700; cursor:pointer; font-size:0.85em;">?? CSV</button>
             </div>
             <div id="anul-lista" style="max-height:450px; overflow-y:auto;"></div>
@@ -10149,8 +10149,8 @@ function clicSeguro(fn, tiempo){
             await sincronizarCola();
 
             const msg = liberados > 0
-                ? `?? Turno sincronizado. ${liberados} pedido(s) archivado(s) — storage liberado`
-                : '?? Turno sincronizado con Supabase';
+                ? `✅ Turno sincronizado. ${liberados} pedido(s) archivado(s) — storage liberado`
+                : '✅ Turno sincronizado con Supabase';
 
             mostrarToast(msg);
             console.log('[KollitaSync] Sincronización exitosa:', { turno: turnoData.secretario_nombre, pedidos: entregados.length, liberados });
@@ -10159,7 +10159,7 @@ function clicSeguro(fn, tiempo){
             console.warn('[KollitaSync] Sin conexión, encolando:', e.message);
             encolarItem('turno', turnoData);
             pedidosData.filter(p => p.estado === 'ENTREGADO').forEach(p => encolarItem('pedido', p));
-            mostrarToast('?? Sin internet — datos guardados para sincronizar luego');
+            mostrarToast('📵 Sin internet — datos guardados para sincronizar luego');
         }
     }
 
@@ -10268,7 +10268,7 @@ function clicSeguro(fn, tiempo){
         if (getCola().length > 0) {
             console.log('[KollitaSync] Conexión restaurada — sincronizando cola...');
             await sincronizarCola();
-            mostrarToast('?? Conexión restaurada — datos sincronizados');
+            mostrarToast('✅ Conexión restaurada — datos sincronizados');
         }
     });
 
@@ -10312,7 +10312,7 @@ function clicSeguro(fn, tiempo){
     // -- MIGRACIÓN INICIAL — sube TODO el historial a Supabase --
     window.migrarHistorialASupabase = async function() {
         // BORRADOR: deshabilitado — no conecta a Supabase
-        mostrarToast('?? Migración deshabilitada en modo borrador');
+        mostrarToast('⚠️ Migración deshabilitada en modo borrador');
         return;
         if (!sucursalId) {
             estado.style.display = 'block';
@@ -10339,7 +10339,7 @@ function clicSeguro(fn, tiempo){
         }
 
         // 1. Recopilar TODOS los pedidos (kollita_db + archivos mensuales)
-        log('?? Recopilando pedidos...');
+        log('🔄 Recopilando pedidos...');
         let todosPedidos = [];
         try {
             const db = JSON.parse(localStorage.getItem('kollita_db') || '[]');
@@ -10364,7 +10364,7 @@ function clicSeguro(fn, tiempo){
             vistos.add(p.id); return true;
         });
 
-        log(`?? ${todosPedidos.length} pedidos encontrados. Subiendo...`);
+        log(`📦 ${todosPedidos.length} pedidos encontrados. Subiendo...`);
 
         // 2. Subir pedidos en lotes de 10 (más seguro para localStorage lleno)
         const lote = 10;
@@ -10418,12 +10418,12 @@ function clicSeguro(fn, tiempo){
                 errores += grupo.length;
             }
             const pct = Math.round((totalPedidos / todosPedidos.length) * 100);
-            log(`?? Subiendo... ${totalPedidos}/${todosPedidos.length} pedidos (${pct}%) — no cierres esta ventana`);
+            log(`⏳ Subiendo... ${totalPedidos}/${todosPedidos.length} pedidos (${pct}%) — no cierres esta ventana`);
             await new Promise(r => setTimeout(r, 400)); // pausa entre lotes
         }
 
         // 3. Subir turnos cerrados
-        log('?? Subiendo turnos cerrados...');
+        log('⏳ Subiendo turnos cerrados...');
         try {
             const turnos = JSON.parse(localStorage.getItem('turnos_cerrados_kollita') || '[]');
             for (const turno of turnos) {
@@ -10439,12 +10439,12 @@ function clicSeguro(fn, tiempo){
             estado.style.background = '#d4edda';
             estado.innerHTML = `? Migración completa: <strong>${totalPedidos} pedidos</strong> y <strong>${totalTurnos} turnos</strong> subidos a Supabase.<br>?? Todos los datos se mantienen en local para consultas.`;
             btn.innerHTML = '? Migración completada';
-            mostrarToast('?? Historial migrado a Supabase');
+            mostrarToast('✅ Historial migrado a Supabase');
         } else {
             estado.style.background = '#fdecea';
-            estado.innerHTML = `?? Se subieron ${totalPedidos} pedidos con ${errores} errores. Verifica tu conexión e intenta de nuevo.`;
+            estado.innerHTML = `⚠️ Se subieron ${totalPedidos} pedidos con ${errores} errores. Verifica tu conexión e intenta de nuevo.`;
             btn.disabled = false;
-            btn.innerHTML = '?? Reintentar migración';
+            btn.innerHTML = '🔄 Reintentar migración';
         }
     };
 
@@ -10543,7 +10543,7 @@ function clicSeguro(fn, tiempo){
     // -- LIBERAR ESPACIO POR RANGO DE FECHAS ------------------
     window.liberarEspacioPorFecha = async function() {
         // BORRADOR: deshabilitado — no conecta a Supabase
-        mostrarToast('?? Liberar espacio deshabilitado en modo borrador');
+        mostrarToast('⚠️ Liberar espacio deshabilitado en modo borrador');
         return;
         const btn    = document.getElementById('btn-liberar-fecha');
         const estado = document.getElementById('liberar-estado');
@@ -10574,7 +10574,7 @@ function clicSeguro(fn, tiempo){
             estado.style.background = '#fdecea';
             estado.style.padding = '10px';
             estado.style.borderRadius = '8px';
-            estado.innerHTML = '? Configura primero la sucursal en ?? Config. Ticket';
+            estado.innerHTML = '? Configura primero la sucursal en 🧾 Config. Ticket';
             return;
         }
 
@@ -10593,7 +10593,7 @@ Los PREPARADOS no se tocan.`)) return;
         function log(msg) { estado.innerHTML = msg; }
 
         // 1. Recopilar pedidos del rango — kollita_db + archivos mensuales
-        log('?? Buscando pedidos en el rango...');
+        log('🔄 Buscando pedidos en el rango...');
         let todosLosLocal = [];
 
         try {
@@ -10653,13 +10653,13 @@ Los PREPARADOS no se tocan.`)) return;
 
         if (pedidosUnicos.length === 0) {
             estado.style.background = '#fff3cd';
-            estado.innerHTML = `?? No se encontraron pedidos ENTREGADOS en el rango ${desde} — ${hasta}`;
+            estado.innerHTML = `⚠️ No se encontraron pedidos ENTREGADOS en el rango ${desde} — ${hasta}`;
             btn.disabled = false;
-            btn.innerHTML = '??? Subir y liberar rango seleccionado';
+            btn.innerHTML = '📤 Subir y liberar rango seleccionado';
             return;
         }
 
-        log(`?? ${pedidosUnicos.length} pedidos encontrados en el rango. Subiendo...`);
+        log(`📦 ${pedidosUnicos.length} pedidos encontrados en el rango. Subiendo...`);
 
         // 2. Subir a Supabase en lotes de 10
         let subidos = 0;
@@ -10712,20 +10712,20 @@ Los PREPARADOS no se tocan.`)) return;
             }
 
             const pct = Math.round(((i + grupo.length) / pedidosUnicos.length) * 100);
-            log(`?? Subiendo... ${Math.min(i + lote, pedidosUnicos.length)}/${pedidosUnicos.length} (${pct}%)`);
+            log(`⏳ Subiendo... ${Math.min(i + lote, pedidosUnicos.length)}/${pedidosUnicos.length} (${pct}%)`);
             await new Promise(r => setTimeout(r, 300));
         }
 
         if (errores > 0) {
             estado.style.background = '#fdecea';
-            estado.innerHTML = `?? ${subidos} subidos, ${errores} con error. Reintenta con mejor conexión.`;
+            estado.innerHTML = `⚠️ ${subidos} subidos, ${errores} con error. Reintenta con mejor conexión.`;
             btn.disabled = false;
-            btn.innerHTML = '?? Reintentar';
+            btn.innerHTML = '🔄 Reintentar';
             return;
         }
 
         // 3. Borrar del localStorage solo los pedidos subidos exitosamente
-        log('?? Liberando espacio del local...');
+        log('🧹 Liberando espacio del local...');
         const idsSubidos = new Set(pedidosUnicos.map(p => p.id));
 
         // Limpiar kollita_db
@@ -10761,10 +10761,10 @@ Los PREPARADOS no se tocan.`)) return;
         const kbAhora = (bytesAhora / 1024).toFixed(1);
 
         estado.style.background = '#d4edda';
-        estado.innerHTML = `? <strong>${subidos} pedidos</strong> subidos a Supabase y liberados del local.<br>?? Storage ahora: <strong>${kbAhora} KB</strong>`;
+        estado.innerHTML = `? <strong>${subidos} pedidos</strong> subidos a Supabase y liberados del local.<br>📊 Storage ahora: <strong>${kbAhora} KB</strong>`;
         btn.disabled = false;
         btn.innerHTML = '? Completado';
-        mostrarToast(`?? ${subidos} pedidos liberados`);
+        mostrarToast(`✅ ${subidos} pedidos liberados`);
     };
 
     console.log('[KollitaSync] Módulo cargado — sincronización activa al cerrar turno');
@@ -10875,7 +10875,7 @@ Los PREPARADOS no se tocan.`)) return;
                 <div class="kl-marca">KollitaPro</div>
                 <div class="kl-sub">Cambiar Contraseña</div>
             </div>
-            <div class="kl-badge" style="background:var(--verde);">?? Primer ingreso — define tu contraseña</div>
+            <div class="kl-badge" style="background:var(--verde);">🔑 Primer ingreso — define tu contraseña</div>
             <div class="kl-titulo" style="margin-bottom:12px;">Nueva contraseña (mín. 6 caracteres)</div>
             <input type="password" id="kl-nueva" class="kl-input" placeholder="Nueva contraseña">
             <input type="password" id="kl-confirmar" class="kl-input" placeholder="Confirmar contraseña">
