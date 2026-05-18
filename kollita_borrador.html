@@ -10511,37 +10511,51 @@ function clicSeguro(fn, tiempo){
 
         log(`📦 ${todosPedidos.length} pedidos encontrados. Subiendo...`);
 
-        // 2. Subir pedidos en lotes de 10 (más seguro para localStorage lleno)
+        // 2. Subir pedidos en lotes de 10
         const lote = 10;
+        let ultimoErrorStr = '';
         for (let i = 0; i < todosPedidos.length; i += lote) {
             const grupo = todosPedidos.slice(i, i + lote);
-            const datos = grupo.map(v => ({ _id_local: v.id,
-                sucursal_id:          sucursalId,
-                numero_nota:          String(v.numeroNota || v.id || ''),
-                cliente:              v.cliente || 'CONSUMIDOR FINAL',
-                items:                v.items || [],
-                subtotal:             v.subtotal    || v.total || 0,
-                descuento:            v.descuento   || 0,
-                porcentaje_descuento: v.porcentajeDescuento || 0,
-                total:                v.total       || 0,
-                estado:               (v.estado     || 'PREPARADO').toUpperCase(),
-                metodo_pago:          v.metodoPago  || null,
-                efectivo_pagado:      v.efectivoPagado  || 0,
-                qr_pagado:            v.qrPagado        || 0,
-                total_entregado:      v.totalEntregado  || v.total || 0,
-                saldo_cobrado:        v.saldoCobrado    || v.total || 0,
-                anticipo:             v.anticipo         || 0,
-                anticipo_efectivo:    v.anticipoEfectivo || 0,
-                anticipo_qr:          v.anticipoQR       || 0,
-                turno_entrega:        v.turnoEntrega     || null,
-                secretario_entrega:   v.secretarioEntrega || null,
-                fecha_entrega:        v.fechaIDEntrega ? new Date(v.fechaIDEntrega).toISOString() : null,
-                hora_entrega:         v.horaEntrega      || null,
-                created_at:           v.id ? new Date(parseInt(v.id)).toISOString() : new Date().toISOString()
-            }));
+            const datos = grupo.map(v => {
+                let safeDate = new Date().toISOString();
+                try {
+                    if (v.id) {
+                        const d = new Date(v.id);
+                        if (!isNaN(d.getTime())) safeDate = d.toISOString();
+                        else {
+                            const ms = parseInt(v.id);
+                            if (!isNaN(ms) && ms > 1000000000000) safeDate = new Date(ms).toISOString();
+                        }
+                    }
+                } catch(e) {}
+                return {
+                    id:                   v._id_local || v.id || String(v.numeroNota || Math.random().toString(36).substr(2,9)),
+                    sucursal_id:          sucursalId,
+                    numero_nota:          parseInt(v.numeroNota) || 0,
+                    cliente:              v.cliente || 'CONSUMIDOR FINAL',
+                    ci_nit:               v.ci_nit || '',
+                    productos:            v.productos || v.items || [],
+                    subtotal:             parseFloat(v.subtotal) || parseFloat(v.total) || 0,
+                    descuento:            parseFloat(v.descuento) || 0,
+                    porcentaje_descuento: parseFloat(v.porcentajeDescuento) || 0,
+                    total:                parseFloat(v.total) || 0,
+                    estado:               (v.estado || 'PREPARADO').toUpperCase(),
+                    metodo_pago:          v.metodoPago || v.metodo_pago || 'EFECTIVO',
+                    efectivo_pagado:      parseFloat(v.efectivoPagado) || 0,
+                    qr_pagado:            parseFloat(v.qrPagado) || 0,
+                    total_entregado:      parseFloat(v.totalEntregado) || parseFloat(v.total) || 0,
+                    saldo_cobrado:        parseFloat(v.saldoCobrado) || parseFloat(v.total) || 0,
+                    anticipo:             parseFloat(v.anticipo) || 0,
+                    anticipo_efectivo:    parseFloat(v.anticipoEfectivo) || 0,
+                    anticipo_qr:          parseFloat(v.anticipoQR) || 0,
+                    secretario:           v.secretario || v.secretario_entrega || 'Sistema',
+                    turno:                v.turno || 'N/A',
+                    hora:                 v.hora || '',
+                    created_at:           safeDate
+                };
+            });
 
             try {
-                const datosLimpios = datos.map(({_id_local, ...rest}) => rest);
                 const tokenActivo = getTokenActivo();
                 const res = await fetch(`${SUPA_URL}/rest/v1/pedidos`, {
                     method: 'POST',
@@ -10551,20 +10565,22 @@ function clicSeguro(fn, tiempo){
                         'Authorization': `Bearer ${tokenActivo}`,
                         'Prefer': 'return=minimal,resolution=ignore-duplicates'
                     },
-                    body: JSON.stringify(datosLimpios)
+                    body: JSON.stringify(datos)
                 });
                 if (res.ok) {
                     totalPedidos += grupo.length;
-                    // No se borra nada del localStorage — datos se mantienen para consultas
                 } else {
                     errores += grupo.length;
+                    ultimoErrorStr = await res.text();
+                    console.error('[Migración] Error Supabase:', ultimoErrorStr, datos[0]);
                 }
             } catch(e) {
                 errores += grupo.length;
+                ultimoErrorStr = String(e);
             }
             const pct = Math.round((totalPedidos / todosPedidos.length) * 100);
             log(`📦 Subiendo... ${totalPedidos}/${todosPedidos.length} pedidos (${pct}%) — no cierres esta ventana`);
-            await new Promise(r => setTimeout(r, 400)); // pausa entre lotes
+            await new Promise(r => setTimeout(r, 400));
         }
 
         // 3. Subir turnos cerrados
@@ -10579,15 +10595,17 @@ function clicSeguro(fn, tiempo){
             }
         } catch(e) {}
 
-        // 4. Finalizar — no se borra nada del localStorage
+        // 4. Finalizar
         if (errores === 0) {
+            localStorage.removeItem('kollita_db');
             estado.style.background = '#d4edda';
-            estado.innerHTML = `✅ Migración completa: <strong>${totalPedidos} pedidos</strong> y <strong>${totalTurnos} turnos</strong> subidos a Supabase.<br>📦 Todos los datos se mantienen en local para consultas.`;
+            estado.innerHTML = `✅ Migración completa: <strong>${totalPedidos} pedidos</strong> y <strong>${totalTurnos} turnos</strong> subidos a Supabase.<br>🧹 Almacenamiento local liberado. El sistema trabaja 100% en la nube.`;
             btn.innerHTML = '✅ Migración completada';
             mostrarToast('☁️ Historial migrado a Supabase');
+            setTimeout(() => location.reload(), 3000);
         } else {
             estado.style.background = '#fdecea';
-            estado.innerHTML = `⚠️ Se subieron ${totalPedidos} pedidos con ${errores} errores. Verifica tu conexión e intenta de nuevo.`;
+            estado.innerHTML = `⚠️ Se subieron ${totalPedidos} pedidos con ${errores} errores.<br><small style="font-family:monospace">${ultimoErrorStr}</small>`;
             btn.disabled = false;
             btn.innerHTML = '🔄 Reintentar migración';
         }
