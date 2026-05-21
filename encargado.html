@@ -31,7 +31,7 @@ body{font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(
 .nav-tab{padding:14px 20px;font-size:.82em;font-weight:700;color:var(--text2);cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;text-transform:uppercase;letter-spacing:.5px;}
 .nav-tab:hover{color:var(--text);background:var(--s2);}
 .nav-tab.active{color:var(--blue);border-bottom-color:var(--blue);background:rgba(0,180,255,.05);}
-.page{display:none;padding:20px;max-width:1400px;margin:0 auto;}
+.page{display:none;padding:20px;max-width:100%;margin:0 auto;}
 .page.active{display:block;}
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:24px;}
 .stat-card{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;overflow:hidden;}
@@ -381,7 +381,24 @@ const DEFAULT_SABORES = {
   OTROS:[], PEDIDOS:[]
 };
 
-function getCatalogo(){ try{ var data=localStorage.getItem('kollita_enc_catalogo'); if(data){ var c=JSON.parse(data); if(Array.isArray(c)){ if(c[0]&&c[0].datos&&typeof c[0].datos==='object') c=c[0].datos; else if(c[0]&&c[0].n) c={TRADICIONAL:c}; else c=null; } if(c&&typeof c==='object'&&!Array.isArray(c)){ for(var k in c){if(Array.isArray(c[k])&&c[k].length>0) return c;} } } }catch(e){} return JSON.parse(JSON.stringify(DEFAULT_SABORES)); }
+function getCatalogo(){
+  try{
+    var data=localStorage.getItem('kollita_enc_catalogo');
+    if(data){
+      var c=JSON.parse(data);
+      if(Array.isArray(c)){
+        for(var i=0;i<c.length;i++){
+          if(c[i]&&c[i].datos&&typeof c[i].datos==='object'&&!Array.isArray(c[i].datos)){ c=c[i].datos; break; }
+        }
+        if(Array.isArray(c)) c=null;
+      }
+      if(c&&typeof c==='object'&&!Array.isArray(c)){
+        for(var k in c){ if(Array.isArray(c[k])&&c[k].length>0) return c; }
+      }
+    }
+  }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT_SABORES));
+}
 function saveCatalogo(d){ localStorage.setItem('kollita_enc_catalogo', JSON.stringify(d)); }
 function gDB(){ try{return JSON.parse(localStorage.getItem('kollita_db')||'[]');}catch{return[];} }
 function gArch(){ var a=[], h=new Date(); for(var m=1;m<=12;m++){ var d=new Date(h.getFullYear(),h.getMonth()-m,1); var k='kollita_archivo_'+d.getFullYear()+'_'+(d.getMonth()+1); try{a=a.concat(JSON.parse(localStorage.getItem(k)||'[]'));}catch{} } return a; }
@@ -404,6 +421,24 @@ function gProd(){try{return JSON.parse(localStorage.getItem('kollita_enc_producc
 function sProd(d){localStorage.setItem('kollita_enc_produccion',JSON.stringify(d));}
 function sAnul(d){localStorage.setItem('kollita_log_anulaciones',JSON.stringify(d));}
 function sDB(d){localStorage.setItem('kollita_db',JSON.stringify(d));}
+const SUPA_URL='https://wsqhzatsuymjoebzfhpg.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzcWh6YXRzdXltam9lYnpmaHBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTUyMTMsImV4cCI6MjA5NDYzMTIxM30.bFCJBY9PAa8WviEwE8HdO2TjE3ytYM3sD6qFgxJ0pPM';
+async function syncSupabaseDown(){
+  if(!SES||!SES.suc) return;
+  try{
+    var sucEnc=encodeURIComponent(SES.suc);
+    var p=await fetch(SUPA_URL+'/rest/v1/pedidos?select=*&sucursal_id=eq.'+sucEnc+'&order=created_at.desc&limit=1000',{headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}});
+    if(p.ok){var pedidos=await p.json();var mapped=(Array.isArray(pedidos)&&pedidos.length)?pedidos.map(function(r){return{id:r.id,numeroNota:r.numero_nota||'',sucursal:r.sucursal_id||'',sucursal_id:r.sucursal_id||'',cliente:r.cliente||'',secretario:r.secretario||'',estado:r.estado||'PREPARADO',total:parseFloat(r.total)||0,subtotal:parseFloat(r.subtotal)||0,descuento:parseFloat(r.descuento)||0,anticipo:parseFloat(r.anticipo)||0,saldoCobrado:parseFloat(r.saldo_cobrado)||0,totalEntregado:parseFloat(r.total_entregado)||0,metodoPago:r.metodo_pago||null,fechaID:r.fecha_id||'',fechaIDEntrega:r.fecha_entrega||'',horaEntrega:r.hora_entrega||'',items:r.items||[],productos:r.productos||[],turno:r.turno||'',hora:r.hora||'',created_at:r.created_at};}):[];localStorage.setItem('kollita_db',JSON.stringify(mapped));console.log('[syncDown] Pedidos cargados:',mapped.length);}
+    else{console.warn('[syncDown] Error pedidos HTTP:',p.status);}
+  }catch(e){console.error('[syncDown] Error pedidos:',e);}
+  try{
+    var sucEnc=encodeURIComponent(SES.suc);
+    var t=await fetch(SUPA_URL+'/rest/v1/turnos?select=*&sucursal_id=eq.'+sucEnc+'&order=hora_cierre.desc&limit=500',{headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}});
+    if(t.ok){var turnos=await t.json();var mapped=(Array.isArray(turnos)&&turnos.length)?turnos.map(function(c){var fc=c.hora_cierre?new Date(c.hora_cierre):null;return{sucursal:c.sucursal_id||'',secretario:c.secretario_nombre||'',turno:c.tipo_turno||'',inicio:c.hora_apertura||'',cierre:c.hora_cierre||'',fechaCierreFormato:fc?fc.toLocaleDateString('es-BO'):'',horaCierreFormato:fc?fc.toLocaleTimeString('es-BO'):'',totalGeneral:parseFloat(c.total_general)||0,totalEfectivo:parseFloat(c.total_efectivo)||0,totalQR:parseFloat(c.total_qr)||0,totalMixtoEfectivo:parseFloat(c.total_mixto_efectivo)||0,totalMixtoQR:parseFloat(c.total_mixto_qr)||0,totalAnticipos:parseFloat(c.total_anticipos)||0,totalDescuentos:parseFloat(c.total_descuentos)||0,cantidadVentas:c.cantidad_ventas||0,cantidadAnulados:c.cantidad_anulados||0,ventas:(c.datos_cierre&&c.datos_cierre.ventas)?c.datos_cierre.ventas:[]};}):[];localStorage.setItem('turnos_cerrados_kollita',JSON.stringify(mapped));console.log('[syncDown] Turnos cargados:',mapped.length);}
+    else{console.warn('[syncDown] Error turnos HTTP:',t.status);}
+  }catch(e){console.error('[syncDown] Error turnos:',e);}
+  renderDash();
+}
 function obtenerPreparadosViejos(){
   var db = gDB();
   var ahora = Date.now();
@@ -463,12 +498,13 @@ function simpleLogin(){
   SES = {suc: suc, nombre: nombre, expira: Date.now() + 9999999999};
   localStorage.setItem('kollita_enc_ses', JSON.stringify(SES));
   localStorage.setItem('enc_sesion_v2', JSON.stringify({suc:SES.suc, nombre:SES.nombre, ts:Date.now()}));
+  syncSupabaseDown();
+  setInterval(function(){if(SES)syncSupabaseDown();},60000);
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('tb-suc').innerHTML = suc;
   document.getElementById('tb-user').innerHTML = '👤 ' + nombre;
   initProdGrid();
-  renderDash(); renderPedidos(); renderCierres(); renderInc();
 }
 
 function doLogout(){
@@ -544,16 +580,7 @@ function renderDash(){
   var pendCount=0;
   try{pendCount=JSON.parse(localStorage.getItem('kollita_pendientes')||'[]').length;}catch(e){}
 
-  var viejosDash = obtenerPreparadosViejos();
-  var alertHtml = '';
-  if(viejosDash.length > 0){
-    alertHtml += '<div style="background:rgba(255,45,85,.08);border:1px solid rgba(255,45,85,.3);border-radius:12px;padding:14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;">'+
-      '<span style="font-size:1.5em;">⏰</span>'+
-      '<div><strong style="color:var(--red);">¡Atención!</strong> '+
-      '<span style="font-size:.85em;">'+viejosDash.length+' pedido(s) PREPARADO(s) con más de 24 horas sin entregar</span></div>'+
-      '</div>';
-  }
-  document.getElementById('dash-stats').innerHTML = alertHtml + [
+  document.getElementById('dash-stats').innerHTML = [
     {l:'Pedidos este mes',v:pMes.length,s:'Todos los estados',a:'var(--blue)'},
     {l:'Entregados mes',v:entMes.length,s:fmt(totEnt),a:'var(--green)'},
     {l:'🟡 Pendientes app',v:pendCount,s:'Desde app móvil',a:'#ff9500'},
@@ -565,7 +592,7 @@ function renderDash(){
   ].map(function(c){return '<div class="stat-card" style="--accent:'+c.a+'"><div class="stat-label">'+c.l+'</div><div class="stat-val">'+c.v+'</div><div class="stat-sub">'+c.s+'</div></div>';}).join('');
 
   var pm={};
-  entMes.forEach(function(p){(p.items||[]).forEach(function(it){pm[it.n]=(pm[it.n]||0)+it.c;});});
+  entMes.forEach(function(p){var its=(Array.isArray(p.items)&&p.items.length)?p.items:(p.productos||[]); its.forEach(function(it){pm[it.n]=(pm[it.n]||0)+it.c;});});
   var prods=Object.entries(pm).sort(function(a,b){return b[1]-a[1];}).slice(0,10);
   var mx=prods[0]?.[1]||1;
   document.getElementById('chart-prod').innerHTML=prods.length===0
@@ -580,8 +607,8 @@ function renderDash(){
     ?'<div style="color:var(--text2);text-align:center;padding:20px;">Sin datos este mes</div>'
     :clis.map(function(nc){return '<div class="bar-item"><div class="bar-label" title="'+esc(nc[0])+'">'+esc(nc[0])+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(nc[1]/mxc*100)+'%;background:var(--green);"></div></div><div class="bar-val">'+nc[1]+' ped.</div></div>';}).join('');
 
-  document.getElementById('dash-cie').innerHTML='<div class="table-responsive"><table style="table-layout:fixed;width:100%;"><thead><tr><th style="width:35%;">Secretario</th><th style="width:15%;">Turno</th><th style="width:25%;">Cierre</th><th style="width:10%;text-align:center;">Notas</th><th style="width:15%;text-align:right;">Total</th></tr></thead><tbody>'+
-    cie.slice(0,6).map(function(c){return '<tr><td style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(c.secretario||'-')+'</td><td style="white-space:nowrap;">'+(c.turno||'DIA')+'</td><td style="white-space:nowrap;font-size:.82em;">'+esc(c.fechaCierreFormato||'-')+'</td><td style="text-align:center;font-weight:700;">'+(c.cantidadVentas||0)+'</td><td style="color:var(--green);font-weight:700;text-align:right;white-space:nowrap;">'+fmt(c.totalGeneral)+'</td></tr>';}).join('')+'</tbody></table></div>';
+  document.getElementById('dash-cie').innerHTML='<div class="table-responsive"><table style="table-layout:fixed;width:100%;"><thead><tr><th style="width:30%;">Secretario</th><th style="width:12%;">Turno</th><th style="width:22%;">Cierre</th><th style="width:10%;text-align:center;">Notas</th><th style="width:12%;text-align:center;">Anticipos</th><th style="width:14%;text-align:right;">Total</th></tr></thead><tbody>'+
+    cie.slice(0,8).map(function(c){return '<tr><td style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(c.secretario||'-')+'</td><td style="white-space:nowrap;">'+(c.turno||'DIA')+'</td><td style="white-space:nowrap;font-size:.8em;">'+esc(c.fechaCierreFormato||'-')+' '+esc(c.horaCierreFormato||'')+'</td><td style="text-align:center;font-weight:700;">'+(c.cantidadVentas||0)+'</td><td style="text-align:center;font-weight:700;">'+fmt(c.totalAnticipos||0)+'</td><td style="color:var(--green);font-weight:700;text-align:right;white-space:nowrap;">'+fmt(c.totalGeneral)+'</td></tr>';}).join('')+'</tbody></table></div>';
 }
 
 /* ─── PEDIDOS ─── */
@@ -1427,7 +1454,8 @@ function guardarCfgSabor(){
         document.getElementById('tb-suc').innerHTML = s.suc;
         document.getElementById('tb-user').innerHTML = '👤 ' + s.nombre;
         initProdGrid();
-        renderDash(); renderPedidos(); renderCierres(); renderInc();
+        syncSupabaseDown();
+        setInterval(function(){if(SES)syncSupabaseDown();},60000);
       }
     }catch(e){}
   }
