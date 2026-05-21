@@ -381,7 +381,7 @@ const DEFAULT_SABORES = {
   OTROS:[], PEDIDOS:[]
 };
 
-function getCatalogo(){ try{ var data = localStorage.getItem('kollita_enc_catalogo'); if(data){ var parsed=JSON.parse(data); if(parsed && typeof parsed==='object') return parsed; } } catch(e){} return JSON.parse(JSON.stringify(DEFAULT_SABORES)); }
+function getCatalogo(){ try{ var data=localStorage.getItem('kollita_enc_catalogo'); if(data){ var c=JSON.parse(data); if(Array.isArray(c)){ if(c[0]&&c[0].datos&&typeof c[0].datos==='object') c=c[0].datos; else if(c[0]&&c[0].n) c={TRADICIONAL:c}; else c=null; } if(c&&typeof c==='object'&&!Array.isArray(c)){ for(var k in c){if(Array.isArray(c[k])&&c[k].length>0) return c;} } } }catch(e){} return JSON.parse(JSON.stringify(DEFAULT_SABORES)); }
 function saveCatalogo(d){ localStorage.setItem('kollita_enc_catalogo', JSON.stringify(d)); }
 function gDB(){ try{return JSON.parse(localStorage.getItem('kollita_db')||'[]');}catch{return[];} }
 function gArch(){ var a=[], h=new Date(); for(var m=1;m<=12;m++){ var d=new Date(h.getFullYear(),h.getMonth()-m,1); var k='kollita_archivo_'+d.getFullYear()+'_'+(d.getMonth()+1); try{a=a.concat(JSON.parse(localStorage.getItem(k)||'[]'));}catch{} } return a; }
