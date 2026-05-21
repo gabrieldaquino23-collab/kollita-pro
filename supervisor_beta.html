@@ -179,8 +179,18 @@ textarea.fii{resize:vertical;min-height:80px;}
 </head>
 <body>
 <script src="recursos/js/supabase-config.js"></script>
+<script src="recursos/js/datos.js"></script>
 <script src="recursos/js/auth-global.js"></script>
 <script>
+if (typeof cfgLeerPasswords === 'undefined') {
+    function cfgLeerPasswords() {
+        try { return JSON.parse(localStorage.getItem('kollita_system_passwords') || '[]'); }
+        catch(e) { return []; }
+    }
+}
+const PASS_BETA='contra1234';
+const PASS_BETA_ADMIN='admin1234';
+var BETA_ADMIN=false;
 /* Placeholder functions para referencias tempranas en HTML */
 function doLogin(){
   const p=document.getElementById('lg-pass').value;
@@ -193,12 +203,14 @@ function doLogin(){
   var regularPass = reg ? reg.pass : PASS_BETA;
 
   var panelName = '';
-  if(p===adminPass){ BETA_ADMIN=true; panelName = adm.panel; }
-  else if(p===regularPass){ BETA_ADMIN=false; panelName = reg.panel; }
-  else { e.textContent='Contrase�a incorrecta.';e.style.display='block';return; }
+  if(p===adminPass){ BETA_ADMIN=true; panelName = adm ? adm.panel : 'Supervisor Beta Admin'; }
+  else if(p===regularPass){ BETA_ADMIN=false; panelName = reg ? reg.panel : 'Supervisor Beta'; }
+  else { e.textContent='Contrasena incorrecta.';e.style.display='block';return; }
 
-  if(p === 'contra1234') {
-    mostrarModalCambioPassGlobal(panelName, function(){ completarLoginBeta(); });
+  if(p === 'contra1234' || p === PASS_BETA_ADMIN || p === PASS_BETA || !adminPass || !regularPass) {
+    if (typeof mostrarModalCambioPassGlobal === 'function') {
+      mostrarModalCambioPassGlobal(panelName, function(){ completarLoginBeta(); });
+    } else { completarLoginBeta(); }
     return;
   }
   completarLoginBeta();
@@ -215,7 +227,6 @@ function completarLoginBeta(){
   if(badge) badge.style.background = BETA_ADMIN ? 'rgba(255,215,0,.15)' : '';
   if(badge) badge.style.border = BETA_ADMIN ? '1px solid rgba(255,215,0,.3)' : '';
   if(badge) badge.style.color = BETA_ADMIN ? 'var(--yellow)' : '';
-  poblarFiltros();
   renderPedidos();
   renderConfig();
 }
@@ -332,7 +343,7 @@ function cM(id){}
   <!-- CLIENTES -->
   <div class="page" id="page-clientes">
     <div class="filters">
-      <input type="text" class="fi" placeholder="🔍 Buscar cliente en todas las sucursales..." id="cli-q" oninput="buscarClienteGlobal()" style="flex:1;min-width:250px;">
+      <input type="text" class="fi" placeholder="🔍 Buscar cliente en todas las sucursales..." id="cli-q" oninput="buscarClienteGlobal()" style="flex:1;min-width:250px;display:none;">
       <span style="font-size:.78em;color:var(--text2);" id="cli-global-result"></span>
     </div>
     <!-- Tarjetas de sucursales con sus clientes -->
@@ -474,17 +485,81 @@ function cM(id){}
    ═══════════════════════════════════════════════ */
 
 // ─── CONFIG ───
-const PASS_BETA='contra1234';
-const PASS_BETA_ADMIN='contra1234';
-let BETA_ADMIN=false;
-const SUCURSALES = ['3 Pasos', '4to Anillo Canal Isuto', 'Av. Paurito', 'Cuchilla', 'G77 Av. Cambodromo', 'Km8 Doble Vía La Guardia', 'Virgen de Cotoca'];
-const MES_ACTUAL = new Date().toISOString().slice(0,7);
+// PASS_BETA, PASS_BETA_ADMIN y BETA_ADMIN se definen al inicio del primer script
+// SUCURSALES y MES_ACTUAL cargados desde recursos/js/datos.js
 
 // ─── UTILIDADES ───
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function fmt(v) { return (v||0).toLocaleString('es-BO',{minimumFractionDigits:0,maximumFractionDigits:0})+' Bs'; }
 function toast(msg, err){ const t=document.createElement('div'); t.className='toast'+(err?' err':''); t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2800); }
 function cM(id){ const m=document.getElementById(id); if(m) m.classList.remove('open'); }
+
+// ════════════════ SUPABASE SYNC ════════════════
+const SUPA_URL = 'https://wsqhzatsuymjoebzfhpg.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzcWh6YXRzdXltam9lYnpmaHBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTUyMTMsImV4cCI6MjA5NDYzMTIxM30.bFCJBY9PAa8WviEwE8HdO2TjE3ytYM3sD6qFgxJ0pPM';
+async function fetchSupabase(endpoint, method, body) {
+    try {
+        var opts = { method: method||'GET', headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json' } };
+        if (body) opts.body = JSON.stringify(body);
+        var r = await fetch(SUPA_URL + '/rest/v1/' + endpoint, opts);
+        if (!r.ok) return null;
+        return await r.json();
+    } catch(e) { return null; }
+}
+async function betaSyncSupabaseDown(){
+    console.log('[BetaSync] Iniciando sincronizacion desde Supabase...');
+    // Cargar pedidos directo a DATA
+    try { 
+        var p = await fetchSupabase('pedidos?select=id,numero_nota,sucursal_id,cliente,secretario,estado,total,anticipo,saldo_cobrado,metodo_pago,subtotal,descuento,total_entregado,fecha_id,created_at,items,productos,turno,hora&order=created_at.desc&limit=2000'); 
+        if (Array.isArray(p) && p.length) { 
+            var mapped = p.map(function(r){ 
+                var rawItems = (Array.isArray(r.items) && r.items.length) ? r.items : (r.productos || []);
+                if (!Array.isArray(rawItems)) rawItems = [rawItems];
+                return {
+                id: r.id, numeroNota: r.numero_nota||'', sucursal: r.sucursal_id||'', sucursal_id: r.sucursal_id||'', cliente: r.cliente||'',
+                secretario: r.secretario||'', fecha: r.fecha_id||'', fechaID: r.fecha_id||'', total: parseFloat(r.total)||0,
+                estado: r.estado||'PREPARADO', metodoPago: r.metodo_pago||null, subtotal: parseFloat(r.subtotal)||0,
+                descuento: parseFloat(r.descuento)||0, totalEntregado: parseFloat(r.total_entregado)||0,
+                saldoCobrado: parseFloat(r.saldo_cobrado)||0, anticipo: parseFloat(r.anticipo)||0,
+                items: rawItems, productos: rawItems
+            };});
+            // Guardar en DATA directamente
+            SUCURSALES.forEach(function(suc){ DATA[suc].pedidos = mapped.filter(function(p){ return p.sucursal===suc; }); });
+            localStorage.setItem('kollita_db', JSON.stringify(mapped));
+            console.log('[BetaSync] '+mapped.length+' pedidos cargados');
+        }
+    } catch(e) { console.warn('[BetaSync] Error pedidos:', e); }
+    // Cargar turnos directo a DATA
+    try { 
+        var tt = await fetchSupabase('turnos?select=id,sucursal_id,secretario_nombre,tipo_turno,estado,hora_apertura,hora_cierre,total_general,total_efectivo,total_qr,total_anticipos,total_descuentos,cantidad_ventas,cantidad_anulados&order=created_at.desc&limit=500'); 
+        if (Array.isArray(tt) && tt.length) {
+            var ttm = tt.map(function(c){ return {
+                sucursal: c.sucursal_id||'', sucursal_id: c.sucursal_id||'',
+                secretario: c.secretario_nombre||'', turno: c.tipo_turno||'', estado: c.estado||'',
+                fechaCierreFormato: c.hora_cierre||'', horaCierreFormato: c.hora_cierre||'',
+                totalGeneral: parseFloat(c.total_general)||0, totalEfectivo: parseFloat(c.total_efectivo)||0,
+                totalQR: parseFloat(c.total_qr)||0, totalAnticipos: parseFloat(c.total_anticipos)||0,
+                totalDescuentos: parseFloat(c.total_descuentos)||0, cantidadVentas: c.cantidad_ventas||0,
+                cantidadAnulados: c.cantidad_anulados||0
+            };});
+            SUCURSALES.forEach(function(suc){ DATA[suc].cierres = ttm.filter(function(c){ return c.sucursal===suc; }); });
+            localStorage.setItem('turnos_cerrados_kollita', JSON.stringify(ttm));
+            console.log('[BetaSync] '+ttm.length+' turnos cargados');
+        }
+    } catch(e) { console.warn('[BetaSync] Error turnos:', e); }
+    // Cargar reclamos y anulaciones
+    try { var rc = await fetchSupabase('bk_reclamos?select=*&limit=200'); if (Array.isArray(rc) && rc.length) { var rcm = rc.map(function(r){ return { id:r.id, tipo:r.tipo, cliente:r.cliente, descripcion:r.descripcion, monto:r.monto, secretario:r.secretario, fecha:r.fecha, fechaFormato:r.fechaformato||'', horaFormato:r.horaformato||'' }; }); SUCURSALES.forEach(function(suc){ DATA[suc].reclamos = rcm; }); localStorage.setItem('kollita_reclamos', JSON.stringify(rcm)); console.log('[BetaSync] '+rcm.length+' reclamos cargados'); } } catch(e) {}
+    try { var al = await fetchSupabase('bk_log_anulaciones?select=*&limit=200'); if (Array.isArray(al) && al.length) { var alm = al.map(function(a){ return { id:a.id, motivo:a.motivo, supervisor:a.supervisor, fecha:a.fecha, hora:a.hora, turno:a.turno, nota:a.nota }; }); SUCURSALES.forEach(function(suc){ DATA[suc].anulaciones = alm; }); localStorage.setItem('kollita_log_anulaciones', JSON.stringify(alm)); console.log('[BetaSync] '+alm.length+' anulaciones cargadas'); } } catch(e) {}
+    // Cargar clientes
+    try { var cl = await fetchSupabase('bk_clientes?select=*&limit=1000'); if (Array.isArray(cl) && cl.length) { var clm = cl.map(function(r){ return { id:r.id, nombre:r.nombre, telefono:r.telefono||'', fechaRegistro:r.fecharegistro||'', historialPedidos:r.historialpedidos||[] }; }); SUCURSALES.forEach(function(suc){ DATA[suc].clientes = clm; }); localStorage.setItem('kollita_clientes', JSON.stringify(clm)); console.log('[BetaSync] '+clm.length+' clientes cargados'); } } catch(e) {}
+    console.log('[BetaSync] Sincronizacion completada');
+}
+function updateSyncIndicator() {
+    var dot = document.getElementById('sync-indicator');
+    if (!dot) { dot = document.createElement('span'); dot.id = 'sync-indicator'; dot.style.cssText = 'position:fixed;top:10px;right:10px;width:12px;height:12px;border-radius:50%;z-index:9999;'; document.body.appendChild(dot); }
+    if (!navigator.onLine) { dot.style.background = '#ff2d55'; return; }
+    fetchSupabase('sucursales?limit=1').then(function(r) { dot.style.background = r ? '#00e676' : '#ffd60a'; }).catch(function() { dot.style.background = '#ff2d55'; });
+}
 
 function renderBar(items,color){
   if(!items||!items.length) return '<div style="color:var(--text2);text-align:center;padding:20px;">Sin datos</div>';
@@ -545,136 +620,16 @@ var CFG_CATS = {}; // {sucursal: true/false} — sucursales con catálogo person
 var _catEditando = 'global'; // 'global' o nombre de sucursal
 var _catSeleccionada = null; // categoría seleccionada para editar
 
-// ─── DATOS MOCK ───
-function buildMockData(){
-  const hoy = new Date();
-  function fechaDiasAtras(n){ const d=new Date(hoy); d.setDate(d.getDate()-n); return d.toISOString().slice(0,10); }
-  function fechaID(n){ return fechaDiasAtras(n).replace(/-/g,''); }
-  function rand(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
-  function randEl(arr){ return arr[rand(0,arr.length-1)]; }
-
-  const productos = [
-    {n:'Kollita 1L', p:28}, {n:'Kollita 500ml', p:16}, {n:'Agua Vital 2L', p:10},
-    {n:'Coca-Cola 3L', p:15}, {n:'Fanta 2L', p:12}, {n:'Sprite 2L', p:12},
-    {n:'Jugo del Valle 1L', p:14}, {n:'Leche Pil 1L', p:8}, {n:'Yogurt 200ml', p:6},
-    {n:'Galletas Club Social', p:5}, {n:'Pipocas', p:3}, {n:'Chupetes', p:2}
-  ];
-  const clientes = ['Juan Pérez', 'María López', 'Carlos Rojas', 'Ana Quispe', 'Luis Mendoza',
-    'Rosa Torrez', 'Pedro Choque', 'Elena Vargas', 'David Flores', 'Carmen Aruquipa',
-    'José Mamani', 'Laura Huanca', 'Miguel Ticona', 'Sonia Apaza', 'Roberto Paredes'];
-  const secretarios = ['Mario A.', 'Jimena L.', 'Diego C.', 'Paola V.', 'Beto S.'];
-
-  function genPedido(i, suc, diasAtras, estado){
-    const items = [randEl(productos), randEl(productos), randEl(productos)];
-    const cantidades = [rand(1,5), rand(1,4), rand(1,3)];
-    const sub = items.reduce((s,it,j)=>s+it.p*cantidades[j],0);
-    const desc = rand(0,1) ? 0 : rand(5,15);
-    const total = Math.round(sub*(1-desc/100));
-    return {
-      id: i, numeroNota: rand(1,999), cliente: randEl(clientes),
-      secretario: randEl(secretarios), fecha: fechaDiasAtras(diasAtras),
-      fechaID: fechaID(diasAtras), items: items.map((it,j)=>({n:it.n,c:cantidades[j],p:it.p})),
-      subtotal: sub, descuento: Math.round(sub*desc/100), porcentajeDescuento: desc,
-      total: total, estado: estado||'PREPARADO',
-      metodoPago: estado==='ENTREGADO'?randEl(['EFECTIVO','QR','MIXTO']):null,
-      anticipo: estado==='PREPARADO'&&rand(0,2)===0?rand(10,50):0,
-      saldoCobrado: estado==='ENTREGADO'?total:0
-    };
-  }
-
-  function genCierre(suc, diasAtras){
-    var fechaF = fechaDiasAtras(diasAtras);
-    var fechaIDVal = fechaID(diasAtras);
-    // Generar pedidos ENTREGADOS para este cierre
-    var numVentas = rand(5,25);
-    var ventasCierre = [];
-    var totEf = 0, totQR = 0, totMix = 0, totAnt = 0, totGen = 0;
-    var ventasEf = 0, ventasQR = 0, ventasMix = 0;
-    for(var i=0; i<numVentas; i++){
-      var p = genPedido(rand(1,99999), suc, diasAtras, 'ENTREGADO');
-      p.sucursal = suc;
-      p.fechaIDEntrega = fechaIDVal;
-      p.turnoEntrega = randEl(['DIA','TARDE','NOCHE']);
-      if(p.metodoPago==='EFECTIVO'){ totEf += p.total; ventasEf++; }
-      else if(p.metodoPago==='QR'){ totQR += p.total; ventasQR++; }
-      else { totMix += p.total; ventasMix++; }
-      totGen += p.total;
-      ventasCierre.push(p);
-    }
-    // Generar algunos preparados (no entregados en este turno)
-    var numPrep = rand(0,8);
-    var preps = [];
-    for(var j=0; j<numPrep; j++){
-      var pp = genPedido(rand(1,99999), suc, diasAtras, 'PREPARADO');
-      pp.anticipo = rand(0,2)===0 ? rand(10,50) : 0;
-      if(pp.anticipo > 0) totAnt += pp.anticipo;
-      preps.push(pp);
-    }
-    var totGenFinal = totGen + totAnt;
-    return {
-      id: Date.now()+rand(1,9999),
-      secretario: randEl(secretarios),
-      turno: randEl(['MAÑANA','TARDE','NOCHE']),
-      fechaCierreFormato: fechaF+'T'+String(rand(8,22)).padStart(2,'0')+':'+String(rand(0,59)).padStart(2,'0'),
-      horaCierreFormato: String(rand(8,22)).padStart(2,'0')+':'+String(rand(0,59)).padStart(2,'0'),
-      cantidadVentas: numVentas,
-      cantidadPreparadas: numPrep,
-      totalGeneral: totGenFinal,
-      totalEfectivo: totEf,
-      totalQR: totQR,
-      totalMixtoEfectivo: Math.round(totMix*0.6),
-      totalMixtoQR: Math.round(totMix*0.4),
-      totalAnticipos: totAnt,
-      totalAnticiposEfectivo: Math.round(totAnt*0.7),
-      totalAnticiposQR: Math.round(totAnt*0.3),
-      ventasEfectivo: ventasEf,
-      ventasQR: ventasQR,
-      ventasMixto: ventasMix,
-      cantidadAnulados: rand(0,3),
-      ventas: ventasCierre,
-      preparadas: preps
-    };
-  }
-
-  function genReclamo(suc, diasAtras){
-    return {
-      tipo: randEl(['RECLAMO','OBSEQUIO','REPOSICIÓN','PROMOCIÓN']),
-      cliente: randEl(clientes), descripcion: randEl(['Producto vencido','Mala atención','Pedido incorrecto','Demora excesiva','Producto dañado','No aplicaron descuento']),
-      monto: rand(10,80), secretario: randEl(secretarios),
-      fecha: fechaDiasAtras(diasAtras), fechaFormato: fechaDiasAtras(diasAtras).split('-').reverse().join('/')
-    };
-  }
-
-  const data = {};
-  SUCURSALES.forEach(suc => {
-    const pedidos = [];
-    for(let i=0; i<35; i++){
-      const dias = rand(0,60);
-      const estados = ['PREPARADO','PREPARADO','PREPARADO','ENTREGADO','ENTREGADO','ANULADO'];
-      pedidos.push(genPedido(i+1, suc, dias, randEl(estados)));
-    }
-    const cierres = [];
-    for(let i=0; i<rand(8,20); i++){ cierres.push(genCierre(suc, rand(0,30))); }
-    const reclamos = [];
-    for(let i=0; i<rand(1,6); i++){ reclamos.push(genReclamo(suc, rand(0,40))); }
-    const anulaciones = pedidos
-      .filter(p=>p.estado==='ANULADO')
-      .map(p=>({
-        id: Date.now()+rand(1,9999), motivo: randEl(['Cliente cambió de opinión','Error en pedido','Producto no disponible','Error de precio']),
-        supervisor:'Supervisor Beta', fecha: fechaDiasAtras(rand(1,10)).split('-').reverse().join('/'),
-        hora: String(rand(8,22)).padStart(2,'0')+':'+String(rand(0,59)).padStart(2,'0'),
-        nota: { numeroNota: p.numeroNota, cliente: p.cliente, total: p.total, secretario: p.secretario, items: p.items||[], metodoPago: p.metodoPago||null },
-        sucursal: suc
-      }));
-    data[suc] = { pedidos, cierres, reclamos, anulaciones };
-  });
-  return data;
-}
+// ─── DATOS (sin mock, solo datos reales desde Supabase)
+function buildMockData(){ return {}; }
 
 function doLogin(){
   const p=document.getElementById('lg-pass').value;
   const e=document.getElementById('lg-err');
   e.style.display='none';
+  if (typeof cfgLeerPasswords === 'undefined') {
+    e.textContent='Error: Sistema no cargado. Recarga la pagina.'; e.style.display='block'; return;
+  }
   var pws = cfgLeerPasswords();
   var adm = pws.find(function(x){ return x.panel.indexOf('Admin')>=0; });
   var reg = pws.find(function(x){ return x.panel.indexOf('Admin')<0 && x.panel.indexOf('Beta')>=0; });
@@ -682,12 +637,14 @@ function doLogin(){
   var regularPass = reg ? reg.pass : PASS_BETA;
 
   var panelName = '';
-  if(p===adminPass){ BETA_ADMIN=true; panelName = adm.panel; }
-  else if(p===regularPass){ BETA_ADMIN=false; panelName = reg.panel; }
-  else { e.textContent='Contrase�a incorrecta.';e.style.display='block';return; }
+  if(p===adminPass){ BETA_ADMIN=true; panelName = adm ? adm.panel : 'Supervisor Beta Admin'; }
+  else if(p===regularPass){ BETA_ADMIN=false; panelName = reg ? reg.panel : 'Supervisor Beta'; }
+  else { e.textContent='Contrasena incorrecta.';e.style.display='block';return; }
 
-  if(p === 'contra1234') {
-    mostrarModalCambioPassGlobal(panelName, function(){ completarLoginBeta(); });
+  if(p === 'contra1234' || p === PASS_BETA_ADMIN || p === PASS_BETA || !adminPass || !regularPass) {
+    if (typeof mostrarModalCambioPassGlobal === 'function') {
+      mostrarModalCambioPassGlobal(panelName, function(){ completarLoginBeta(); });
+    } else { completarLoginBeta(); }
     return;
   }
   completarLoginBeta();
@@ -754,6 +711,25 @@ function poblarFiltros(){
 // ─── PEDIDOS ───
 function renderPedidos(){
   if(!DATA) return;
+
+  // Cargar pedidos reales desde localStorage a DATA
+  try {
+    var db = JSON.parse(localStorage.getItem('kollita_db')||'[]');
+    SUCURSALES.forEach(function(suc){
+      DATA[suc].pedidos = db.filter(function(p){ return p.sucursal===suc || p.sucursal_id===suc; });
+    });
+    // Cargar archivos mensuales
+    var hoy = new Date();
+    for (var m=1; m<=24; m++) {
+      var d = new Date(hoy.getFullYear(), hoy.getMonth()-m, 1);
+      var clave = 'kollita_archivo_'+d.getFullYear()+'_'+String(d.getMonth()+1).padStart(2,'0');
+      var arch = JSON.parse(localStorage.getItem(clave)||'[]');
+      arch.forEach(function(p){
+        var suc = p.sucursal||p.sucursal_id||'';
+        if (DATA[suc]) { DATA[suc].pedidos.push(p); }
+      });
+    }
+  } catch(e) {}
 
   // Cache de pedidos en cierres (UNA lectura)
   _betaCierrePedidoIds = new Set();
@@ -916,12 +892,7 @@ function renderPedidos(){
       } else if(est2==='PREPARADO'){
         acciones='<button class="btn-d" style="padding:4px 8px;font-size:.75em;" onclick="event.stopPropagation();abrirAnularPed(\''+esc(p.sucursal||'')+'\',\''+esc(String(p.id||''))+'\')">❌ Anular</button>';
       } else if(est2==='ENTREGADO'){
-        var enCierre = pedidoEnCierre(p.sucursal, p.id);
-        if(enCierre){
-          acciones='<span style="display:inline-flex;gap:4px;white-space:nowrap;"><span style="color:var(--text2);font-size:.9em;" title="Cerrado en caja — no se puede anular ni traspasar">🔒</span></span>';
-        } else {
-          acciones='<span style="display:inline-flex;gap:4px;white-space:nowrap;"><button class="btn-d" style="padding:4px 8px;font-size:.75em;" onclick="event.stopPropagation();abrirAnularPed(\''+esc(p.sucursal||'')+'\',\''+esc(String(p.id||''))+'\')">❌ Anular</button><button class="btn-t" onclick="event.stopPropagation();traspasarAPreparado(\''+esc(p.sucursal||'')+'\',\''+esc(String(p.id||''))+'\')">🔄 Preparado</button></span>';
-        }
+        acciones='<span style="display:inline-flex;gap:4px;white-space:nowrap;"><span style="color:var(--text2);font-size:.9em;" title="Pedido ENTREGADO — no se puede anular ni traspasar">🔒</span></span>';
       } else if(est2==='ANULADO'){
         acciones='<button class="btn-r" style="padding:4px 8px;font-size:.75em;" onclick="event.stopPropagation();reactivarPedido(\''+esc(p.sucursal||'')+'\',\''+esc(String(p.id||''))+'\')">♻️ Reactivar</button>';
       }
@@ -1084,7 +1055,7 @@ function renderCierres(){
   (sucF?[sucF]:SUCURSALES).forEach(function(suc){
     (DATA[suc].cierres||[]).forEach(function(c){ rows.push({...c,sucursal:suc}); });
   });
-  if(mesF) rows=rows.filter(function(c){ return (c.fechaCierreFormato||'').startsWith(mesF.slice(0,4)); });
+  if(mesF) rows=rows.filter(function(c){ return (c.fechaCierreFormato||'').startsWith(mesF); });
   if(q) rows=rows.filter(function(c){ return (c.secretario||'').toLowerCase().includes(q)||(c.turno||'').toLowerCase().includes(q); });
   rows.sort(function(a,b){ return (b.fechaCierreFormato||'').localeCompare(a.fechaCierreFormato||''); });
 
@@ -1215,16 +1186,20 @@ function renderInc(){
   const mesF=document.getElementById('inc-mes').value;
   const q=(document.getElementById('inc-q').value||'').toLowerCase();
   let items=[];
-  (sucF?[sucF]:SUCURSALES).forEach(function(suc){
-    (DATA[suc].reclamos||[]).forEach(function(r){items.push({tipo:r.tipo,suc,cli:r.cliente,desc:r.descripcion,monto:r.monto||0,sec:r.secretario,fecha:r.fecha,fFmt:r.fechaFormato,_raw:r});});
-    (DATA[suc].anulaciones||[]).forEach(function(a){
-      items.push({
-        tipo:'ANULACION',suc,cli:a.nota?.cliente||'—',
-        desc:'Nota Nº'+esc(String(a.nota?.numeroNota||'?'))+' — '+esc(a.motivo||'sin motivo'),
-        monto:a.nota?.total||0,sec:a.supervisor,
-        fecha:a.fecha?a.fecha.split('/').reverse().join('-'):'',fFmt:a.fecha,
-        _items:a.nota?.items||[],_metodoPago:a.nota?.metodoPago||null
-      });
+  // Cargar reclamos directo de DATA (sin duplicar por sucursal)
+  var allReclamos = [];
+  SUCURSALES.forEach(function(suc){ if (DATA[suc].reclamos && DATA[suc].reclamos.length) { allReclamos = DATA[suc].reclamos; } });
+  allReclamos.forEach(function(r){items.push({tipo:r.tipo,suc:r.sucursal||'',cli:r.cliente,desc:r.descripcion,monto:r.monto||0,sec:r.secretario,fecha:r.fecha,fFmt:r.fechaFormato||r.fechaformato||'',_raw:r});});
+  // Cargar anulaciones (sin duplicar)
+  var allAnulaciones = [];
+  SUCURSALES.forEach(function(suc){ if (DATA[suc].anulaciones && DATA[suc].anulaciones.length) { allAnulaciones = DATA[suc].anulaciones; } });
+  allAnulaciones.forEach(function(a){
+    items.push({
+      tipo:'ANULACION',suc:a.sucursal||'',cli:a.nota?.cliente||'—',
+      desc:'Nota Nº'+esc(String(a.nota?.numeroNota||'?'))+' — '+esc(a.motivo||'sin motivo'),
+      monto:a.nota?.total||0,sec:a.supervisor,
+      fecha:a.fecha?a.fecha.split('/').reverse().join('-'):'',fFmt:a.fecha,
+      _items:a.nota?.items||[],_metodoPago:a.nota?.metodoPago||null
     });
   });
   items=items.filter(function(it){
@@ -1290,15 +1265,24 @@ function verDetalleInc(idx){
 
 // ─── CLIENTES ───
 function gAllPedidos(){
-  try{return JSON.parse(localStorage.getItem('kollita_db')||'[]');}catch(e){return[];}
+  try{ var p = JSON.parse(localStorage.getItem('kollita_db')||'[]'); if (p.length) return p; } catch(e){}
+  // Fallback: leer de DATA (poblado por Supabase sync)
+  var all = [];
+  SUCURSALES.forEach(function(suc){ if (DATA[suc] && DATA[suc].pedidos) { all = all.concat(DATA[suc].pedidos); } });
+  return all;
 }
 
 var _cliCache={};
+var _cliPedidos=[];
 
 function renderClientes(){
   _cliCache={};
   var clientesReales=[];
-  try{ clientesReales=JSON.parse(localStorage.getItem('kollita_clientes')||'[]'); }catch(e){}
+  try{ clientesReales=JSON.parse(localStorage.getItem('kollita_clientes')||'[]'); } catch(e){}
+  // Fallback: si no hay en localStorage, usar DATA
+  if (!clientesReales.length && DATA) {
+    SUCURSALES.forEach(function(suc){ if (DATA[suc].clientes && DATA[suc].clientes.length) { clientesReales = DATA[suc].clientes; } });
+  }
   var todos=gAllPedidos();
   var q=(document.getElementById('cli-q').value||'').toLowerCase();
   var gridHtml='';
@@ -1349,9 +1333,9 @@ function renderClientes(){
       }
     });
     var clientes=Object.values(clientesMap);
-    if(q) clientes=clientes.filter(function(c){return c.nombre.toLowerCase().includes(q);});
-    clientes.sort(function(a,b){return b.total-a.total;});
+    clientes.sort(function(a,b){return a.nombre.localeCompare(b.nombre,'es');});
     _cliCache[suc]=clientes;
+    if(q) clientes=clientes.filter(function(c){return c.nombre.toLowerCase().includes(q);});
     var top3=clientes.slice(0,3);
     var topHtml=top3.length===0?'<div style="color:var(--text2);font-size:.75em;padding:4px 0;">Sin clientes registrados</div>'
       :top3.map(function(c,i){
@@ -1377,15 +1361,97 @@ function renderClientes(){
   document.getElementById('cli-casas-grid').innerHTML=gridHtml||'<div style="color:var(--text2);text-align:center;padding:40px;">Sin datos de clientes</div>';
 }
 
+function filtrarClientesSuc(suc, q){
+  // Filtrar clientes dentro de una sucursal por nombre
+  if(!_cliCache[suc]) return;
+  var todas = document.querySelectorAll('.casa-card');
+  todas.forEach(function(card){
+    var hdr = card.querySelector('.casa-nombre');
+    if(hdr && hdr.textContent === suc){
+      var body = card.querySelector('.casa-body');
+      if(!body) return;
+      var clientes = _cliCache[suc];
+      var filtrados = q ? clientes.filter(function(c){ return c.nombre.toLowerCase().includes(q.toLowerCase()); }) : clientes;
+      // Actualizar contador
+      var countEl = card.querySelector('.casa-count');
+      if(countEl) countEl.textContent = filtrados.length + ' clientes';
+      // Actualizar top 3
+      var top3 = filtrados.slice(0,3);
+      var topHtml = top3.length===0?'<div style="color:var(--text2);font-size:.75em;padding:4px 0;">Sin resultados</div>'
+        :top3.map(function(c,i){ return'<div class="casa-sec-item"><span class="casa-sec-nombre">'+(i+1)+'. '+esc(c.nombre)+'</span><span style="font-size:.72em;color:var(--green);">'+fmt(c.total)+'</span></div>'; }).join('');
+      var topDiv = body.querySelector('.casa-sec-item')?.parentElement;
+      if(topDiv) topDiv.innerHTML = topHtml;
+      // Actualizar stats
+      var stats = body.querySelectorAll('[style*="grid-template-columns"] > div > div:last-child');
+      if(stats.length >= 3){
+        stats[0].textContent = filtrados.reduce(function(s,c){return s+c.entregados;},0);
+        stats[1].textContent = filtrados.reduce(function(s,c){return s+c.preparados;},0);
+        stats[2].textContent = filtrados.reduce(function(s,c){return s+c.anulados;},0);
+      }
+      // Actualizar boton
+      var btn = body.querySelector('.btn-g');
+      if(btn) btn.textContent = '👁️ Ver todos ('+filtrados.length+')';
+    }
+  });
+}
+
 function buscarClienteGlobal(){
-  renderClientes();
+  if(Object.keys(_cliCache).length===0){ renderClientes(); return; }
   var q=(document.getElementById('cli-q').value||'').toLowerCase().trim();
   var el=document.getElementById('cli-global-result');
-  if(q&&el){
-    var total=0;
-    SUCURSALES.forEach(function(suc){total+=(_cliCache[suc]||[]).length;});
-    el.textContent=total+' clientes encontrados';
-  }else if(el){el.textContent='';}
+  var gridHtml='';
+  var totalClientes=0;
+  SUCURSALES.forEach(function(suc){
+    var clientes=_cliCache[suc]||[];
+    var display=q?clientes.filter(function(c){return c.nombre.toLowerCase().includes(q);}):clientes;
+    totalClientes+=display.length;
+    var top3=display.slice(0,3);
+    var topHtml=top3.length===0?'<div style="color:var(--text2);font-size:.75em;padding:4px 0;">Sin clientes registrados</div>'
+      :top3.map(function(c,i){
+        return'<div class="casa-sec-item"><span class="casa-sec-nombre">'+(i+1)+'. '+esc(c.nombre)+'</span><span style="font-size:.72em;color:var(--green);">'+fmt(c.total)+'</span></div>';
+      }).join('');
+    gridHtml+='<div class="casa-card" style="cursor:pointer;" onclick="abrirClientesSucursal(\''+esc(suc)+'\')">'+
+      '<div class="casa-hdr">'+
+        '<div style="display:flex;align-items:center;"><span class="casa-icono">🏪</span><span class="casa-nombre">'+esc(suc)+'</span></div>'+
+        '<span class="casa-count">'+display.length+' clientes</span>'+
+      '</div>'+
+      '<div class="casa-body">'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;">'+
+          '<div style="background:var(--s3);border-radius:6px;padding:6px;text-align:center;"><div style="font-size:.6em;color:var(--text2);">Entregados</div><div style="font-weight:700;color:var(--green);">'+display.reduce(function(s,c){return s+c.entregados;},0)+'</div></div>'+
+          '<div style="background:var(--s3);border-radius:6px;padding:6px;text-align:center;"><div style="font-size:.6em;color:var(--text2);">Preparados</div><div style="font-weight:700;color:var(--orange);">'+display.reduce(function(s,c){return s+c.preparados;},0)+'</div></div>'+
+          '<div style="background:var(--s3);border-radius:6px;padding:6px;text-align:center;"><div style="font-size:.6em;color:var(--text2);">Anulados</div><div style="font-weight:700;color:var(--red);">'+display.reduce(function(s,c){return s+c.anulados;},0)+'</div></div>'+
+        '</div>'+
+        '<div style="font-size:.7em;font-weight:700;color:var(--text2);text-transform:uppercase;margin-bottom:4px;">🏆 Top clientes</div>'+
+        topHtml+
+        '<div style="text-align:center;margin-top:8px;"><button class="btn-g" style="padding:4px 12px;font-size:.72em;" onclick="event.stopPropagation();abrirClientesSucursal(\''+esc(suc)+'\')">👁️ Ver todos ('+display.length+')</button></div>'+
+      '</div>'+
+    '</div>';
+  });
+  document.getElementById('cli-casas-grid').innerHTML=gridHtml||'<div style="color:var(--text2);text-align:center;padding:40px;">Sin datos de clientes</div>';
+  if(el){ el.textContent=q?totalClientes+' clientes encontrados':''; }
+}
+
+function filtrarClientesModal(suc, q){
+  var tbody = document.getElementById('cli-suc-tbody');
+  if (!tbody) return;
+  var clientes = _cliCache[suc] || [];
+  var filtrados = q ? clientes.filter(function(c){ return c.nombre.toLowerCase().includes(q.toLowerCase()); }) : clientes;
+  tbody.innerHTML = filtrados.length === 0
+    ? '<tr><td colspan="7" style="text-align:center;color:var(--text2);padding:20px;">Sin resultados</td></tr>'
+    : filtrados.map(function(c){
+      return'<tr style="cursor:pointer;" onclick="verClienteBeta(\''+esc(c.nombre)+'\',\''+esc(suc)+'\')">'+
+        '<td style="font-weight:700;">'+esc(c.nombre)+(c.telefono?'<br><span style="font-size:.72em;color:var(--text2);">📞 '+esc(c.telefono)+'</span>':'')+'</td>'+
+        '<td style="text-align:center;">'+c.count+'</td>'+
+        '<td style="text-align:center;color:var(--green);">'+c.entregados+'</td>'+
+        '<td style="text-align:center;color:var(--orange);">'+c.preparados+'</td>'+
+        '<td style="text-align:center;'+(c.anulados>0?'color:var(--red);font-weight:700;':'')+'">'+(c.anulados||'—')+'</td>'+
+        '<td style="color:var(--green);font-weight:700;">'+fmt(c.total)+'</td>'+
+        '<td style="font-size:.78em;">'+esc(c.ultima||'—')+'</td>'+
+      '</tr>';
+    }).join('');
+  // Actualizar titulo
+  var title = document.getElementById('cli-modal-title');
+  if (title) title.innerHTML = '🏪 '+esc(suc)+' — <span style="color:var(--beta);">'+filtrados.length+' clientes</span> <span class="mc" onclick="cM(\'modal-cli\')">✕</span>';
 }
 
 function abrirClientesSucursal(suc){
@@ -1401,7 +1467,8 @@ function abrirClientesSucursal(suc){
       '<div class="sc" style="--ac:var(--orange)"><div class="sl">Pedidos totales</div><div class="sv">'+clientes.reduce(function(s,c){return s+c.count;},0)+'</div></div>'+
       '<div class="sc" style="--ac:var(--purple)"><div class="sl">Promedio/cliente</div><div class="sv" style="font-size:1.2em;">'+fmt(clientes.length?Math.round(clientes.reduce(function(s,c){return s+c.total;},0)/clientes.length):0)+'</div></div>'+
     '</div>'+
-    '<div class="tw"><div class="table-responsive"><table><thead><tr><th>Cliente</th><th>Pedidos</th><th>Entregados</th><th>Preparados</th><th>Anulados</th><th>Total gastado</th><th>Último</th></tr></thead><tbody>'+
+    '<input type="text" class="fi" placeholder="🔍 Buscar cliente en '+esc(suc)+'..." id="cli-suc-search" oninput="filtrarClientesModal(\''+esc(suc)+'\',this.value)" style="width:100%;margin-bottom:12px;font-size:.85em;padding:10px 12px;">'+
+    '<div class="tw"><div class="table-responsive"><table><thead><tr><th>Cliente</th><th>Pedidos</th><th>Entregados</th><th>Preparados</th><th>Anulados</th><th>Total gastado</th><th>Último</th></tr></thead><tbody id="cli-suc-tbody">'+
     clientes.map(function(c){
       return'<tr style="cursor:pointer;" onclick="verClienteBeta(\''+esc(c.nombre)+'\',\''+esc(suc)+'\')">'+
         '<td style="font-weight:700;">'+esc(c.nombre)+(c.telefono?'<br><span style="font-size:.72em;color:var(--text2);">📞 '+esc(c.telefono)+'</span>':'')+'</td>'+
@@ -1422,34 +1489,128 @@ function abrirClientesSucursal(suc){
 function verClienteBeta(nombre,suc){
   var todos=gAllPedidos();
   var pedidos=todos.filter(function(p){return p.cliente===nombre;});
+  if (!pedidos.length) {
+    try {
+      var clientes = JSON.parse(localStorage.getItem('kollita_clientes')||'[]');
+      if (!clientes.length && DATA) { SUCURSALES.forEach(function(s){ if (DATA[s].clientes && DATA[s].clientes.length) { clientes = DATA[s].clientes; } }); }
+      var cli = clientes.find(function(c){ return c.nombre===nombre; });
+      if (cli && cli.historialPedidos) { pedidos = cli.historialPedidos; }
+    } catch(e) {}
+  }
   var entregados=pedidos.filter(function(p){return p.estado==='ENTREGADO';});
+  var preparados=pedidos.filter(function(p){return(p.estado||'PREPARADO')==='PREPARADO';});
+  var anulados=pedidos.filter(function(p){return p.estado==='ANULADO';});
   var totalGastado=entregados.reduce(function(s,p){return s+(p.saldoCobrado!=null?p.saldoCobrado:(p.totalEntregado||p.total||0));},0);
   var prodMap={};
   entregados.forEach(function(p){(p.items||[]).forEach(function(it){prodMap[it.n]=(prodMap[it.n]||0)+(it.c||1);});});
   var topProd=Object.entries(prodMap).sort(function(a,b){return b[1]-a[1];}).slice(0,6);
-  document.getElementById('cli-modal-title').innerHTML='👤 '+esc(nombre)+' <span class="mc" onclick="cM(\'modal-cli\')">✕</span>';
+  var telefono='';
+  try{
+    var clientesAll=JSON.parse(localStorage.getItem('kollita_clientes')||'[]');
+    var cliData=clientesAll.find(function(c){return c.nombre===nombre;});
+    if(cliData) telefono=cliData.telefono||'';
+  }catch(e){}
+  document.getElementById('cli-modal-title').innerHTML='👤 '+esc(nombre)+' — <span style="color:var(--beta);font-size:.8em;">'+esc(suc)+'</span> <span class="mc" onclick="cM(\'modal-cli\')">✕</span>';
   var html='<div class="sg" style="margin-bottom:16px;">'+
-    '<div class="sc" style="--ac:var(--green)"><div class="sl">Pedidos entregados</div><div class="sv">'+entregados.length+'</div><div class="ss">'+fmt(totalGastado)+'</div></div>'+
-    '<div class="sc" style="--ac:var(--orange)"><div class="sl">Preparados activos</div><div class="sv">'+pedidos.filter(function(p){return(p.estado||'PREPARADO')==='PREPARADO';}).length+'</div></div>'+
-    '<div class="sc" style="--ac:var(--red)"><div class="sl">Anulaciones</div><div class="sv">'+pedidos.filter(function(p){return p.estado==='ANULADO';}).length+'</div></div>'+
-    '<div class="sc" style="--ac:var(--beta)"><div class="sl">Sucursales</div><div class="sv">'+[...new Set(pedidos.map(function(p){return p.sucursal||suc;}))].length+'</div></div>'+
+    '<div class="sc" style="--ac:var(--green)"><div class="sl">Entregados</div><div class="sv">'+entregados.length+'</div><div class="ss">'+fmt(totalGastado)+'</div></div>'+
+    '<div class="sc" style="--ac:var(--orange)"><div class="sl">Preparados</div><div class="sv">'+preparados.length+'</div></div>'+
+    '<div class="sc" style="--ac:var(--red)"><div class="sl">Anulados</div><div class="sv">'+anulados.length+'</div></div>'+
+    '<div class="sc" style="--ac:var(--beta)"><div class="sl">Total pedidos</div><div class="sv">'+pedidos.length+'</div></div>'+
   '</div>';
+  if(telefono) html+='<div style="color:var(--text2);font-size:.82em;margin-bottom:14px;">📞 '+esc(telefono)+'</div>';
   if(topProd.length) html+='<div class="stitle">🏆 Productos favoritos</div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">'+
     topProd.map(function(e){return'<span style="background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:.82em;"><span style="color:var(--text);">'+esc(e[0])+'</span> <span style="color:var(--green);font-weight:700;">'+e[1]+'u</span></span>';}).join('')+
     '</div>';
-  html+='<div class="stitle">📋 Historial de pedidos</div>'+
-    '<div class="tw"><div class="table-responsive"><table><thead><tr><th>Sucursal</th><th>Nota</th><th>Fecha</th><th>Total</th><th>Estado</th></tr></thead><tbody>'+
-    pedidos.sort(function(a,b){return(b.fecha||'').localeCompare(a.fecha||'');}).slice(0,20).map(function(p){
-      return'<tr><td style="color:var(--beta);font-size:.78em;">'+esc(p.sucursal||suc)+'</td>'+
+  var pedidosOrdenados=pedidos.sort(function(a,b){return(b.fecha||'').localeCompare(a.fecha||'');}).slice(0,200);
+  _cliPedidos=pedidosOrdenados;
+  html+='<div class="stitle">📋 Historial de pedidos ('+pedidosOrdenados.length+' de '+pedidos.length+')</div>'+
+    '<div class="tw"><div class="table-responsive"><table><thead><tr><th>Sucursal</th><th>Nota</th><th>Fecha / Hora</th><th>Total</th><th>Estado</th></tr></thead><tbody>'+
+    pedidosOrdenados.map(function(p,i){
+      var estado=(p.estado||'PREPARADO').toUpperCase();
+      var badgeClass=estado==='ENTREGADO'?'be':estado==='ANULADO'?'ba':'bp';
+      return'<tr style="cursor:pointer;" onclick="verDetallePedidoCliente('+i+')"><td style="color:var(--beta);font-size:.78em;">'+esc(p.sucursal||suc)+'</td>'+
         '<td style="font-weight:700;">Nº '+esc(String(p.numeroNota||'—'))+'</td>'+
-        '<td style="font-size:.8em;">'+esc(p.fecha||'—')+'</td>'+
+        '<td style="font-size:.8em;">'+esc(p.fecha||'—')+(p.hora?'<br><span style="color:var(--text2);font-size:.72em;">'+esc(p.hora)+'</span>':'')+'</td>'+
         '<td style="font-weight:700;">'+fmt(p.total)+'</td>'+
-        '<td><span class="badge '+(p.estado==='ENTREGADO'?'be':p.estado==='ANULADO'?'ba':'bp')+'">'+(p.estado||'PREPARADO')+'</span></td>'+
+        '<td><span class="badge '+badgeClass+'">'+estado+'</span></td>'+
       '</tr>';
     }).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--text2);padding:14px;">Sin pedidos</td></tr>'+
     '</tbody></table></div></div>';
   document.getElementById('cli-modal-body').innerHTML=html;
   document.getElementById('modal-cli').classList.add('open');
+}
+
+function verDetallePedidoCliente(idx){
+  var p=_cliPedidos[idx];
+  if(!p) return;
+  // Si no tiene items, buscar el pedido completo en Supabase
+  if (!p.items || !p.items.length) {
+    fetchPedidoDetalle(p.id);
+    return; // mostrará el modal cuando llegue la respuesta
+  }
+  mostrarDetallePedidoCliente(p);
+}
+
+async function fetchPedidoDetalle(pedidoId){
+  try {
+    var r = await fetchSupabase('pedidos?id=eq.'+encodeURIComponent(pedidoId)+'&select=*');
+    if (r && r.length) { mostrarDetallePedidoCliente(r[0]); return; }
+  } catch(e) {}
+  // Si falla, mostrar lo que tengamos
+  mostrarDetallePedidoCliente(_cliPedidos.find(function(x){ return x.id===pedidoId; }) || {});
+}
+
+function mostrarDetallePedidoCliente(p){
+  var est=(p.estado||'PREPARADO').toUpperCase();
+  var bc=est==='PREPARADO'?'bp':est==='ENTREGADO'?'be':est==='ANULADO'?'ba':'bp';
+  var items=p.items||[];
+  var itemsHtml=items.length?items.map(function(it){
+    return'<tr style="border-top:1px solid var(--border);"><td style="padding:8px 12px;font-size:.85em;">'+esc(it.n)+'</td><td style="padding:8px;text-align:center;font-weight:700;">'+(it.c||1)+'</td><td style="padding:8px;text-align:right;color:var(--text2);">'+(it.p||0).toFixed(2)+' Bs</td><td style="padding:8px 12px;text-align:right;font-weight:700;">'+((it.c||1)*(it.p||0)).toFixed(2)+' Bs</td></tr>';
+  }).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--text2);padding:14px;">Sin detalle de productos</td></tr>';
+  var subtotalItems=items.reduce(function(s,it){return s+(it.c||1)*(it.p||0);},0);
+  var subtotal=subtotalItems||p.subtotal||p.total||0;
+  var descuento=p.descuento||p.porcentajeDescuento||0;
+  var total=p.total||0;
+  var anticipo=p.anticipo||0;
+  var metodo=p.metodoPago||'—';
+  var entregadoPor=p.entregadoPor||p.secretario_entrega||(est==='ENTREGADO'?p.secretario||'—':'Pendiente');
+  var fechaEntrega=p.fechaIDEntrega||p.fecha_entrega||(est==='ENTREGADO'?p.fecha:'—');
+  var horaEntrega=p.hora_entrega||(est==='ENTREGADO'?p.hora:'—');
+  var saldoCobrado=p.saldoCobrado;
+  var efectivo=p.efectivoPagado||0;
+  var qr=p.qrPagado||0;
+
+  document.getElementById('ped-modal-title').innerHTML='📋 Detalle Pedido Nº '+esc(String(p.numeroNota||'—'))+' — '+esc(p.cliente||'—')+' <span class="mc" onclick="cM(\'modal-ped\')">✕</span>';
+
+  var html='<div style="background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;font-size:.85em;display:grid;grid-template-columns:1fr 1fr;gap:8px;">'+
+    '<div><span style="color:var(--text2);">Cliente: </span><strong>'+esc(p.cliente||'—')+'</strong></div>'+
+    '<div><span style="color:var(--text2);">Estado: </span><span class="badge '+bc+'">'+est+'</span></div>'+
+    '<div><span style="color:var(--text2);">Secretario: </span>'+esc(p.secretario||'—')+'</div>'+
+    '<div><span style="color:var(--text2);">Entregado por: </span>'+esc(entregadoPor)+'</div>'+
+    '<div><span style="color:var(--text2);">Fecha: </span>'+esc(p.fecha||'—')+'</div>'+
+    '<div><span style="color:var(--text2);">Hora: </span>'+esc(p.hora||'—')+'</div>'+
+    (est==='ENTREGADO'?'<div><span style="color:var(--text2);">Fecha entrega: </span>'+esc(fechaEntrega)+'</div><div><span style="color:var(--text2);">Hora entrega: </span>'+esc(horaEntrega)+'</div>':'<div><span style="color:var(--text2);">Sucursal: </span>'+esc(p.sucursal||'—')+'</div>')+
+    '<div><span style="color:var(--text2);">Método de pago: </span><strong>'+esc(metodo)+'</strong></div>'+
+    '</div>';
+
+  html+='<div style="background:var(--s2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;">'+
+    '<div class="table-responsive"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:rgba(255,107,157,.1);">'+
+    '<th style="padding:8px 12px;text-align:left;font-size:.72em;color:var(--text2);">Producto</th>'+
+    '<th style="padding:8px;text-align:center;font-size:.72em;color:var(--text2);">Cant.</th>'+
+    '<th style="padding:8px;text-align:right;font-size:.72em;color:var(--text2);">Precio</th>'+
+    '<th style="padding:8px 12px;text-align:right;font-size:.72em;color:var(--text2);">Subtotal</th></tr></thead><tbody>'+itemsHtml+'</tbody></table></div></div>';
+
+  html+='<div style="background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:.85em;">'+
+    '<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:var(--text2);">Subtotal (bruto): </span><span>'+fmt(subtotal)+'</span></div>'+
+    (descuento>0?'<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:var(--red);">Descuento '+(p.porcentajeDescuento?esc(p.porcentajeDescuento)+'%':'')+': </span><span style="color:var(--red);">- '+fmt(descuento)+'</span></div>':'')+
+    '<div style="display:flex;justify-content:space-between;margin-bottom:4px;font-weight:700;"><span>Total: </span><span>'+fmt(total)+'</span></div>'+
+    (anticipo>0?'<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:var(--purple);">Anticipo: </span><span style="color:var(--purple);">- '+fmt(anticipo)+'</span></div>':'')+
+    (est==='ENTREGADO'&&efectivo>0?'<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:var(--text2);">Efectivo: </span><span>'+fmt(efectivo)+'</span></div>':'')+
+    (est==='ENTREGADO'&&qr>0?'<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:var(--text2);">QR: </span><span>'+fmt(qr)+'</span></div>':'')+
+    '<div style="display:flex;justify-content:space-between;padding-top:6px;border-top:1px solid var(--border);font-weight:800;font-size:1em;"><span>'+(est==='ENTREGADO'?'Total cobrado: ':'Saldo pendiente: ')+'</span><span style="color:var(--blue);">'+fmt(est==='ENTREGADO'?(saldoCobrado!=null?saldoCobrado:total-anticipo):(total-anticipo))+'</span></div></div>';
+
+  document.getElementById('ped-modal-body').innerHTML=html;
+  document.getElementById('modal-ped').classList.add('open');
 }
 
 // ─── ANULACIÓN ───
@@ -2221,10 +2382,16 @@ setTimeout(_betaCargarPendientes, 500);
         if(badge) badge.style.background = BETA_ADMIN ? 'rgba(255,215,0,.15)' : '';
         if(badge) badge.style.border = BETA_ADMIN ? '1px solid rgba(255,215,0,.3)' : '';
         if(badge) badge.style.color = BETA_ADMIN ? 'var(--yellow)' : '';
-        poblarFiltros();
-        renderPedidos();
-        renderConfig();
-      }
+  poblarFiltros();
+  renderPedidos();
+  renderConfig();
+  updateSyncIndicator();
+  betaSyncSupabaseDown().then(function(){ 
+    renderPedidos();
+    if (typeof renderCierres === 'function') renderCierres();
+    if (typeof renderInc === 'function') renderInc();
+  });
+}
     }catch(e){}
   }
 })();

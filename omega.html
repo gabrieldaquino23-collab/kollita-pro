@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -388,6 +388,7 @@ body{font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(
   </div>
 </div>
 
+<span id="sync-indicator" style="position:fixed;top:10px;right:10px;width:12px;height:12px;border-radius:50%;background:#ff2d55;z-index:9999;" title="Sin conexión a Supabase"></span>
 <div id="app">
   <div class="topbar">
     <div style="display:flex;align-items:center;">
@@ -533,7 +534,7 @@ body{font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(
 
   <!-- FUNCIÓN ESPECIAL OMEGA 1 — COCA SYSTEM -->
   <div class="page omega1-only" id="page-omega1extra">
-    <iframe src="coca_system_pro.html" style="width:100%;height:calc(100vh - 120px);border:none;display:block;" title="CocaPay Pro"></iframe>
+    <iframe src="/coca" style="width:100%;height:calc(100vh - 120px);border:none;display:block;" title="CocaPay Pro"></iframe>
   </div>
 
   <!-- REPORTE DE PAGOS (OMEGA 2) -->
@@ -595,8 +596,50 @@ body{font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(
 <script src="recursos/js/datos.js"></script>
 <script src="recursos/js/auth-global.js"></script>
 <script>
+// Fallback por si auth-global.js no carga desde CDN
+if (typeof cfgLeerPasswords === 'undefined') {
+    function cfgLeerPasswords() {
+        try { return JSON.parse(localStorage.getItem('kollita_system_passwords') || '[]'); }
+        catch(e) { return []; }
+    }
+}
+</script>
+<script>
 var _adcOmega = {};
 function clicSeguro(fn, t){ t=t||800; var k=fn.toString().slice(0,50); if(_adcOmega[k])return; _adcOmega[k]=1; try{fn();}catch(e){} setTimeout(function(){_adcOmega[k]=0;},t); }
+
+const SUPA_URL = 'https://wsqhzatsuymjoebzfhpg.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzcWh6YXRzdXltam9lYnpmaHBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTUyMTMsImV4cCI6MjA5NDYzMTIxM30.bFCJBY9PAa8WviEwE8HdO2TjE3ytYM3sD6qFgxJ0pPM';
+
+async function fetchSupabase(endpoint, method, body) {
+  method = method || 'GET';
+  try {
+    var headers = { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY };
+    if (body) headers['Content-Type'] = 'application/json';
+    var r = await fetch(SUPA_URL + '/rest/v1/' + endpoint, {
+      method: method,
+      headers: headers,
+      body: body ? JSON.stringify(body) : undefined
+    });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch(e) { return null; }
+}
+
+function updateSyncIndicator() {
+  var dot = document.getElementById('sync-indicator');
+  if (!dot) return;
+  if (navigator.onLine) {
+    fetchSupabase('sucursales?limit=1').then(function(r) {
+      if (r) { dot.style.background = '#00e676'; dot.title = 'Conectado a Supabase'; }
+      else { dot.style.background = '#ffd60a'; dot.title = 'Supabase no disponible (offline)'; }
+    }).catch(function() { dot.style.background = '#ff2d55'; dot.title = 'Sin conexión'; });
+  } else {
+    dot.style.background = '#ff2d55'; dot.title = 'Sin conexión a internet';
+  }
+}
+window.addEventListener('online', updateSyncIndicator);
+window.addEventListener('offline', updateSyncIndicator);
 
 /* ═══════════════════════════════════════════════════════════
    DATOS Y CONFIGURACIÓN
@@ -605,9 +648,72 @@ const PASS1 = 'omega1_2024';
 const PASS2 = 'omega2_2024';
 let DATA=null, USER=1;
 // ─── HELPERS: Leer datos reales del encargado ───
-function gProdRealO(){ try{return JSON.parse(localStorage.getItem('kollita_enc_produccion')||'[]');}catch(e){return[];} }
-function gCatalogoRealO(){ try{var c=JSON.parse(localStorage.getItem('kollita_enc_catalogo')||'null');return c||{};}catch(e){return{};} }
-function gEncargadosO(){ try{return JSON.parse(localStorage.getItem('kollita_encargados')||'[]');}catch(e){return[];} }
+function gProdRealO(){ if(DATA&&DATA._raw_produccion)return DATA._raw_produccion; try{return JSON.parse(localStorage.getItem('kollita_enc_produccion')||'[]');}catch(e){return[];} }
+function gCatalogoRealO(){ if(DATA&&DATA._catalogo)return DATA._catalogo; try{var c=JSON.parse(localStorage.getItem('kollita_enc_catalogo')||'null');return c||{};}catch(e){return{};} }
+function gEncargadosO(){ if(DATA&&DATA._encargados)return DATA._encargados; try{return JSON.parse(localStorage.getItem('kollita_encargados')||'[]');}catch(e){return[];} }
+function gClientesRealO(){ if(DATA){var all=[];SUCURSALES.forEach(function(suc){(DATA[suc].clientes||[]).forEach(function(c){all.push(c);});});if(all.length)return all;} try{return JSON.parse(localStorage.getItem('kollita_clientes')||'[]');}catch(e){return[];} }
+function actualizarProduccionDATA(rawProduccion, catalogo){ if(!DATA)return; SUCURSALES.forEach(function(suc){DATA[suc].produccion=[];}); rawProduccion.forEach(function(r){var suc=r.suc||r.sucursal||'';if(!DATA[suc])DATA[suc]={pedidos:[],cierres:[],reclamos:[],anulaciones:[],produccion:[],clientes:[]};var datos={};for(var cat in(r.datos||{})){datos[cat]={};for(var sabor in(r.datos[cat]||{})){var v=r.datos[cat][sabor];datos[cat][sabor]={media:v.media||0,cuartilla:v.cuartilla||0,total:v.total||0,pm:v.pm||getPrecioProd(catalogo,cat,sabor,'media'),pc:v.pc||getPrecioProd(catalogo,cat,sabor,'cuartilla')};}}DATA[suc].produccion.push({fecha:r.fecha,turno:r.turno,encargado:r.encargado||'—',suc:suc,datos:datos,ts:r.ts,_real:true});});}
+// ════════════════ SUPABASE SYNC ════════════════
+async function omegaSyncSupabaseDown(){
+  console.log('[OmegaSync] Iniciando sincronizacion desde Supabase...');
+  // Cargar pedidos directo a DATA + localStorage
+  try {
+    var p = await fetchSupabase('pedidos?select=id,numero_nota,sucursal_id,cliente,secretario,estado,total,anticipo,saldo_cobrado,metodo_pago,subtotal,descuento,total_entregado,fecha_id,created_at,items,productos,turno,hora&order=created_at.desc&limit=2000');
+    if (Array.isArray(p) && p.length) {
+      var mapped = p.map(function(r){ 
+        var rawItems = (Array.isArray(r.items) && r.items.length) ? r.items : (r.productos || []);
+        if (!Array.isArray(rawItems)) rawItems = [rawItems];
+        return {
+        id: r.id, numeroNota: r.numero_nota||'', sucursal: r.sucursal_id||'', sucursal_id: r.sucursal_id||'', cliente: r.cliente||'',
+        secretario: r.secretario||'', fecha: r.fecha_id||'', fechaID: r.fecha_id||'', total: parseFloat(r.total)||0,
+        estado: r.estado||'PREPARADO', metodoPago: r.metodo_pago||null, subtotal: parseFloat(r.subtotal)||0,
+        descuento: parseFloat(r.descuento)||0, totalEntregado: parseFloat(r.total_entregado)||0,
+        saldoCobrado: parseFloat(r.saldo_cobrado)||0, anticipo: parseFloat(r.anticipo)||0, turno: r.turno||'', hora: r.hora||'',
+        items: rawItems, productos: rawItems
+      };});
+      SUCURSALES.forEach(function(suc){ DATA[suc].pedidos = mapped.filter(function(p){ return p.sucursal===suc; }); });
+      localStorage.setItem('kollita_db', JSON.stringify(mapped));
+      if(DATA) DATA._kollita_db = mapped;
+      console.log('[OmegaSync] '+mapped.length+' pedidos cargados');
+    }
+  } catch(e) { console.warn('[OmegaSync] Error pedidos:', e); }
+  // Cargar turnos directo a DATA + localStorage
+  try {
+    var tt = await fetchSupabase('turnos?select=id,sucursal_id,secretario_nombre,tipo_turno,estado,hora_apertura,hora_cierre,total_general,total_efectivo,total_qr,total_anticipos,total_descuentos,cantidad_ventas,cantidad_anulados&order=created_at.desc&limit=500');
+    if (Array.isArray(tt) && tt.length) {
+      var ttm = tt.map(function(c){ return {
+        sucursal: c.sucursal_id||'', sucursal_id: c.sucursal_id||'',
+        secretario: c.secretario_nombre||'', turno: c.tipo_turno||'', estado: c.estado||'',
+        fechaCierreFormato: c.hora_cierre||'', horaCierreFormato: c.hora_cierre||'',
+        totalGeneral: parseFloat(c.total_general)||0, totalEfectivo: parseFloat(c.total_efectivo)||0,
+        totalQR: parseFloat(c.total_qr)||0, totalAnticipos: parseFloat(c.total_anticipos)||0,
+        totalDescuentos: parseFloat(c.total_descuentos)||0, cantidadVentas: c.cantidad_ventas||0,
+        cantidadAnulados: c.cantidad_anulados||0
+      };});
+      SUCURSALES.forEach(function(suc){ DATA[suc].cierres = ttm.filter(function(c){ return c.sucursal===suc; }); });
+      localStorage.setItem('turnos_cerrados_kollita', JSON.stringify(ttm));
+      if(DATA) DATA._turnos_cerrados = ttm;
+      console.log('[OmegaSync] '+ttm.length+' turnos cargados');
+    }
+  } catch(e) { console.warn('[OmegaSync] Error turnos:', e); }
+  // Cargar reclamos → DATA + localStorage
+  try { var rc = await fetchSupabase('bk_reclamos?select=*&limit=200'); if (Array.isArray(rc) && rc.length) { var rcm = rc.map(function(r){ return { id:r.id, tipo:r.tipo, cliente:r.cliente, descripcion:r.descripcion, monto:r.monto, secretario:r.secretario, fecha:r.fecha, fechaFormato:r.fechaformato||'', horaFormato:r.horaformato||'' }; }); SUCURSALES.forEach(function(suc){ DATA[suc].reclamos = rcm; }); localStorage.setItem('kollita_reclamos', JSON.stringify(rcm)); console.log('[OmegaSync] '+rcm.length+' reclamos cargados'); } } catch(e) {}
+  // Cargar anulaciones → DATA + localStorage
+  try { var al = await fetchSupabase('bk_log_anulaciones?select=*&limit=200'); if (Array.isArray(al) && al.length) { var alm = al.map(function(a){ return { id:a.id, motivo:a.motivo, supervisor:a.supervisor, fecha:a.fecha, hora:a.hora, turno:a.turno, nota:a.nota }; }); SUCURSALES.forEach(function(suc){ DATA[suc].anulaciones = alm; }); localStorage.setItem('kollita_log_anulaciones', JSON.stringify(alm)); console.log('[OmegaSync] '+alm.length+' anulaciones cargadas'); } } catch(e) {}
+  // Cargar clientes → DATA + localStorage
+  try { var cl = await fetchSupabase('bk_clientes?select=*&limit=1000'); if (Array.isArray(cl) && cl.length) { var clm = cl.map(function(r){ return { id:r.id, nombre:r.nombre, telefono:r.telefono||'', fechaRegistro:r.fecharegistro||'', historialPedidos:r.historialpedidos||[] }; }); SUCURSALES.forEach(function(suc){ DATA[suc].clientes = clm; }); localStorage.setItem('kollita_clientes', JSON.stringify(clm)); console.log('[OmegaSync] '+clm.length+' clientes cargados'); } } catch(e) {}
+  // Config ticket → localStorage
+  try { var ct = await fetchSupabase('bk_config_ticket?select=*&limit=1'); if (Array.isArray(ct) && ct.length) { localStorage.setItem('kollita_config_ticket', JSON.stringify(ct[0])); console.log('[OmegaSync] Config ticket cargada'); } } catch(e) {}
+  // Config descuento → localStorage
+  try { var cd = await fetchSupabase('bk_config_descuento?select=*&limit=1'); if (Array.isArray(cd) && cd.length) { localStorage.setItem('kollita_config_descuento', JSON.stringify(cd[0])); console.log('[OmegaSync] Config descuento cargada'); } } catch(e) {}
+  // Cargar produccion → localStorage (mantenido del sync original)
+  try { var pr = await fetchSupabase('produccion?select=*&limit=500'); if (Array.isArray(pr) && pr.length) { localStorage.setItem('kollita_enc_produccion', JSON.stringify(pr)); if(DATA){ DATA._raw_produccion = pr; actualizarProduccionDATA(pr, gCatalogoRealO()); } console.log('[OmegaSync] '+pr.length+' registros produccion cargados'); } } catch(e) {}
+  // Cargar catalogo → localStorage
+  try { var ctpRaw = await fetchSupabase('catalogo_productos?select=*'); if (Array.isArray(ctpRaw) && ctpRaw.length) { var ctpObj = {}; ctpRaw.forEach(function(p){ var cat = p.categoria || 'TRADICIONAL'; if(!ctpObj[cat]) ctpObj[cat] = []; ctpObj[cat].push({n: p.nombre, pm: p.precio_media, pc: p.precio_cuartilla, activo: p.activo, orden: p.orden}); }); localStorage.setItem('kollita_enc_catalogo', JSON.stringify(ctpObj)); if(DATA) DATA._catalogo = ctpObj; console.log('[OmegaSync] Catalogo productos cargado ('+ctpRaw.length+' items)'); } } catch(e) {}
+  // Cargar encargados → localStorage
+  try { var enc = await fetchSupabase('secretarios?select=*'); if (Array.isArray(enc) && enc.length) { localStorage.setItem('kollita_encargados', JSON.stringify(enc)); localStorage.setItem('kollita_secretarios', JSON.stringify(enc)); if(DATA){ DATA._encargados = enc; DATA._secretarios = enc; } console.log('[OmegaSync] '+enc.length+' encargados/secretarios cargados'); } } catch(e) {}
+  console.log('[OmegaSync] Sincronizacion completada');
+}
 function getPrecioProd(catalogo,cat,sabor,tipo){
   var catData=catalogo[cat]||[];
   var prod=catData.find(function(p){return p.n===sabor;});
@@ -666,7 +772,12 @@ function doLogin(){
   var pws = [];
   try { pws = JSON.parse(localStorage.getItem('kollita_system_passwords')||'[]'); } catch(ex){}
   var myPwObj = pws.find(x => x.panel === panelName);
-  var expected = myPwObj ? myPwObj.pass : 'contra1234';
+  var expected = myPwObj ? myPwObj.pass : null;
+
+  if(!expected) {
+    mostrarModalCambioPassGlobal(panelName, function(){ completarLoginOmega(); });
+    return;
+  }
 
   if(val !== expected){
     e.textContent='Contraseña incorrecta.';
@@ -674,16 +785,13 @@ function doLogin(){
     return;
   }
   
-  if(expected === 'contra1234') {
-    mostrarModalCambioPassGlobal(panelName, function(){ completarLoginOmega(); });
-    return;
-  }
   completarLoginOmega();
 }
 
 function completarLoginOmega(){
   var merged=mergeDataOmega();
   DATA = merged.data;
+  console.log('[Supervisor Omega] Data source:', merged.source);
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').style.display='block';
   localStorage.setItem('omega_sesion', JSON.stringify({user:USER, ts:Date.now()}));
@@ -696,8 +804,15 @@ function completarLoginOmega(){
   document.querySelectorAll('.omega2-only').forEach(function(el){el.style.display=USER===2?'':'none';});
   document.getElementById('nt-omega2-reporte').style.display=USER===2?'block':'none';
   poblarFiltros();
-  renderDash();
+  updateSyncIndicator();
+  omegaSyncSupabaseDown().then(function(){ renderDash(); });
 }
+
+setInterval(function() {
+  if (!DATA || document.hidden) return;
+  omegaSyncSupabaseDown();
+  updateSyncIndicator();
+}, 60000);
 function doLogout(){
   localStorage.removeItem('omega_sesion');
   DATA=null;
@@ -772,6 +887,20 @@ function renderDash(){
   ent.forEach(function(p){(p.items||[]).forEach(function(it){pm[it.n]=(pm[it.n]||0)+it.c;});});
   document.getElementById('chart-prod').innerHTML=renderBar(Object.entries(pm).sort(function(a,b){return b[1]-a[1];}).slice(0,10),'var(--omega2)');
 
+  // EVO CHART: evolucion ultimas 4 semanas
+  var hoy = new Date();
+  var semanas = [];
+  for (var w = 3; w >= 0; w--) {
+    var finSem = new Date(hoy); finSem.setDate(hoy.getDate() - w*7);
+    var iniSem = new Date(finSem); iniSem.setDate(finSem.getDate() - 6);
+    var totSem = pedidos.filter(function(p){
+      var fp = p.fechaID || p.fecha || '';
+      return p.estado === 'ENTREGADO' && fp >= iniSem.toISOString().slice(0,10) && fp <= finSem.toISOString().slice(0,10);
+    }).reduce(function(s,p){ return s + (p.saldoCobrado || p.total || 0); }, 0);
+    semanas.push([iniSem.toISOString().slice(5,10) + '~' + finSem.toISOString().slice(5,10), totSem]);
+  }
+  document.getElementById('evo-chart').innerHTML = renderBar(semanas, 'var(--omega1)');
+
   document.getElementById('dash-cierres').innerHTML='<table><thead><tr><th>Sucursal</th><th>Secretario</th><th>Turno</th><th>Fecha</th><th>Notas</th><th>Total</th></tr></thead><tbody>'+cierres.slice(0,12).map(function(c){return'<tr><td style="color:var(--omega1);font-weight:700;">'+esc(c.sucursal)+'</td><td>'+esc(c.secretario)+'</td><td>'+c.turno+'</td><td style="font-size:.8em;">'+esc(c.fechaCierreFormato)+' '+esc(c.horaCierreFormato)+'</td><td style="text-align:center;">'+c.cantidadVentas+'</td><td style="color:var(--green);font-weight:700;">'+fmt(c.totalGeneral)+'</td></tr>';}).join('')+'</tbody></table>';
 }
 
@@ -792,8 +921,7 @@ function onPedEstadoSelectOmega(){
 // ─── SUCURSALES ───
 function renderSucursales(){
   if(!DATA) return;
-  var clientesReales=[];
-  try{ clientesReales=JSON.parse(localStorage.getItem('kollita_clientes')||'[]'); }catch(e){}
+  var clientesReales=gClientesRealO();
   var todos=gAllPedidosO();
   var q=(document.getElementById('cli-q')?.value||'').toLowerCase();
   var totalEncontrados=0;
@@ -819,12 +947,10 @@ function renderSucursales(){
     clientesReales.forEach(function(c){
       var sucCliente='';
       if(c.historialPedidos&&c.historialPedidos.length>0){
-        try{
-          var secs=JSON.parse(localStorage.getItem('kollita_secretarios')||'[]');
-          var ultimoPedido=c.historialPedidos[c.historialPedidos.length-1];
-          var found=secs.find(function(s){return s.nombre&&ultimoPedido.secretario&&s.nombre.toLowerCase()===ultimoPedido.secretario.toLowerCase();});
-          if(found) sucCliente=found.sucursal;
-        }catch(e){}
+        var secs=gSecretariosO();
+        var ultimoPedido=c.historialPedidos[c.historialPedidos.length-1];
+        var found=secs.find(function(s){return s.nombre&&ultimoPedido.secretario&&s.nombre.toLowerCase()===ultimoPedido.secretario.toLowerCase();});
+        if(found) sucCliente=found.sucursal;
       }
       if(sucCliente===suc){
         var nombre=(c.nombre||'').trim();
@@ -890,17 +1016,14 @@ function abrirSucursalUnificada(suc){
     if(!clientesMap[k].ultima||(p.fecha||'')>clientesMap[k].ultima) clientesMap[k].ultima=p.fecha||'';
   });
   // Agregar clientes reales de kollita_clientes
-  var clientesRealesSuc=[];
-  try{ clientesRealesSuc=JSON.parse(localStorage.getItem('kollita_clientes')||'[]'); }catch(e){}
+  var clientesRealesSuc=gClientesRealO();
   clientesRealesSuc.forEach(function(c){
     var sucCliente='';
     if(c.historialPedidos&&c.historialPedidos.length>0){
-      try{
-        var secs=JSON.parse(localStorage.getItem('kollita_secretarios')||'[]');
+        var secs=gSecretariosO();
         var ultimoPedido=c.historialPedidos[c.historialPedidos.length-1];
         var found=secs.find(function(s){return s.nombre&&ultimoPedido.secretario&&s.nombre.toLowerCase()===ultimoPedido.secretario.toLowerCase();});
         if(found) sucCliente=found.sucursal;
-      }catch(e){}
     }
     if(sucCliente===suc){
       var nombreCli=(c.nombre||'').trim();
@@ -1185,11 +1308,11 @@ function renderPedidosGlobal(){
     });
   });
    try{
-     var dbReal = JSON.parse(localStorage.getItem('kollita_db')||'[]');
+     var dbReal = gAllPedidosO();
      var secsMapO = {};
-     try{var sa=JSON.parse(localStorage.getItem('kollita_secretarios')||'[]');sa.forEach(function(s){if(s.nombre)secsMapO[s.nombre.toLowerCase()]=s.sucursal;});}catch(e){}
+     var sa=gSecretariosO(); sa.forEach(function(s){if(s.nombre)secsMapO[s.nombre.toLowerCase()]=s.sucursal;});
      var cierreSecMapO = {};
-     try{var ca=JSON.parse(localStorage.getItem('turnos_cerrados_kollita')||'[]');ca.forEach(function(c){var sf=secsMapO[(c.secretario||'').toLowerCase()]||'';(c.ventas||[]).forEach(function(v){if(v.id)cierreSecMapO[v.id]=sf;});});}catch(e){}
+     var ca=gTurnosCerradosO(); ca.forEach(function(c){var sf=secsMapO[(c.secretario||'').toLowerCase()]||'';(c.ventas||[]).forEach(function(v){if(v.id)cierreSecMapO[v.id]=sf;});});
      var dbCountO = 0; var MAX_DB = 500;
      dbReal.forEach(function(p){
        if(dbCountO >= MAX_DB) return; dbCountO++;
@@ -1202,7 +1325,7 @@ function renderPedidosGlobal(){
    }catch(e){}
   if(!estF||estF==='PENDIENTE'){
     try{
-      var pend=JSON.parse(localStorage.getItem('kollita_pendientes')||'[]');
+    var pend=gPendientesO();
       pend.forEach(function(p){
         if(sucF && p.branch && p.branch!==sucF) return;
         var fi2=p.fechaISO||p.date||'';
@@ -1413,9 +1536,10 @@ function imprimirTicketOmega(suc, id){
 }
 
 // ─── CLIENTES ───
-function gAllPedidosO(){
-  try{return JSON.parse(localStorage.getItem('kollita_db')||'[]');}catch(e){return[];}
-}
+function gAllPedidosO(){ if(DATA&&DATA._kollita_db)return DATA._kollita_db; if(DATA){var all=[];SUCURSALES.forEach(function(suc){(DATA[suc].pedidos||[]).forEach(function(p){all.push({...p,sucursal:suc});});});if(all.length)return all;} try{return JSON.parse(localStorage.getItem('kollita_db')||'[]');}catch(e){return[];} }
+function gSecretariosO(){ if(DATA&&DATA._secretarios&&DATA._secretarios.length)return DATA._secretarios; try{var s=JSON.parse(localStorage.getItem('kollita_secretarios')||'[]');if(s.length)return s;var e=JSON.parse(localStorage.getItem('kollita_encargados')||'[]');return e;}catch(e){return[];} }
+function gTurnosCerradosO(){ if(DATA&&DATA._turnos_cerrados)return DATA._turnos_cerrados; try{return JSON.parse(localStorage.getItem('turnos_cerrados_kollita')||'[]');}catch(e){return[];} }
+function gPendientesO(){ if(DATA&&DATA._pendientes)return DATA._pendientes; try{return JSON.parse(localStorage.getItem('kollita_pendientes')||'[]');}catch(e){return[];} }
 
 var _incItemsO=[];
 function renderIncidencias(){
@@ -1748,7 +1872,7 @@ function renderOmega2Reporte(){
         document.querySelectorAll('.omega2-only').forEach(function(el){el.style.display=USER===2?'':'none';});
         document.getElementById('nt-omega2-reporte').style.display=USER===2?'block':'none';
         poblarFiltros();
-        renderDash();
+        omegaSyncSupabaseDown().then(function(){ renderDash(); });
       }
     }catch(e){}
   }
@@ -1762,6 +1886,7 @@ setInterval(function(){
   if(tab==='pedidos') renderPedidosGlobal();
   if(tab==='dashboard') renderDash();
   if(tab==='sucursales') renderSucursales();
+  omegaSyncSupabaseDown();
 }, 10000);
 </script>
 

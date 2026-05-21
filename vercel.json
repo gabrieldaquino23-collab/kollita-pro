@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/panel", "destination": "/secretarios.html" },
+    { "source": "/encargado", "destination": "/encargado.html" },
+    { "source": "/supervisor", "destination": "/supervisor_alfa.html" },
+    { "source": "/supervisor-beta", "destination": "/supervisor_beta.html" },
+    { "source": "/omega", "destination": "/omega.html" },
+    { "source": "/senior", "destination": "/senior.html" },
+    { "source": "/coca", "destination": "/coca_system_pro.html" },
+    { "source": "/movil", "destination": "/kollita movil.html" },
+    { "source": "/admin-movil", "destination": "/admin de kollita movil.html" }
+  ],
+  "headers": [
+    {
+      "source": "/recursos/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}
