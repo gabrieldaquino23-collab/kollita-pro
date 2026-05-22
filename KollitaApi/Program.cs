@@ -199,9 +199,11 @@ app.MapGet("/", () => Results.Ok(new
 
 app.UseExceptionHandler(err => {
     err.Run(async context => {
+        var ex = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
+        var msg = ex?.Error?.Message ?? "Unknown error";
         context.Response.StatusCode = 500;
         context.Response.ContentType = "application/json";
-        await context.Response.WriteAsync("{\"error\":\"Internal server error\"}");
+        await context.Response.WriteAsync($"{{\"error\":\"{msg.Replace("\"", "'").Replace("\n", " ")}\"}}");
     });
 });
 
