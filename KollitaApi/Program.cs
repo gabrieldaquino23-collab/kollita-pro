@@ -171,7 +171,7 @@ app.UseForwardedHeaders();
 
 if (!app.Environment.IsDevelopment())
     app.UseHsts();
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection(); // Desactivado: Render maneja TLS
 
 app.UseRateLimiter();
 app.UseCors("KollitaCors");
