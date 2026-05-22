@@ -95,8 +95,11 @@ builder.Services.AddRateLimiter(options => {
             }));
 });
 
-// ── Base de datos ──────────────────────────────────────
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")!;
+// ── Base de datos: Supabase REST (no requiere password DB) ─
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<IUsuarioRepository, SupabaseRestRepository>();
+// Repos EF Core legacy (para pedidos/pendientes/cierres)
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? "Host=localhost;Database=postgres;Username=postgres;Password=;SSL Mode=Prefer";
 builder.Services.AddDbContext<KollitaDbContext>(options =>
     options.UseNpgsql(connectionString));
 
@@ -104,7 +107,6 @@ builder.Services.AddDbContext<KollitaDbContext>(options =>
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<IPendienteRepository, PendienteRepository>();
 builder.Services.AddScoped<ICierreRepository, CierreRepository>();
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IConfigSucursalRepository, ConfigSucursalRepository>();
 
 // ── Service Layer ──────────────────────────────────────
