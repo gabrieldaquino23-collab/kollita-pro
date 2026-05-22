@@ -32,18 +32,21 @@ public class SupabaseRestRepository : IUsuarioRepository
 
     private static Models.Usuario MapUser(Dictionary<string, object> row)
     {
+        static long ToLong(object v) => v is JsonElement je && je.ValueKind == JsonValueKind.Number ? je.GetInt64() : Convert.ToInt64(v);
+        static string ToStr(object v) => v?.ToString() ?? "";
+        static bool ToBool(object v) => v is JsonElement je ? (je.ValueKind == JsonValueKind.True || (je.ValueKind == JsonValueKind.String && je.GetString() == "true")) : Convert.ToBoolean(v);
+        static DateTime? ToDate(object v) => v == null ? null : v is JsonElement je && je.ValueKind == JsonValueKind.String ? DateTime.Parse(je.GetString()!) : null;
+
         return new Models.Usuario
         {
-            Id = Convert.ToInt64(row["id"]),
-            Email = row["email"]?.ToString() ?? "",
-            PasswordHash = row["password_hash"]?.ToString() ?? "",
-            Nombre = row["nombre"]?.ToString() ?? "",
-            Rol = row["rol"]?.ToString() ?? "",
-            Sucursal = row["sucursal"]?.ToString() ?? "",
-            Activo = row["activo"] is bool b ? b : true,
-            UltimoAcceso = row.ContainsKey("ultimo_acceso") && row["ultimo_acceso"] != null
-                ? DateTime.Parse(row["ultimo_acceso"].ToString()!)
-                : null
+            Id = ToLong(row["id"]),
+            Email = ToStr(row["email"]),
+            PasswordHash = ToStr(row["password_hash"]),
+            Nombre = ToStr(row["nombre"]),
+            Rol = ToStr(row["rol"]),
+            Sucursal = ToStr(row["sucursal"]),
+            Activo = ToBool(row["activo"]),
+            UltimoAcceso = ToDate(row.GetValueOrDefault("ultimo_acceso"))
         };
     }
 
