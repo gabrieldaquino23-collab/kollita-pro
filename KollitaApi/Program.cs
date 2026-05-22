@@ -197,8 +197,13 @@ app.MapGet("/", () => Results.Ok(new
     docs = "/health"
 }));
 
-app.UseExceptionHandler("/error");
-app.MapGet("/error", () => Results.Problem("An internal error occurred", statusCode: 500));
+app.UseExceptionHandler(err => {
+    err.Run(async context => {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsync("{\"error\":\"Internal server error\"}");
+    });
+});
 
 app.MapHub<KollitaHub>("/hubs/kollita");
 
