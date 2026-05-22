@@ -184,21 +184,20 @@ textarea.fii{resize:vertical;min-height:80px;}
       <input type="date" class="fi" id="pf-desde" onchange="renderPedidos()">
       <input type="date" class="fi" id="pf-hasta" onchange="renderPedidos()">
       <input type="text" class="fi" placeholder="🔍 Cliente o Nº nota..." id="pf-q" onchange="renderPedidos()" style="flex:1;min-width:160px;">
-      <button class="btn-p" onclick="abrirNuevoPedido()">➕ Nuevo Pedido</button>
     </div>
     <div class="estado-tabs" id="estado-tabs">
       <button class="etab active" data-est="PENDIENTE" onclick="filtrarEstado(this)">🟡 PENDIENTES</button>
       <button class="etab" data-est="PREPARADO" onclick="filtrarEstado(this)">🟠 PREPARADOS <span id="badge-preparados" style="display:none;"></span></button>
       <button class="etab" data-est="ENTREGADO" onclick="filtrarEstado(this)">🟢 ENTREGADOS</button>
     </div>
-    <div class="tbl-wrap"><div class="table-responsive"><table style="table-layout:fixed;width:100%;"><thead><tr><th style="width:36px;"></th><th style="width:65px;">Nota</th><th style="width:130px;">Cliente</th><th style="width:90px;">Secretario</th><th style="width:85px;">Fecha</th><th style="width:75px;text-align:right;">Total</th><th style="width:70px;text-align:right;">Anticipo</th><th style="width:75px;">Estado</th><th style="width:155px;">Acciones</th></tr></thead><tbody id="ped-tbody"></tbody></table></div></div>
+    <div class="tbl-wrap"><div class="table-responsive"><table style="table-layout:fixed;width:100%;"><thead><tr><th style="width:36px;"></th><th style="width:60px;">Nota</th><th style="width:140px;">Cliente</th><th style="width:100px;">Secretario</th><th style="width:90px;">Fecha</th><th style="width:80px;text-align:right;">Total</th><th style="width:70px;text-align:center;">Anticipo</th><th style="width:75px;text-align:center;">Estado</th><th style="width:130px;text-align:center;">Acciones</th></tr></thead><tbody id="ped-tbody"></tbody></table></div></div>
   </div>
 
   <!-- CIERRES -->
   <div class="page" id="page-cierres">
     <div class="filters"><select class="fs" id="cf-sec" onchange="renderCierres()"><option value="">Todos los secretarios</option></select><input type="month" class="fi" id="cf-mes" onchange="renderCierres()"></div>
     <div class="stats-grid" id="cie-res"></div>
-    <div class="tbl-wrap"><div class="table-responsive"><table><thead><tr><th>Secretario</th><th>Turno</th><th>Apertura</th><th>Cierre</th><th>Notas</th><th>Anticipos</th><th>Total</th><th>Efectivo</th><th>QR</th></tr></thead><tbody id="cie-tbody"></tbody></table></div></div>
+    <div class="tbl-wrap"><div class="table-responsive"><table><thead><tr><th>Secretario</th><th>Turno</th><th>Apertura</th><th>Cierre</th><th style="text-align:center;">Notas</th><th style="text-align:center;">Efectivo</th><th style="text-align:center;">QR</th><th style="text-align:center;">Anticipo</th><th style="text-align:right;">Total</th></tr></thead><tbody id="cie-tbody"></tbody></table></div></div>
   </div>
 
   <!-- INCIDENCIAS -->
@@ -439,7 +438,19 @@ async function syncSupabaseDown(){
     if(t.ok){var turnos=await t.json();var mapped=(Array.isArray(turnos)&&turnos.length)?turnos.map(function(c){var fc=c.hora_cierre?new Date(c.hora_cierre):null;return{sucursal:c.sucursal_id||'',secretario:c.secretario_nombre||'',turno:c.tipo_turno||'',inicio:c.hora_apertura||'',cierre:c.hora_cierre||'',fechaCierreFormato:fc?fc.toLocaleDateString('es-BO'):'',horaCierreFormato:fc?fc.toLocaleTimeString('es-BO'):'',totalGeneral:parseFloat(c.total_general)||0,totalEfectivo:parseFloat(c.total_efectivo)||0,totalQR:parseFloat(c.total_qr)||0,totalMixtoEfectivo:parseFloat(c.total_mixto_efectivo)||0,totalMixtoQR:parseFloat(c.total_mixto_qr)||0,totalAnticipos:parseFloat(c.total_anticipos)||0,totalDescuentos:parseFloat(c.total_descuentos)||0,cantidadVentas:c.cantidad_ventas||0,cantidadAnulados:c.cantidad_anulados||0,ventas:(c.datos_cierre&&c.datos_cierre.ventas)?c.datos_cierre.ventas:[]};}):[];localStorage.setItem('turnos_cerrados_kollita',JSON.stringify(mapped));console.log('[syncDown] Turnos cargados:',mapped.length);}
     else{console.warn('[syncDown] Error turnos HTTP:',t.status);}
   }catch(e){console.error('[syncDown] Error turnos:',e);}
+  try{
+    var r=await fetch(SUPA_URL+'/rest/v1/bk_reclamos?sucursal=eq.'+encodeURIComponent(SES.suc)+'&limit=200',{headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}});
+    if(r.ok){var reclamos=await r.json();if(Array.isArray(reclamos)){localStorage.setItem('kollita_reclamos',JSON.stringify(reclamos));console.log('[syncDown] Reclamos cargados:',reclamos.length);}}
+  }catch(e){}
+  try{
+    var a=await fetch(SUPA_URL+'/rest/v1/bk_log_anulaciones?sucursal=eq.'+encodeURIComponent(SES.suc)+'&limit=200',{headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}});
+    if(a.ok){var anul=await a.json();if(Array.isArray(anul)){localStorage.setItem('kollita_log_anulaciones',JSON.stringify(anul));console.log('[syncDown] Anulaciones cargadas:',anul.length);}}
+  }catch(e){}
+  actualizarPedidosCerrados();
   renderDash();
+  if(document.getElementById('page-pedidos').classList.contains('active')) renderPedidos();
+  if(document.getElementById('page-cierres').classList.contains('active')) renderCierres();
+  if(document.getElementById('page-incidencias').classList.contains('active')) renderInc();
 }
 async function syncPedidoUp(pedido){
   if(!SES||!SES.suc) return;
@@ -465,7 +476,7 @@ async function syncAnulacionUp(anulacion){
     await fetch(SUPA_URL+'/rest/v1/bk_log_anulaciones',{
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'resolution=merge-duplicates'},
-      body:JSON.stringify([{id:anulacion.id, motivo:anulacion.motivo||'', supervisor:anulacion.supervisor||SES.nombre, fecha:anulacion.fecha||'', hora:anulacion.hora||'', turno:anulacion.turno||'', nota:anulacion.nota||{}}])
+      body:JSON.stringify([{id:anulacion.id, motivo:anulacion.motivo||'', supervisor:anulacion.supervisor||SES.nombre, fecha:anulacion.fecha||'', hora:anulacion.hora||'', turno:anulacion.turno||'', nota:anulacion.nota||{}, sucursal: SES.suc||''}])
     }).catch(function(e){});
   }catch(e){}
 }
@@ -571,6 +582,7 @@ function activarApp(){
   document.getElementById('if-mes').value=mes;
   initProdGrid();
   poblarSecs();
+  poblarSecsDesdeSupabase();
   renderDash(); renderPedidos(); renderCierres(); renderInc();
 }
 
@@ -581,6 +593,16 @@ function poblarSecs(){
     sel.innerHTML='<option value="">Todos los secretarios</option>';
     secs.forEach(function(s){ var o=document.createElement('option'); o.value=s; o.textContent=s; sel.appendChild(o); });
   });
+}
+async function poblarSecsDesdeSupabase(){
+  if(!SES||!SES.suc) return;
+  try{
+    var sel=document.getElementById('pf-sec');
+    while(sel.options.length>1) sel.remove(1);
+    var nombres=new Set();
+    var r=await fetch(SUPA_URL+'/rest/v1/secretarios?sucursal=eq.'+encodeURIComponent(SES.suc)+'&select=nombre&limit=50',{headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}});
+    if(r.ok){var secs=await r.json();if(Array.isArray(secs)){secs.forEach(function(s){if(s.nombre&&!nombres.has(s.nombre)){nombres.add(s.nombre);var o=document.createElement('option');o.value=s.nombre;o.textContent=s.nombre;sel.appendChild(o);}});}}
+  }catch(e){}
 }
 
 function goTab(el){
@@ -664,17 +686,21 @@ function toISO(f){
   return'';
 }
 
-function renderPedidos(){
-  var viejos = obtenerPreparadosViejos();
-  var _pedidosCerrados = new Set();
+var _pedidosCerrados = new Set();
+function actualizarPedidosCerrados(){
+  _pedidosCerrados = new Set();
   try{
     var arch = gArch();
-    arch.forEach(function(p){ _pedidosCerrados.add(p.id); });
+    arch.forEach(function(p){ _pedidosCerrados.add(String(p.id)); });
     var cierres = JSON.parse(localStorage.getItem('turnos_cerrados_kollita')||'[]');
     cierres.forEach(function(c){
-      (c.ventas||[]).forEach(function(v){ _pedidosCerrados.add(v.id); });
+      (c.ventas||[]).forEach(function(v){ _pedidosCerrados.add(String(v.id)); });
     });
   }catch(e){}
+}
+function renderPedidos(){
+  var viejos = obtenerPreparadosViejos();
+  actualizarPedidosCerrados();
   var badgePrep = document.getElementById('badge-preparados');
   if(badgePrep){
     var count24 = viejos.filter(function(v){ return !v._pendiente; }).length;
@@ -698,6 +724,7 @@ function renderPedidos(){
   var des=document.getElementById('pf-desde').value;
   var has=document.getElementById('pf-hasta').value;
   var q=(document.getElementById('pf-q').value||'').toLowerCase().trim();
+  if(document.getElementById('pf-sec').options.length<=1) poblarSecsDesdeSupabase();
   var rows=gAll().filter(function(p){
     if(est&&(p.estado||'PREPARADO')!==est)return false;
     if(SES.suc && (p.sucursal||p.sucursal_id||'')!==SES.suc) return false;
@@ -723,9 +750,7 @@ function renderPedidos(){
     }catch(e){}
   }
 
-  rows.sort(function(a,b){
-    return (b.fecha||'').localeCompare(a.fecha||'')||String(b.numeroNota||'').localeCompare(String(a.numeroNota||''));
-  });
+  rows.sort(function(a,b){ return (b.fechaID||b.fecha||'').localeCompare(a.fechaID||a.fecha||''); });
   rows=rows.slice(0,200);
 
   if(rows.length===0){
@@ -751,14 +776,14 @@ function renderPedidos(){
     var prefijo = esViejo24 ? '⏰ ' : '';
     var numNota=esc(String(p.numeroNota||'-'));
     var secretario=esc(p.secretario||'-');
-    var fecha=esc(p.fecha||'-');
+    var fecha=esc(p.fechaID||p.fecha||'-');
     var total=fmt(p.subtotal || p.total);
     var anticipo=(p.anticipo>0?'<span style="color:var(--purple);">'+fmt(p.anticipo)+'</span>':'-');
     var acciones='';
     if(est2==='PREPARADO'){
       acciones='<button class="btn-d" style="padding:4px 8px;font-size:.75em;" onclick="pedAccion(\''+p.id+'\',\'anular\')">❌ Anular</button>';
     } else if(est2==='ENTREGADO'){
-      if(_pedidosCerrados.has(p.id)){
+      if(_pedidosCerrados.has(String(p.id)) || _pedidosCerrados.has(p.id)){
         acciones='🔒 <span style="font-size:.75em;color:var(--text2);">Cerrado en caja</span>';
       } else {
         acciones='<span style="display:inline-flex;gap:6px;white-space:nowrap;"><button class="btn-d" style="padding:4px 8px;font-size:.75em;" onclick="pedAccion(\''+p.id+'\',\'anular-ent\')">❌ Anular</button><button class="btn-t" onclick="if(this.disabled)return;this.disabled=true;setTimeout(()=>this.disabled=false,1500);traspasarAPreparado(\''+p.id+'\')">🔄 Preparado</button></span>';
@@ -773,8 +798,8 @@ function renderPedidos(){
       '<td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+secretario+'</td>'+
       '<td style="font-size:.8em;white-space:nowrap;">'+fecha+'</td>'+
       '<td style="font-weight:700;text-align:right;white-space:nowrap;">'+total+'</td>'+
-      '<td style="text-align:right;white-space:nowrap;">'+anticipo+'</td>'+
-      '<td style="white-space:nowrap;"><span class="badge '+bc+'">'+est2+'</span></td>'+
+      '<td style="text-align:center;white-space:nowrap;">'+anticipo+'</td>'+
+      '<td style="text-align:center;white-space:nowrap;"><span class="badge '+bc+'">'+est2+'</span></td>'+
       '<td style="text-align:center;white-space:nowrap;">'+acciones+'</td></tr>';
   });
   document.getElementById('ped-tbody').innerHTML=html;
@@ -1100,7 +1125,7 @@ function renderCierres(){
   ].map(function(c){return '<div class="stat-card" style="--accent:'+c.a+'"><div class="stat-label">'+c.l+'</div><div class="stat-val" style="font-size:1.2em;">'+c.v+'</div></div>';}).join('');
   document.getElementById('cie-tbody').innerHTML=rows.length===0
     ?'<tr><td colspan="9" style="text-align:center;color:var(--text2);padding:30px;">Sin cierres en este periodo</td></tr>'
-    :rows.map(function(c){return '<tr><td style="font-weight:700;">'+esc(c.secretario||'-')+'</td><td>'+(c.turno||'DIA')+'</td><td style="font-size:.78em;">'+(c.inicio?new Date(c.inicio).toLocaleString('es-BO'):'-')+'</td><td style="font-size:.78em;">'+esc(c.fechaCierreFormato||'-')+' '+(c.horaCierreFormato||'')+'</td><td style="text-align:center;">'+(c.cantidadVentas||0)+'</td><td style="color:var(--purple);">'+(c.totalAnticipos>0?fmt(c.totalAnticipos):'-')+'</td><td style="color:var(--green);font-weight:700;">'+fmt(c.totalGeneral)+'</td><td>'+(c.totalEfectivo>0?fmt(c.totalEfectivo):'-')+'</td><td>'+(c.totalQR>0?fmt(c.totalQR):'-')+'</td></tr>';}).join('');
+    :rows.map(function(c){return '<tr><td style="font-weight:700;">'+esc(c.secretario||'-')+'</td><td>'+(c.turno||'DIA')+'</td><td style="font-size:.78em;">'+(c.inicio?new Date(c.inicio).toLocaleString('es-BO'):'-')+'</td><td style="font-size:.78em;">'+esc(c.fechaCierreFormato||'-')+' '+(c.horaCierreFormato||'')+'</td><td style="text-align:center;">'+(c.cantidadVentas||0)+'</td><td style="text-align:center;">'+(c.totalEfectivo>0?fmt(c.totalEfectivo):'-')+'</td><td style="text-align:center;">'+(c.totalQR>0?fmt(c.totalQR):'-')+'</td><td style="text-align:center;">'+(c.totalAnticipos>0?fmt(c.totalAnticipos):'-')+'</td><td style="color:var(--green);font-weight:700;text-align:right;">'+fmt(c.totalGeneral)+'</td></tr>';}).join('');
 }
 
 /* ─── INCIDENCIAS ─── */
