@@ -1,33 +1,33 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using KollitaApi.Data;
 using KollitaApi.Models;
+using KollitaApi.Services.Interfaces;
 
 namespace KollitaApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Policy = "Secretario")]
 public class CierresController : ControllerBase
 {
-    private readonly KollitaDbContext _db;
+    private readonly ICierreService _service;
 
-    public CierresController(KollitaDbContext db)
+    public CierresController(ICierreService service)
     {
-        _db = db;
+        _service = service;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var cierres = await _db.Cierres.OrderByDescending(c => c.Id).Take(200).ToListAsync();
+        var cierres = await _service.GetAllAsync(200);
         return Ok(cierres);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] Cierre cierre)
     {
-        _db.Cierres.Add(cierre);
-        await _db.SaveChangesAsync();
-        return Ok(cierre);
+        var created = await _service.CreateAsync(cierre);
+        return Ok(created);
     }
 }

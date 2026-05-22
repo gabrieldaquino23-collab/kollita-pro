@@ -1,7 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using KollitaApi.Data;
 using KollitaApi.Models;
+using KollitaApi.Services.Interfaces;
 
 namespace KollitaApi.Controllers;
 
@@ -9,51 +9,25 @@ namespace KollitaApi.Controllers;
 [Route("api/[controller]")]
 public class ConfigController : ControllerBase
 {
-    private readonly KollitaDbContext _db;
+    private readonly IConfigService _service;
 
-    public ConfigController(KollitaDbContext db)
+    public ConfigController(IConfigService service)
     {
-        _db = db;
+        _service = service;
     }
 
     [HttpGet("sucursales")]
     public async Task<IActionResult> GetSucursales()
     {
-        var sucursales = new[]
-        {
-            "3 Pasos", "Cuchilla", "G77 Av. Cambodromo", "Km8 Doble Vía La Guardia",
-            "4to Anillo Canal Isuto", "Av. Paurito", "Virgen de Cotoca"
-        };
-
-        var configs = await _db.ConfigSucursales.ToListAsync();
-        var resultado = sucursales.Select(suc =>
-        {
-            var cfg = configs.FirstOrDefault(c => c.Sucursal == suc);
-            return new
-            {
-                nombre = suc,
-                consulta = cfg?.Consulta ?? true,
-                rapido = cfg?.Rapido ?? true
-            };
-        });
-
-        return Ok(resultado);
+        var sucursales = await _service.GetSucursalesAsync();
+        return Ok(sucursales);
     }
 
+    [Authorize(Policy = "Admin")]
     [HttpPut("sucursales/{sucursal}")]
     public async Task<IActionResult> UpdateSucursal(string sucursal, [FromBody] ConfigSucursalDto dto)
     {
-        var cfg = await _db.ConfigSucursales.FirstOrDefaultAsync(c => c.Sucursal == sucursal);
-        if (cfg == null)
-        {
-            cfg = new ConfigSucursal { Sucursal = sucursal };
-            _db.ConfigSucursales.Add(cfg);
-        }
-
-        if (dto.Consulta.HasValue) cfg.Consulta = dto.Consulta.Value;
-        if (dto.Rapido.HasValue) cfg.Rapido = dto.Rapido.Value;
-
-        await _db.SaveChangesAsync();
+        var cfg = await _service.UpdateSucursalAsync(sucursal, dto.Consulta, dto.Rapido);
         return Ok(cfg);
     }
 }

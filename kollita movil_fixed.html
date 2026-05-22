@@ -759,9 +759,9 @@ function notifySync(type,data){
   try{window.dispatchEvent(new CustomEvent('kollita_sync',{detail:{type,data}}));}catch(e){}
 }
 
-// ── SUPABASE SYNC (DESCONECTADO) ──
-// const SUPA_URL='https://yngeclqhqljnjxvqgbih.supabase.co/rest/v1/kollita_config';
-// const SUPA_KEY='sb_publishable_KjmHILYWY4s40McEN5e-kA_QOE1izkI';
+// ── SUPABASE SYNC ──
+const SUPA_URL='https://wsqhzatsuymjoebzfhpg.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzcWh6YXRzdXltam9lYnpmaHBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTUyMTMsImV4cCI6MjA5NDYzMTIxM30.bFCJBY9PAa8WviEwE8HdO2TjE3ytYM3sD6qFgxJ0pPM';
 async function fetchCloud(){}
 // ── Solo localStorage ──
 function lg(k,d){

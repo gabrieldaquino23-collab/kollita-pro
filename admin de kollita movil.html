@@ -11,6 +11,15 @@
 <!-- SheetJS for Excel import -->
 <script src="recursos/js/supabase-config.js"></script>
 <script src="recursos/js/auth-global.js"></script>
+<script>
+// Fallback por si auth-global.js no carga desde CDN
+if (typeof cfgLeerPasswords === 'undefined') {
+    function cfgLeerPasswords() {
+        try { return JSON.parse(localStorage.getItem('kollita_system_passwords') || '[]'); }
+        catch(e) { return []; }
+    }
+}
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -216,6 +225,7 @@ select.fi{cursor:pointer}
 </head>
 <body>
 <div id="toast"></div>
+<span id="sync-indicator" style="position:fixed;top:10px;right:10px;width:12px;height:12px;border-radius:50%;background:#ff2d55;z-index:9999;" title="Sin conexión a Supabase"></span>
 
 <!-- LOGIN -->
 <div id="scr-login">
@@ -652,13 +662,82 @@ select.fi{cursor:pointer}
 // STORAGE
 // ═══════════════════════════════════════════════
 const SK={CFG:'kol_adm_v3',HIST:'kollita_v4_hist',PASS:'kol_pass_v3'};
-const DEF_PASS='contra1234';
+const DEF_PASS='';
 
-// ── SUPABASE SYNC (DESCONECTADO) ──
+// ── SUPABASE SYNC ──
 const SUPA_URL = 'https://wsqhzatsuymjoebzfhpg.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzcWh6YXRzdXltam9lYnpmaHBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTUyMTMsImV4cCI6MjA5NDYzMTIxM30.bFCJBY9PAa8WviEwE8HdO2TjE3ytYM3sD6qFgxJ0pPM';
-async function fetchCloud(){}
-function saveCloud(){}
+
+async function fetchSupabase(endpoint, method, body) {
+  method = method || 'GET';
+  try {
+    var headers = { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY };
+    if (body) headers['Content-Type'] = 'application/json';
+    var r = await fetch(SUPA_URL + '/rest/v1/' + endpoint, {
+      method: method,
+      headers: headers,
+      body: body ? JSON.stringify(body) : undefined
+    });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch(e) { return null; }
+}
+
+function updateSyncIndicator() {
+  var dot = document.getElementById('sync-indicator');
+  if (!dot) return;
+  if (navigator.onLine) {
+    fetchSupabase('sucursales?limit=1').then(function(r) {
+      if (r) { dot.style.background = '#00e676'; dot.title = 'Conectado a Supabase'; }
+      else { dot.style.background = '#ffd60a'; dot.title = 'Supabase no disponible (offline)'; }
+    }).catch(function() { dot.style.background = '#ff2d55'; dot.title = 'Sin conexión'; });
+  } else {
+    dot.style.background = '#ff2d55'; dot.title = 'Sin conexión a internet';
+  }
+}
+window.addEventListener('online', updateSyncIndicator);
+window.addEventListener('offline', updateSyncIndicator);
+
+async function fetchCloud(){
+  try {
+    var r = await fetch(SUPA_URL + '/rest/v1/admin_config?key=eq.kol_adm_v3&select=data&limit=1', {
+      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY }
+    });
+    if (r.ok) {
+      var rows = await r.json();
+      if (rows.length && rows[0].data) {
+        var cloudCfg = rows[0].data;
+        var localRaw = localStorage.getItem(SK.CFG);
+        if (!localRaw) {
+          localStorage.setItem(SK.CFG, JSON.stringify(cloudCfg));
+          console.log('[Admin] Data source: Supabase');
+        }
+        updateSyncIndicator();
+        return cloudCfg;
+      }
+    }
+  } catch(e) {}
+  console.log('[Admin] Data source: localStorage');
+  return null;
+}
+function saveCloud(){
+  try {
+    var raw = localStorage.getItem(SK.CFG);
+    if (!raw) return;
+    var data = JSON.parse(raw);
+    var payload = { key: 'kol_adm_v3', data: data, updated_at: new Date().toISOString() };
+    fetch(SUPA_URL + '/rest/v1/admin_config', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify(payload)
+    }).catch(function(){});
+  } catch(e) {}
+}
 
 // ── SYNC PRODUCTOS A SUPABASE ──
 async function syncProductToSupabase(prod, isDelete) {
@@ -674,11 +753,11 @@ async function syncProductToSupabase(prod, isDelete) {
     orden: prod.id
   };
   try {
-    const r = await fetch('https://wsqhzatsuymjoebzfhpg.supabase.co/rest/v1/catalogo_productos', {
+    const r = await fetch(`${SUPA_URL}/rest/v1/catalogo_productos`, {
       method: 'POST',
       headers: {
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzcWh6YXRzdXltam9lYnpmaHBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTUyMTMsImV4cCI6MjA5NDYzMTIxM30.bFCJBY9PAa8WviEwE8HdO2TjE3ytYM3sD6qFgxJ0pPM',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzcWh6YXRzdXltam9lYnpmaHBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTUyMTMsImV4cCI6MjA5NDYzMTIxM30.bFCJBY9PAa8WviEwE8HdO2TjE3ytYM3sD6qFgxJ0pPM',
+        'apikey': SUPA_KEY,
+        'Authorization': `Bearer ${SUPA_KEY}`,
         'Content-Type': 'application/json',
         'Prefer': 'resolution=merge-duplicates'
       },
@@ -941,7 +1020,7 @@ let toastT=null;
 let _mcb=null;
 let _xlData=null; // pending excel data before branch selection
 
-function sc(){ls(SK.CFG,cfg);}
+function sc(){ls(SK.CFG,cfg);saveCloud();}
 
 function toast(m,d=1900){
   const t=$('toast');t.textContent=m;t.classList.add('on');
@@ -961,7 +1040,7 @@ async function login(){
 
   if(p!==expected){$('le').classList.add('on');$('lp').value='';return;}
 
-  if(expected === 'contra1234') {
+  if(!expected) {
     mostrarModalCambioPassGlobal('Admin Kollita Movil', function(){ completarLoginAdminMovil(); });
     return;
   }
@@ -976,6 +1055,7 @@ async function completarLoginAdminMovil(){
   hist=lg(SK.HIST,[]);
   $('scr-login').style.display='none';$('le').classList.remove('on');
   if(lb)lb.innerHTML='<i class="fa-solid fa-lock-open"></i> &nbsp;INGRESAR';
+  updateSyncIndicator();
   initDash();loadCoca();
 }
 

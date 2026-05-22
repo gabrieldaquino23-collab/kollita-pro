@@ -18,3 +18,24 @@ KollitaApi/appsettings.Production.json
 Thumbs.db
 
 .vercel
+
+# Local Netlify folder
+.netlify
+
+# Temp and fix scripts (already applied)
+*.log
+fix_safe_output.txt
+temp.js
+temp_patch.js
+temp_patch2.js
+temp_scripts.js
+check_project.js
+check_project_new.js
+create_tables.js
+fix.js
+fix5.js
+fix_migrar.js
+fix_schema.js
+fix_safe.js
+temp_git_version.html
+kollita movil_fixed.html

@@ -1434,6 +1434,7 @@
   </head>
 
   <body>
+    <span id="sync-indicator" style="position:fixed;top:10px;right:10px;width:12px;height:12px;border-radius:50%;background:#ff2d55;z-index:9999;" title="Sin conexión a Supabase"></span>
     <div id="app">
       <!-- SIDEBAR -->
       <nav id="sidebar">
@@ -2036,7 +2037,81 @@
     <script src="recursos/js/supabase-config.js"></script>
 <script src="recursos/js/auth-global.js"></script>
 <script>
+// Fallback por si auth-global.js no carga desde CDN
+if (typeof cfgLeerPasswords === 'undefined') {
+    function cfgLeerPasswords() {
+        try { return JSON.parse(localStorage.getItem('kollita_system_passwords') || '[]'); }
+        catch(e) { return []; }
+    }
+}
+</script>
+<script>
       'use strict';
+
+      /* ═══════════════════════════════════════
+         SUPABASE INTEGRATION
+      ═══════════════════════════════════════ */
+      var SUPA_URL = 'https://wsqhzatsuymjoebzfhpg.supabase.co';
+      var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzcWh6YXRzdXltam9lYnpmaHBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTUyMTMsImV4cCI6MjA5NDYzMTIxM30.bFCJBY9PAa8WviEwE8HdO2TjE3ytYM3sD6qFgxJ0pPM';
+
+      async function syncCocaToSupabase(data) {
+        try {
+          var payload = { key: 'cocapay_v3_omega', data: data, updated_at: new Date().toISOString() };
+          await fetch(SUPA_URL + '/rest/v1/coca_config', {
+            method: 'POST',
+            headers: {
+              'apikey': SUPA_KEY,
+              'Authorization': 'Bearer ' + SUPA_KEY,
+              'Content-Type': 'application/json',
+              'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify(payload)
+          });
+        } catch(e) {}
+      }
+
+      async function fetchCocaFromSupabase() {
+        try {
+          var r = await fetch(SUPA_URL + '/rest/v1/coca_config?key=eq.cocapay_v3_omega&select=data&limit=1', {
+            headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY }
+          });
+          if (r.ok) {
+            var rows = await r.json();
+            if (rows.length && rows[0].data) return rows[0].data;
+          }
+        } catch(e) {}
+        return null;
+      }
+
+      async function fetchSupabase(endpoint, method, body) {
+        method = method || 'GET';
+        try {
+          var headers = { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY };
+          if (body) headers['Content-Type'] = 'application/json';
+          var r = await fetch(SUPA_URL + '/rest/v1/' + endpoint, {
+            method: method,
+            headers: headers,
+            body: body ? JSON.stringify(body) : undefined
+          });
+          if (!r.ok) return null;
+          return await r.json();
+        } catch(e) { return null; }
+      }
+
+      function updateSyncIndicator() {
+        var dot = document.getElementById('sync-indicator');
+        if (!dot) return;
+        if (navigator.onLine) {
+          fetchSupabase('sucursales?limit=1').then(function(r) {
+            if (r) { dot.style.background = '#00e676'; dot.title = 'Conectado a Supabase'; }
+            else { dot.style.background = '#ffd60a'; dot.title = 'Supabase no disponible (offline)'; }
+          }).catch(function() { dot.style.background = '#ff2d55'; dot.title = 'Sin conexión'; });
+        } else {
+          dot.style.background = '#ff2d55'; dot.title = 'Sin conexión a internet';
+        }
+      }
+      window.addEventListener('online', updateSyncIndicator);
+      window.addEventListener('offline', updateSyncIndicator);
 
       /* ═══════════════════════════════════════
          LAYER 0: EventBus (Publish/Subscribe)
@@ -2099,7 +2174,7 @@
          LAYER 2: Repository (Data Access)
          Uses localStorage with JSON schema
       ═══════════════════════════════════════ */
-      const DB_KEY = 'cocapay_v3';
+      const DB_KEY = 'cocapay_v3_omega';
 
       const Repository = {
         _data: null,
@@ -2108,18 +2183,40 @@
           _seq: { casero: 1, sucursal: 1, registro: 1, pago: 1, nota: 1 }
         },
 
-        load() {
+        async load() {
+          var dataFromCloud = await fetchCocaFromSupabase();
+          if (dataFromCloud) {
+            this._data = dataFromCloud;
+            this._data._fromCloud = true;
+            localStorage.setItem(DB_KEY, JSON.stringify(dataFromCloud));
+            updateSyncIndicator();
+            return this;
+          }
           try {
             const raw = localStorage.getItem(DB_KEY);
-            this._data = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(this._schema));
+            if (raw) {
+              console.log('[CocaPay] Data source: localStorage');
+              this._data = JSON.parse(raw);
+            } else {
+              const oldRaw = localStorage.getItem('cocapay_v3');
+              if (oldRaw) {
+                this._data = JSON.parse(oldRaw);
+                localStorage.setItem(DB_KEY, oldRaw);
+              } else {
+                this._data = JSON.parse(JSON.stringify(this._schema));
+              }
+            }
           } catch (e) {
             this._data = JSON.parse(JSON.stringify(this._schema));
           }
+          updateSyncIndicator();
           return this;
         },
 
         save() {
-          localStorage.setItem(DB_KEY, JSON.stringify(this._data));
+          var cloned = JSON.parse(JSON.stringify(this._data));
+          localStorage.setItem(DB_KEY, JSON.stringify(cloned));
+          syncCocaToSupabase(cloned);
           return this;
         },
 
@@ -3184,12 +3281,15 @@
       ═══════════════════════════════════════ */
       const App = {
         init() {
-          Repository.load();
-          this._seedIfEmpty();
-          this._bindEvents();
-          this._initUI();
-          Router.go('dashboard');
-          AuditoriaService.log('SISTEMA_INICIO', 'Aplicación iniciada correctamente', 'blue');
+          var self = this;
+          Repository.load().then(function() {
+            console.log('[CocaPay] Data loaded, source:', Repository._data._fromCloud ? 'Supabase' : 'localStorage');
+            self._seedIfEmpty();
+            self._bindEvents();
+            self._initUI();
+            Router.go('dashboard');
+            AuditoriaService.log('SISTEMA_INICIO', 'Aplicación iniciada correctamente', 'blue');
+          });
         },
 
         _seedIfEmpty() {

@@ -97,6 +97,7 @@ body{font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(
   </div>
 </div>
 
+<span id="sync-indicator" style="position:fixed;top:10px;right:10px;width:12px;height:12px;border-radius:50%;background:#ff2d55;z-index:9999;" title="Sin conexión a Supabase"></span>
 <div id="app">
   <div class="topbar">
     <div style="display:flex;align-items:center;">
@@ -184,9 +185,51 @@ body{font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(
 <script src="recursos/js/datos.js"></script>
 <script src="recursos/js/auth-global.js"></script>
 <script>
+// Fallback por si auth-global.js no carga desde CDN
+if (typeof cfgLeerPasswords === 'undefined') {
+    function cfgLeerPasswords() {
+        try { return JSON.parse(localStorage.getItem('kollita_system_passwords') || '[]'); }
+        catch(e) { return []; }
+    }
+}
+</script>
+<script>
 /* ═══════════════════════════════════════════════
    SUPERVISOR SENIOR — PRODUCCIÓN GLOBAL
    ═══════════════════════════════════════════════ */
+
+const SUPA_URL = 'https://wsqhzatsuymjoebzfhpg.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzcWh6YXRzdXltam9lYnpmaHBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTUyMTMsImV4cCI6MjA5NDYzMTIxM30.bFCJBY9PAa8WviEwE8HdO2TjE3ytYM3sD6qFgxJ0pPM';
+
+async function fetchSupabase(endpoint, method, body) {
+  method = method || 'GET';
+  try {
+    var headers = { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY };
+    if (body) headers['Content-Type'] = 'application/json';
+    var r = await fetch(SUPA_URL + '/rest/v1/' + endpoint, {
+      method: method,
+      headers: headers,
+      body: body ? JSON.stringify(body) : undefined
+    });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch(e) { return null; }
+}
+
+function updateSyncIndicator() {
+  var dot = document.getElementById('sync-indicator');
+  if (!dot) return;
+  if (navigator.onLine) {
+    fetchSupabase('sucursales?limit=1').then(function(r) {
+      if (r) { dot.style.background = '#00e676'; dot.title = 'Conectado a Supabase'; }
+      else { dot.style.background = '#ffd60a'; dot.title = 'Supabase no disponible (offline)'; }
+    }).catch(function() { dot.style.background = '#ff2d55'; dot.title = 'Sin conexión'; });
+  } else {
+    dot.style.background = '#ff2d55'; dot.title = 'Sin conexión a internet';
+  }
+}
+window.addEventListener('online', updateSyncIndicator);
+window.addEventListener('offline', updateSyncIndicator);
 
 const PASS_SENIOR = 'senior2024';
 let DATA = null;
@@ -200,6 +243,13 @@ function gCatalogoReal(){
 }
 function gEncargados(){
   try { return JSON.parse(localStorage.getItem('kollita_encargados')||'[]'); } catch(e) { return []; }
+}
+// ════════════════ SUPABASE SYNC ════════════════
+async function seniorSyncSupabaseDown(){
+  if(typeof SupabaseClient==='undefined') return;
+  try{ var pr=await SupabaseClient.select('produccion','select=*'); if(Array.isArray(pr)&&pr.length){ localStorage.setItem('kollita_enc_produccion',JSON.stringify(pr)); } }catch(e){}
+  try{ var ct=await SupabaseClient.select('catalogo_productos','select=*'); if(Array.isArray(ct)&&ct.length){ localStorage.setItem('kollita_enc_catalogo',JSON.stringify(ct)); } }catch(e){}
+  try{ var enc=await SupabaseClient.select('secretarios','select=*'); if(Array.isArray(enc)&&enc.length){ localStorage.setItem('kollita_encargados',JSON.stringify(enc)); } }catch(e){}
 }
 function getPrecio(catalogo, cat, sabor, tipo){
   var catData=catalogo[cat]||[];
@@ -257,7 +307,12 @@ function doLogin(){
   var pws = [];
   try { pws = JSON.parse(localStorage.getItem('kollita_system_passwords')||'[]'); } catch(ex){}
   var myPwObj = pws.find(x => x.panel === panelName);
-  var expected = myPwObj ? myPwObj.pass : 'contra1234';
+  var expected = myPwObj ? myPwObj.pass : null;
+
+  if(!expected) {
+    mostrarModalCambioPassGlobal(panelName, function(){ completarLoginSenior(); });
+    return;
+  }
 
   if(p !== expected){
     e.textContent = 'Contraseña incorrecta.';
@@ -265,22 +320,26 @@ function doLogin(){
     return;
   }
   
-  if(expected === 'contra1234') {
-    mostrarModalCambioPassGlobal(panelName, function(){ completarLoginSenior(); });
-    return;
-  }
   completarLoginSenior();
 }
 
 function completarLoginSenior() {
   var merged=mergeData();
   DATA = merged.data;
+  console.log('[Supervisor Senior] Data source:', merged.source);
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('tb-fecha').textContent = new Date().toLocaleDateString('es-BO',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
   poblarFiltros();
-  renderProd();
+  updateSyncIndicator();
+  seniorSyncSupabaseDown().then(function(){ renderProd(); });
 }
+
+setInterval(function() {
+  if (!DATA || document.hidden) return;
+  seniorSyncSupabaseDown();
+  updateSyncIndicator();
+}, 60000);
 
 function doLogout(){
   DATA = null;

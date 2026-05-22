@@ -6,65 +6,82 @@ Kollita Pro es un sistema integral avanzado para la gestión de puntos de venta 
 
 ## 🏗️ 1. Arquitectura del Sistema
 
-El ecosistema de Kollita Pro opera en un "triángulo" de servicios en la nube, asegurando alta disponibilidad y rendimiento en tiempo real:
+El ecosistema de Kollita Pro opera sobre tres servicios en la nube:
 
 1. **Supabase (Base de Datos Central)**
-   - Actúa como el "cerebro" del sistema.
    - Aloja la base de datos relacional PostgreSQL.
-   - Gestiona el almacenamiento de datos en tiempo real mediante API REST.
-   - Proyecto en producción: `wsqhzatsuymjoebzfhpg` (Región: São Paulo).
+   - Gestiona el almacenamiento de datos en tiempo real mediante API REST (PostgREST).
+   - Proyecto único en producción: `wsqhzatsuymjoebzfhpg` (Región: São Paulo, sa-east-1).
+   - Anon Key centralizada en `recursos/js/supabase-config.js`.
 
 2. **Vercel (Frontend Hosting)**
-   - Aloja las interfaces de usuario construidas en HTML, CSS y Vanilla JavaScript.
-   - Proveedor del entorno público para el **Panel Móvil** (`kollita-movil-public.vercel.app`), diseñado para un acceso ágil desde cualquier dispositivo móvil.
+   - Aloja TODOS los paneles como archivos HTML estáticos con Vanilla JavaScript.
+   - Rewrites definidos en `vercel.json` para URLs limpias (`/panel`, `/movil`, `/encargado`, etc.).
+   - Paneles: kollita_borrador.html, kollita movil.html, admin de kollita movil.html, encargado.html, supervisor_alfa.html, supervisor_beta.html, omega.html, senior.html, coca_system_pro.html.
 
 3. **Render (Backend API)**
    - Aloja la `KollitaApi` construida en C# / .NET (contenedor Docker).
-   - Se conecta directamente al puerto `5432` de Supabase para operaciones complejas, procesamiento masivo de reportes o interacciones de nivel servidor.
+   - Conexión directa al puerto `5432` de Supabase para operaciones complejas y procesamiento de reportes.
 
 ---
 
 ## 👥 2. Paneles y Roles de Usuario
 
-El sistema está modularizado para diferentes niveles de acceso y responsabilidades:
+Todos los paneles se sirven desde Vercel con URLs limpias:
 
-- **📱 Panel Móvil (Cliente/Público):** Interfaz ágil alojada en Vercel. Permite a los usuarios elegir una sucursal, realizar pedidos de machucas y bebidas, y enviarlos directamente a Supabase sin necesidad de intermediarios.
-- **💼 Panel Secretario (`kollita_borrador.html`):** Panel operativo de caja y recepción. Recibe pedidos del móvil en tiempo real, registra cobros, gestiona cierres de turno y controla inventarios.
-- **🏪 Panel Encargado (`encargado.html`):** Panel para la administración local de la sucursal. Supervisa inventarios físicos (tanques, registros de coca) y aprueba traspasos de turno.
-- **👑 Panel Supervisor / Omega (`supervisor_alfa.html` / `omega.html`):** Dashboards de alta gerencia para visión global. Analiza métricas de ventas cruzadas, rendimiento por sucursal y realiza auditorías a nivel empresarial.
+| Ruta | Archivo | Rol |
+|------|---------|-----|
+| `/panel` | `kollita_borrador.html` | Secretario — caja, cobros, cierres de turno, inventarios |
+| `/movil` | `kollita movil.html` | Cliente/Público — pedidos de machuca y bebidas |
+| `/admin-movil` | `admin de kollita movil.html` | Admin — catálogo de productos, configuración de sucursales |
+| `/encargado` | `encargado.html` | Encargado — supervisión de inventarios físicos, tanques, traspasos |
+| `/supervisor` | `supervisor_alfa.html` | Supervisor Alfa — dashboard de alta gerencia |
+| `/supervisor-beta` | `supervisor_beta.html` | Supervisor Beta — dashboard alternativo con análisis por sucursal |
+| `/omega` | `omega.html` | Omega — panel ejecutivo con métricas globales |
+| `/senior` | `senior.html` | Senior — panel de control avanzado |
+| `/coca` | `coca_system_pro.html` | Coca System Pro — control de producción de coca |
 
 ---
 
 ## 🗄️ 3. Estructura de la Base de Datos
 
-Las tablas están estrictamente conectadas mediante **Llaves Foráneas (Foreign Keys)** ancladas a la tabla principal `sucursales`, asegurando integridad referencial (Cascada).
+Las tablas están conectadas mediante **Foreign Keys** ancladas a `sucursales`, asegurando integridad referencial (CASCADE).
 
 ### Tablas Principales:
-1. **`sucursales`**: El nodo central. Contiene el nombre y configuración de cada local.
-2. **`secretarios`** y **`encargados`**: Credenciales y datos del personal operativo, vinculados obligatoriamente a una sucursal.
-3. **`pedidos`**: Registra cada orden (móvil o presencial), vinculada a una sucursal.
-4. **`coca_pagos`**, **`produccion`**, **`cierres_caja`**, **`coca_registros`**: Control financiero e inventario diario, conectados a sus respectivas sucursales.
-5. **`sync_queue`**: Tabla de control para registro de eventos de sincronización.
-6. **`catalogo_productos`**: Única tabla "Global" (no conectada a sucursales), ya que estandariza los precios y productos para toda la empresa.
+1. **`sucursales`**: Nodo central — `id` (UUID), `nombre` (ej: "G77", "Km8", "4to Anillo", "Paurito", "Cotoca", "3 Pasos", "Cuchilla").
+2. **`secretarios`** y **`encargados`**: Personal operativo vinculado a sucursal.
+3. **`pedidos`**: Cada orden (móvil o presencial) con `sucursal_id`, `numero_nota` (integer), `metodo_pago` (CHECK: EFECTIVO, QR, MIXTO), `estado`, `fecha_id`, items, montos.
+4. **`cierres_caja`**: Cierres de turno con `sucursal_id`, ventas, arqueos, fecha.
+5. **`catalogo_productos`**: Tabla global con productos (`id`, `nombre`, `precio_media`, `categorias`, `emoji`, `activo`, `orden`).
+6. **`reclamos`**: Registro de reclamos/obsequios/promociones por sucursal.
+7. **`coca_historial`** / **`coca_produccion`**: Control de producción e inventario de coca.
 
 ---
 
-## 🪂 4. Tecnología de Sincronización (KollitaSync v3.0)
+## 🪂 4. Tecnología de Sincronización (KollitaSync)
 
-Kollita Pro cuenta con un motor avanzado de sincronización conocido como modelo **Offline-First**.
+El sistema usa un modelo **Offline-First** con dos capas:
 
-### ¿Cómo funciona?
-1. **Estado Online:** Los datos (ej. un pedido) viajan instantáneamente a Supabase vía peticiones `fetch`.
-2. **Estado Offline (El Paracaídas):** Si la sucursal pierde la conexión a Internet, el código intercepta el error. En lugar de detener el sistema, los datos se guardan temporalmente en el **Almacenamiento Local (`localStorage`)** del navegador bajo la llave de `kollita_pendientes`. El Secretario continúa su trabajo sin interrupción.
-3. **Recuperación Automática:** Al detectarse el retorno de Internet (`navigator.onLine === true`), KollitaSync vacía la cola local y dispara todas las transacciones retenidas hacia Supabase, limpiando la memoria del dispositivo tras una validación exitosa.
+1. **Persistencia local (`localStorage`):**
+   - `kollita_db`: Pedidos activos del secretario (PREPARADO, PENDIENTE, ENTREGADO).
+   - `kollita_archivo_YYYY_MM`: Archivos mensuales históricos.
+   - `kollita_pendientes`: Cola de pedidos del móvil que el secretario debe procesar.
+   - `kollita_config_ticket`: Configuración de sucursal y ticket.
+
+2. **Sincronización a Supabase:**
+   - Al cerrar turno, el módulo KollitaSync (en `kollita_borrador.html`) sube pedidos en lotes a la tabla `pedidos` vía REST API.
+   - El Panel Móvil envía pedidos directamente a Supabase (`POST /rest/v1/pedidos`) en tiempo real y también los guarda en `kollita_db` local.
+   - El botón "Migrar Historial" permite subir todo el historial local acumulado a Supabase.
+   - La función `migrarHistorialASupabase()` barre `kollita_db` y todos los archivos mensuales para subida masiva.
 
 ---
 
 ## 🔐 5. Seguridad y Mantenimiento
 
-- **Credenciales:** La conexión frontend a Supabase utiliza la `Anon Key`, mientras que el backend en C# (Render) utiliza conexión directa con contraseña encriptada.
-- **Integridad:** Las eliminaciones en Supabase están protegidas por `ON DELETE SET NULL` u `ON DELETE CASCADE` para evitar registros huérfanos.
-- **Despliegues:** Cualquier actualización en las interfaces (`.html`, `.css`, `.js`) debe ser subida (`push`) al repositorio de GitHub asociado a Vercel para su auto-despliegue en producción.
+- **Credenciales:** El frontend usa la `Anon Key` de Supabase (definida en `recursos/js/supabase-config.js`). Render usa conexión directa con clave de servicio.
+- **Login:** El panel secretario (`kollita_borrador.html`) tiene login local con contraseña y selección de sucursal. La sesión se guarda en `kollita_login_session` por 8 horas.
+- **Integridad:** Foreign Keys con `ON DELETE CASCADE`/`SET NULL` evitan registros huérfanos.
+- **Despliegues:** Cualquier push al repositorio de GitHub asociado a Vercel dispara el auto-despliegue en producción.
 
 ---
-*Documentación generada y actualizada en Mayo de 2026 para el ecosistema Kollita Pro.*
+*Documentación actualizada en Mayo de 2026 para el ecosistema Kollita Pro.*

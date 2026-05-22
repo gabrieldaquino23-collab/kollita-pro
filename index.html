@@ -17,82 +17,69 @@
             align-items: center;
             padding: 40px 20px;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+        .header { text-align: center; margin-bottom: 40px; }
         .header h1 {
-            font-size: 3em;
-            font-weight: 700;
+            font-size: 3em; font-weight: 700;
             background: linear-gradient(90deg, #00c6ff, #0072ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
         }
-        .header p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.1em;
+        .header .status {
+            display: inline-block; padding: 6px 16px; border-radius: 20px;
+            font-size: 0.8em; font-weight: 700; letter-spacing: 1px;
+            background: rgba(52,199,89,0.2); color: #34c759;
         }
+        .header .status.off { background: rgba(255,45,85,0.2); color: #ff2d55; }
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            width: 100%;
-            max-width: 1000px;
+            gap: 20px; width: 100%; max-width: 1100px;
         }
         .card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 25px;
-            text-decoration: none;
-            color: #fff;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px; padding: 25px;
+            text-decoration: none; color: #fff;
+            transition: all 0.3s;
             backdrop-filter: blur(10px);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            display: flex; flex-direction: column;
         }
         .card:hover {
             transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(0, 198, 255, 0.5);
-            box-shadow: 0 10px 30px rgba(0, 198, 255, 0.2);
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(0,198,255,0.5);
+            box-shadow: 0 10px 30px rgba(0,198,255,0.2);
         }
-        .card-icon {
-            font-size: 2.5em;
-            margin-bottom: 15px;
-        }
-        .card-title {
-            font-size: 1.4em;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        .card-desc {
-            font-size: 0.9em;
-            color: rgba(255, 255, 255, 0.6);
-            line-height: 1.5;
-        }
+        .card-icon { font-size: 2.2em; margin-bottom: 12px; }
+        .card-title { font-size: 1.3em; font-weight: 700; margin-bottom: 8px; }
+        .card-desc { font-size: 0.85em; color: rgba(255,255,255,0.55); line-height: 1.5; flex:1; }
+        .card-domain { font-size: 0.7em; color: rgba(255,255,255,0.3); margin-top: 12px; }
         .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75em;
-            font-weight: 700;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            display: inline-block; padding: 4px 10px; border-radius: 20px;
+            font-size: 0.7em; font-weight: 700; margin-bottom: 12px;
+            text-transform: uppercase; letter-spacing: 1px;
         }
-        .badge.admin { background: rgba(255, 45, 85, 0.2); color: #ff2d55; }
-        .badge.super { background: rgba(0, 198, 255, 0.2); color: #00c6ff; }
-        .badge.op { background: rgba(52, 199, 89, 0.2); color: #34c759; }
-
+        .badge.admin { background: rgba(255,45,85,0.2); color: #ff2d55; }
+        .badge.super { background: rgba(0,198,255,0.2); color: #00c6ff; }
+        .badge.op { background: rgba(52,199,89,0.2); color: #34c759; }
+        .badge.mobile { background: rgba(255,149,0,0.2); color: #ff9500; }
+        .section-title {
+            grid-column: 1 / -1;
+            font-size: 1.1em; font-weight: 700; color: rgba(255,255,255,0.4);
+            text-transform: uppercase; letter-spacing: 2px;
+            padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);
+        }
         footer {
-            margin-top: auto;
-            padding-top: 50px;
-            font-size: 0.8em;
-            color: rgba(255, 255, 255, 0.3);
-            text-align: center;
+            margin-top: 50px; padding: 20px;
+            font-size: 0.75em; color: rgba(255,255,255,0.25);
+            text-align: center; line-height: 1.8;
+        }
+        footer a { color: rgba(255,255,255,0.25); text-decoration: none; }
+        footer a:hover { color: #00c6ff; }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 2em; }
+            .grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -100,84 +87,125 @@
 
     <div class="header">
         <h1>Kollita Pro</h1>
-        <p>Portal Central de Accesos del Sistema</p>
+        <p>Portal Central de Accesos &mdash; Cloud Production</p>
+        <div id="sys-status" class="status">CONECTADO</div>
     </div>
 
     <div class="grid">
-        <!-- Secretarios -->
-        <a href="kollita_borrador.html" class="card">
+        <div class="section-title">PANELES OPERATIVOS</div>
+
+        <a href="/panel" class="card">
             <div>
                 <span class="badge op">Operativo</span>
-                <div class="card-icon">💻</div>
+                <div class="card-icon">&#x1F4BB;</div>
                 <div class="card-title">Panel de Secretario</div>
-                <div class="card-desc">Registro de pedidos, clientes y cobros. Conexión paracaídas offline habilitada.</div>
+                <div class="card-desc">Registro de pedidos, clientes, cobros, cierre de turno. Conexion paracaidas offline.</div>
+                <div class="card-domain">/panel</div>
             </div>
         </a>
 
-        <!-- Encargados -->
-        <a href="encargado.html" class="card">
+        <a href="/encargado" class="card">
             <div>
                 <span class="badge op">Operativo</span>
-                <div class="card-icon">📦</div>
+                <div class="card-icon">&#x1F4E6;</div>
                 <div class="card-title">Panel de Encargado</div>
-                <div class="card-desc">Gestión de producción e inventario por sucursal aislada.</div>
+                <div class="card-desc">Gestion de produccion e inventario por sucursal. Control de tanques y registros.</div>
+                <div class="card-domain">/encargado</div>
             </div>
         </a>
 
-        <!-- Supervisor Alfa -->
-        <a href="supervisor_alfa.html" class="card">
+        <div class="section-title">SUPERVISION</div>
+
+        <a href="/supervisor" class="card">
             <div>
-                <span class="badge super">Supervisión</span>
-                <div class="card-icon">👁️</div>
+                <span class="badge super">Supervision</span>
+                <div class="card-icon">&#x1F441;</div>
                 <div class="card-title">Supervisor Alfa</div>
-                <div class="card-desc">Monitoreo y ajustes primarios de sucursales.</div>
+                <div class="card-desc">Dashboard KPIs, ranking sucursales, ventas cruzadas, actividad secretarios.</div>
+                <div class="card-domain">/supervisor</div>
             </div>
         </a>
 
-        <!-- Supervisor Beta -->
-        <a href="supervisor_beta.html" class="card">
+        <a href="/supervisor-beta" class="card">
             <div>
-                <span class="badge super">Supervisión</span>
-                <div class="card-icon">⚡</div>
+                <span class="badge super">Supervision</span>
+                <div class="card-icon">&#x26A1;</div>
                 <div class="card-title">Supervisor Beta</div>
-                <div class="card-desc">Administración avanzada y gestión de credenciales del sistema.</div>
+                <div class="card-desc">Gestion de encargados, secretarios, credenciales y configuracion avanzada.</div>
+                <div class="card-domain">/supervisor-beta</div>
             </div>
         </a>
 
-        <!-- Senior -->
-        <a href="senior.html" class="card">
-            <div>
-                <span class="badge admin">Dirección</span>
-                <div class="card-icon">📊</div>
-                <div class="card-title">Panel Senior</div>
-                <div class="card-desc">Análisis global, métricas consolidadas y control estadístico.</div>
-            </div>
-        </a>
+        <div class="section-title">DIRECCION</div>
 
-        <!-- Omega -->
-        <a href="omega.html" class="card">
+        <a href="/omega" class="card">
             <div>
                 <span class="badge admin">God Mode</span>
-                <div class="card-icon">👑</div>
+                <div class="card-icon">&#x1F451;</div>
                 <div class="card-title">Omega Central</div>
-                <div class="card-desc">Acceso total al sistema. Contiene el módulo Coca System Pro.</div>
+                <div class="card-desc">Acceso total. Modulo Coca System Pro, reportes mejorados, control absoluto.</div>
+                <div class="card-domain">/omega</div>
             </div>
         </a>
 
-        <!-- Admin Móvil -->
-        <a href="admin de kollita movil.html" class="card">
+        <a href="/senior" class="card">
             <div>
-                <span class="badge super">Mobile</span>
-                <div class="card-icon">📱</div>
-                <div class="card-title">Admin Móvil</div>
-                <div class="card-desc">Visualización rápida y ligera optimizada para smartphones.</div>
+                <span class="badge admin">Direccion</span>
+                <div class="card-icon">&#x1F4CA;</div>
+                <div class="card-title">Panel Senior</div>
+                <div class="card-desc">Analisis de produccion global. Tendencias, rankings, productividad de encargados.</div>
+                <div class="card-domain">/senior</div>
+            </div>
+        </a>
+
+        <div class="section-title">MODULOS ESPECIALES</div>
+
+        <a href="/coca" class="card">
+            <div>
+                <span class="badge op">Especial</span>
+                <div class="card-icon">&#x1F964;</div>
+                <div class="card-title">CocaPay Pro</div>
+                <div class="card-desc">Sistema de gestion de pagos para caseros. Registros, tanques, cobros programados.</div>
+                <div class="card-domain">/coca</div>
+            </div>
+        </a>
+
+        <a href="https://kollita-movil-public.vercel.app" class="card" target="_blank" rel="noopener">
+            <div>
+                <span class="badge mobile">Movil</span>
+                <div class="card-icon">&#x1F4F1;</div>
+                <div class="card-title">App Movil Publica</div>
+                <div class="card-desc">Pedidos desde el celular del cliente. Machucas, bebidas, WhatsApp integrado.</div>
+                <div class="card-domain">kollita-movil-public.vercel.app &#x2197;</div>
+            </div>
+        </a>
+
+        <a href="/admin-movil" class="card">
+            <div>
+                <span class="badge super">Admin</span>
+                <div class="card-icon">&#x2699;</div>
+                <div class="card-title">Admin App Movil</div>
+                <div class="card-desc">Configuracion del catalogo movil, precios, sucursales, banners y descuentos.</div>
+                <div class="card-domain">/admin-movil</div>
             </div>
         </a>
     </div>
 
     <footer>
-        &copy; 2024 Kollita Pro System. Vercel Production Environment.
+        &copy; 2026 Kollita Pro System. Cloud Production Environment.<br>
+        <a href="https://kollita.vercel.app">kollita.vercel.app</a> &nbsp;|&nbsp;
+        <a href="https://kollita-movil-public.vercel.app">kollita-movil-public.vercel.app</a><br>
+        Supabase: wsqhzatsuymjoebzfhpg (Sao Paulo) &nbsp;|&nbsp; Render API: kollita-api.onrender.com
     </footer>
+
+    <script>
+        (function(){
+            var dot = document.getElementById('sys-status');
+            if (!navigator.onLine) { dot.textContent = 'OFFLINE'; dot.className = 'status off'; }
+            window.addEventListener('online', function(){ dot.textContent = 'CONECTADO'; dot.className = 'status'; });
+            window.addEventListener('offline', function(){ dot.textContent = 'OFFLINE'; dot.className = 'status off'; });
+        })();
+    </script>
 
 </body>
 </html>

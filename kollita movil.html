@@ -70,6 +70,45 @@ input[type="number"]{-moz-appearance:textfield}
 .br-btn i{color:var(--muted);font-size:12px}
 .br-ver{margin-top:32px;font-size:10px;color:#2a2a2a;letter-spacing:3px;font-weight:700}
 
+/* ═══ LOGIN SCREEN ═══ */
+#scr-login{
+  position:fixed;inset:0;z-index:9001;
+  background:var(--dark);
+  display:none;flex-direction:column;align-items:center;
+  padding:0 24px 50px;overflow-y:auto;
+  background-image:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(255,45,32,.18) 0%,transparent 70%)
+}
+#scr-login.on{display:flex}
+.log-top{padding:50px 0 32px;text-align:center;width:100%}
+.log-top i{font-size:44px;color:var(--red)}
+.log-top h3{font-family:var(--fd);font-size:34px;color:#fff;letter-spacing:3px;margin:4px 0 12px}
+.log-info{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:500}
+.log-branch{display:inline-block;background:rgba(255,45,32,.12);color:var(--red);font-size:11px;font-weight:700;padding:5px 12px;border-radius:50px;margin-bottom:28px;letter-spacing:.5px}
+.log-input{
+  width:100%;max-width:360px;padding:13px 16px;
+  border:1px solid var(--dark3);border-radius:12px;
+  font-size:14px;font-family:var(--fb);font-weight:600;
+  outline:none;background:var(--dark2);color:#fff;
+  margin-bottom:10px;transition:border-color .2s;box-sizing:border-box
+}
+.log-input:focus{border-color:var(--red)}
+.log-btn{
+  width:100%;max-width:360px;padding:14px;
+  border:none;border-radius:12px;
+  font-size:14px;font-family:var(--fb);font-weight:800;
+  cursor:pointer;letter-spacing:.5px;transition:all .14s
+}
+.log-btn-primary{background:linear-gradient(90deg,#FF2D20,#C41F15);color:#fff;box-shadow:0 4px 16px rgba(255,45,32,.4)}
+.log-btn-primary:active{transform:scale(.97);opacity:.9}
+.log-btn-secondary{background:transparent;color:var(--muted);font-weight:600;letter-spacing:0}
+.log-btn-secondary:active{color:#fff}
+.log-err{color:#ff6b6b;font-size:12px;font-weight:700;margin-top:8px;display:none;text-align:center;max-width:360px;width:100%;background:rgba(255,45,85,.1);padding:8px 12px;border-radius:8px}
+.log-mode{margin-top:16px;font-size:11px;color:var(--muted);font-weight:500}
+.log-mode span{color:var(--red);font-weight:700;cursor:pointer}
+.log-mode span:active{text-decoration:underline}
+.log-back{position:absolute;top:20px;left:16px;background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:8px}
+.log-back:active{color:#fff}
+
 /* ══════════════════════════════
    TOAST
 ══════════════════════════════ */
@@ -111,6 +150,11 @@ input[type="number"]{-moz-appearance:textfield}
 .hdr-btn:active{background:var(--dark3);color:#fff}
 .notif-dot{width:7px;height:7px;background:var(--red);border-radius:50%;display:none;box-shadow:0 0 5px var(--red)}
 .notif-dot.on{display:block}
+.conn-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;transition:background .3s,box-shadow .3s}
+.conn-dot.green{background:var(--green-l);box-shadow:0 0 6px var(--green-l)}
+.conn-dot.red{background:var(--red);box-shadow:0 0 6px var(--red)}
+.conn-dot.yellow{background:var(--yellow);box-shadow:0 0 6px var(--yellow);animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .hdr-btn-branch{
   background:rgba(255,45,32,.15);border:1px solid rgba(255,45,32,.35);
   color:var(--red);padding:0 12px;height:36px;border-radius:10px;
@@ -494,6 +538,25 @@ input[type="number"]{-moz-appearance:textfield}
   <div class="br-ver">V4.0 · 2026</div>
 </div>
 
+<!-- ══ LOGIN JWT ══ -->
+<div id="scr-login">
+  <button class="log-back" onclick="K.showBranches()"><i class="fa-solid fa-arrow-left"></i> Atrás</button>
+  <div class="log-top">
+    <i class="fa-solid fa-lock"></i>
+    <h3>Acceder</h3>
+    <div class="log-info" id="log-info">Para hacer tu pedido, iniciá sesión</div>
+    <div class="log-branch" id="log-branch">—</div>
+  </div>
+  <input type="email" id="log-email" class="log-input" placeholder="Correo electrónico" autocomplete="email">
+  <input type="password" id="log-pass" class="log-input" placeholder="Contraseña" autocomplete="current-password">
+  <div class="log-err" id="log-err"></div>
+  <button class="log-btn log-btn-primary" id="log-btn-main" onclick="K.doLogin()">INGRESAR</button>
+  <div class="log-mode">
+    <span id="log-toggle" onclick="K.toggleLoginMode()">Crear cuenta nueva</span>
+  </div>
+  <input type="text" id="log-name" class="log-input" placeholder="Tu nombre" style="display:none">
+</div>
+
 <!-- ══ MODAL ══ -->
 <div id="modal">
   <div class="modal-sheet">
@@ -516,6 +579,7 @@ input[type="number"]{-moz-appearance:textfield}
     <div class="hdr-branch" id="hdr-branch">—</div>
   </div>
   <div class="hdr-actions">
+    <div class="conn-dot" id="conn-dot" title="Estado de conexión"></div>
     <div class="notif-dot" id="notif-dot"></div>
     <button class="hdr-btn-branch" id="btn-change-branch" onclick="K.changeBranch()" style="display:none">
       <i class="fa-solid fa-store"></i> SUCURSAL
@@ -773,7 +837,38 @@ function notifySync(type,data){
 // ── SUPABASE SYNC ──
 const SUPA_URL='https://wsqhzatsuymjoebzfhpg.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzcWh6YXRzdXltam9lYnpmaHBnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTUyMTMsImV4cCI6MjA5NDYzMTIxM30.bFCJBY9PAa8WviEwE8HdO2TjE3ytYM3sD6qFgxJ0pPM';
-async function fetchCloud(){}
+async function fetchCloud(){
+  const BRANCH_KEY = 'kol_movil_sesion';
+  try {
+    const cached = localStorage.getItem(BRANCH_KEY);
+    if (cached) {
+      const obj = JSON.parse(cached);
+      if (obj && obj.branch) {
+        const b = CFG.branches.find(function(x){return x.n===obj.branch;});
+        if (b) {
+          branch = b;
+          store = obj.store || 'machuca';
+        }
+      }
+    }
+  } catch(e) {}
+  try {
+    const r = await fetch(`${SUPA_URL}/rest/v1/kollita_config?select=key,value&key=eq.last_branch`, {
+      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY }
+    });
+    if (r.ok) {
+      const rows = await r.json();
+      if (rows && rows.length && rows[0].value) {
+        const cloudBranch = rows[0].value;
+        const b = CFG.branches.find(function(x){return x.n===cloudBranch;});
+        if (b) {
+          branch = b;
+          localStorage.setItem(BRANCH_KEY, JSON.stringify({branch: cloudBranch, store: 'machuca', ts: Date.now()}));
+        }
+      }
+    }
+  } catch(e) {}
+}
 async function postToSupabase(tabla, data) {
   try {
     const r = await fetch(`${SUPA_URL}/rest/v1/${tabla}`, {
@@ -789,7 +884,21 @@ async function postToSupabase(tabla, data) {
 
 // ── CATÁLOGO DINÁMICO DESDE SUPABASE ──
 let cloudBebidas = null; // null = no cargado aún, [] = nube vacía, [...] = datos reales
+const CATALOGO_CACHE_KEY = 'kollita_catalogo_cache';
+const CATALOGO_CACHE_TTL = 3600000; // 1 hour
 async function loadCatalogoCloud() {
+  // Try cache first (instant display)
+  try {
+    const raw = localStorage.getItem(CATALOGO_CACHE_KEY);
+    if (raw) {
+      const cached = JSON.parse(raw);
+      if (Array.isArray(cached.data) && cached.data.length > 0 && (Date.now() - cached.ts) < CATALOGO_CACHE_TTL) {
+        cloudBebidas = cached.data;
+        if (store === 'bebidas') renderBebContent();
+      }
+    }
+  } catch(e) {}
+  // Fetch fresh data from Supabase
   try {
     const r = await fetch(`${SUPA_URL}/rest/v1/catalogo_productos?activo=eq.true&order=orden.asc`, {
       headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY }
@@ -806,6 +915,8 @@ async function loadCatalogoCloud() {
       p: Number(p.precio_media || p.precio || p.price || 0),
       img: p.img_url || p.imagen || p.foto || ''
     }));
+    // Cache fresh data
+    try { localStorage.setItem(CATALOGO_CACHE_KEY, JSON.stringify({data: cloudBebidas, ts: Date.now()})); } catch(e) {}
     // Refrescar vista si ya estamos en bebidas
     if (store === 'bebidas') renderBebContent();
     console.log('[Kollita] Catálogo cargado desde Supabase:', cloudBebidas.length, 'productos');
@@ -820,7 +931,36 @@ function lg(k,d){
   try{const r=localStorage.getItem(k);return r?JSON.parse(r):d;}catch(e){return d;}
 }
 function readHist(){return lg(HIST_KEY,[]);}
-function saveHist(){try{localStorage.setItem(HIST_KEY,JSON.stringify(history));}catch(e){}}
+function saveHist(){
+  try{localStorage.setItem(HIST_KEY,JSON.stringify(history));}catch(e){}
+  syncHistToSupabase();
+}
+async function syncHistToSupabase(){
+  try {
+    const orders = readHist();
+    if (!orders.length || !branch || !navigator.onLine) return;
+    // Sync latest 20 orders as backup to kollita_historial_movil
+    const latest = orders.slice(0, 20);
+    const payload = latest.map(o => ({
+      id: String(o.id),
+      sucursal_id: branch.n,
+      cliente: o.client || '',
+      total: o.total || 0,
+      metodo_pago: (['EFECTIVO','QR','MIXTO'].includes((o.method||'').toUpperCase()) ? o.method.toUpperCase() : 'EFECTIVO'),
+      fecha_id: o.fechaISO || '',
+      hora: o.time || '',
+      estado: o.estado || 'PENDIENTE',
+      origen: 'movil',
+      items_count: o.items ? o.items.length : 0,
+      created_at: new Date(o.id).toISOString()
+    }));
+    await fetch(`${SUPA_URL}/rest/v1/kollita_historial_movil`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY },
+      body: JSON.stringify(payload)
+    });
+  } catch(e) { /* silent background sync */ }
+}
 
 // ─── CONFIG ───
 const CFG={
@@ -1089,6 +1229,200 @@ function toast(msg){
   clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),1700);
 }
 
+// ══ JWT AUTH ══
+const API_URL = 'https://kollita-api.onrender.com';
+let authMode = 'login'; // 'login' | 'register'
+let authToken = null;
+let authUser = null;
+
+function getToken() {
+  if (authToken) return authToken;
+  try {
+    const raw = localStorage.getItem('kollita_jwt');
+    if (raw) {
+      const obj = JSON.parse(raw);
+      if (obj.token && Date.now() < obj.expiresAt) {
+        authToken = obj.token;
+        authUser = obj.user;
+        return obj.token;
+      }
+    }
+  } catch(e) {}
+  return null;
+}
+
+function saveToken(token, user) {
+  authToken = token;
+  authUser = user;
+  const payload = parseJwt(token);
+  const expiresAt = payload && payload.exp ? payload.exp * 1000 : Date.now() + 8 * 3600000;
+  localStorage.setItem('kollita_jwt', JSON.stringify({ token, user, expiresAt }));
+}
+
+function clearToken() {
+  authToken = null;
+  authUser = null;
+  localStorage.removeItem('kollita_jwt');
+  localStorage.removeItem('kol_movil_sesion');
+}
+
+function parseJwt(token) {
+  try {
+    const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    const json = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+    return JSON.parse(json);
+  } catch(e) { return null; }
+}
+
+function isTokenValid() {
+  try {
+    const raw = localStorage.getItem('kollita_jwt');
+    if (!raw) return false;
+    const obj = JSON.parse(raw);
+    return obj.token && Date.now() < obj.expiresAt;
+  } catch(e) { return false; }
+}
+
+async function doLogin() {
+  const email = $('log-email').value.trim();
+  const pass = $('log-pass').value.trim();
+  const err = $('log-err');
+  err.style.display = 'none';
+
+  if (!email || !pass) { err.textContent = 'Completa todos los campos'; err.style.display = 'block'; return; }
+
+  const btn = $('log-btn-main');
+  btn.disabled = true;
+  btn.textContent = 'Ingresando...';
+
+  try {
+    const r = await fetch(`${API_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass })
+    });
+
+    const data = await r.json();
+
+    if (!r.ok) {
+      err.textContent = data.error || 'Credenciales incorrectas';
+      err.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'INGRESAR';
+      return;
+    }
+
+    saveToken(data.token, { nombre: data.nombre, rol: data.rol, sucursal: data.sucursal });
+
+    if (data.cambioContrasena) {
+      // TODO: mostrar modal de cambio de contraseña
+    }
+
+    enterApp();
+  } catch(e) {
+    err.textContent = 'Error de conexión. Intentá de nuevo.';
+    err.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'INGRESAR';
+  }
+}
+
+async function doRegister() {
+  const email = $('log-email').value.trim();
+  const pass = $('log-pass').value.trim();
+  const nombre = $('log-name').value.trim();
+  const err = $('log-err');
+  err.style.display = 'none';
+
+  if (!email || !pass || !nombre) { err.textContent = 'Completa todos los campos'; err.style.display = 'block'; return; }
+  if (pass.length < 4) { err.textContent = 'Contraseña mínimo 4 caracteres'; err.style.display = 'block'; return; }
+
+  const btn = $('log-btn-main');
+  btn.disabled = true;
+  btn.textContent = 'Creando cuenta...';
+
+  try {
+    const r = await fetch(`${API_URL}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass, nombre, rol: 'Cliente', sucursal: branch ? branch.n : '' })
+    });
+
+    const data = await r.json();
+
+    if (!r.ok) {
+      err.textContent = data.error || 'Error al registrar';
+      err.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'CREAR CUENTA';
+      return;
+    }
+
+    saveToken(data.token, { nombre: data.nombre, rol: data.rol, sucursal: data.sucursal });
+    enterApp();
+  } catch(e) {
+    err.textContent = 'Error de conexión. Intentá de nuevo.';
+    err.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'CREAR CUENTA';
+  }
+}
+
+function toggleLoginMode() {
+  authMode = authMode === 'login' ? 'register' : 'login';
+  const toggle = $('log-toggle');
+  const nameInput = $('log-name');
+  const btn = $('log-btn-main');
+  const info = $('log-info');
+
+  if (authMode === 'register') {
+    toggle.textContent = 'Ya tengo cuenta';
+    nameInput.style.display = 'block';
+    btn.textContent = 'CREAR CUENTA';
+    info.textContent = 'Registrate para hacer tu pedido';
+  } else {
+    toggle.textContent = 'Crear cuenta nueva';
+    nameInput.style.display = 'none';
+    btn.textContent = 'INGRESAR';
+    info.textContent = 'Para hacer tu pedido, iniciá sesión';
+  }
+}
+
+function showLogin() {
+  $('scr-branch').style.display = 'none';
+  $('scr-login').classList.add('on');
+  $('log-branch').textContent = branch ? branch.n : '—';
+  $('log-err').style.display = 'none';
+  authMode = 'login';
+  $('log-toggle').textContent = 'Crear cuenta nueva';
+  $('log-name').style.display = 'none';
+  $('log-btn-main').textContent = 'INGRESAR';
+  $('log-info').textContent = 'Para hacer tu pedido, iniciá sesión';
+  $('log-email').value = '';
+  $('log-pass').value = '';
+  $('log-name').value = '';
+  $('log-btn-main').disabled = false;
+}
+
+function showBranches() {
+  $('scr-login').classList.remove('on');
+  $('scr-branch').style.display = '';
+  branch = null;
+}
+
+function enterApp() {
+  localStorage.setItem('kol_movil_sesion', JSON.stringify({branch: branch.n, branchTel: branch.tel, store: 'machuca', ts: Date.now()}));
+  $('scr-login').classList.remove('on');
+  $('scr-branch').style.display = 'none';
+  $('hdr-branch').textContent = branch.n;
+  $('rc-addr').textContent = CFG.storeAddr;
+  const btnCB = $('btn-change-branch');
+  if (btnCB) btnCB.style.display = 'flex';
+  renderMachucaCats();
+  renderBebCats();
+  setStore('machuca');
+}
+
 // ══ SUCURSALES ══
 function renderBranches(){
   const c=$('branch-list');c.innerHTML='';
@@ -1098,27 +1432,17 @@ function renderBranches(){
     btn.innerHTML='<span class="br-dot"></span><span>'+esc(b.n)+'</span><i class="fa-solid fa-chevron-right"></i>';
     btn.addEventListener('click',async ()=>{
       branch=b;
-      
-      // Mostrar pantalla de carga interactiva
-      c.innerHTML='<div style="text-align:center;padding:30px;color:#aaa"><i class="fa-solid fa-spinner fa-spin" style="font-size:32px;color:var(--red);margin-bottom:15px"></i><br><b style="font-size:14px;color:#fff">Cargando sucursal...</b></div>';
-      
-      // Esperar sincronización de nube MÁXIMO 2.5 segundos para no dejar al usuario esperando
-      if(window._cloudPromise) {
-        await Promise.race([window._cloudPromise, new Promise(r=>setTimeout(r, 2500))]);
+      $('log-branch').textContent = b.n;
+
+      // Si ya hay token válido, entrar directo
+      if (isTokenValid()) {
+        getToken();
+        enterApp();
+        return;
       }
-      
-      // Diferir el render pesado para que no se congele 
-      setTimeout(() => {
-        localStorage.setItem('kol_movil_sesion', JSON.stringify({branch:b.n, branchTel:b.tel, store:'machuca', ts:Date.now()}));
-        $('scr-branch').style.display='none';
-        $('hdr-branch').textContent=b.n;
-        $('rc-addr').textContent=CFG.storeAddr;
-        const btnCB = $('btn-change-branch');
-        if(btnCB) btnCB.style.display='flex';
-        renderMachucaCats();
-        renderBebCats();
-        setStore('machuca');
-      }, 50);
+
+      // Si no, mostrar login
+      showLogin();
     });
     c.appendChild(btn);
   });
@@ -1706,14 +2030,41 @@ function confirmOrder(){
     notifySync('nuevo_pendiente',orderParaSecretario);
 
     // ENVIAR DIRECTO A SUPABASE PARA QUE EL SECRETARIO LO VEA EN TIEMPO REAL
-    postToSupabase('pedidos', {
-      id: 'ped_' + Date.now() + '_' + Math.floor(Math.random()*1000),
-      sucursal: branch.n,
+    const metodoNorm = (['EFECTIVO','QR','MIXTO'].includes(payment.toUpperCase()) ? payment.toUpperCase() : 'EFECTIVO');
+    const pedidoSupabase = {
+      id: String(Date.now()) + '_' + Math.floor(Math.random()*1000),
       sucursal_id: branch.n,
+      numero_nota: 0,
+      cliente: client,
+      items: JSON.parse(JSON.stringify(itemsMachuca)),
+      productos: JSON.parse(JSON.stringify(itemsMachuca)),
+      subtotal: itemsMachuca.reduce((s,i)=>s+i.c*i.p,0),
+      descuento: disc,
+      total: itemsMachuca.reduce((s,i)=>s+i.c*i.p,0)-disc,
       estado: 'PENDIENTE',
+      metodo_pago: metodoNorm,
+      fecha_id: nowISO,
+      hora: now.toLocaleTimeString('es-BO',{hour:'2-digit',minute:'2-digit'}),
+      secretario: 'Pendiente',
       origen: 'movil',
-      datos: orderParaSecretario
-    });
+      created_at: now.toISOString()
+    };
+    // Offline detection: queue if no connection
+    if (navigator.onLine) {
+      postToSupabase('pedidos', pedidoSupabase);
+    } else {
+      const cola = lg('kollita_sync_cola_v1', []);
+      cola.push(pedidoSupabase);
+      try { localStorage.setItem('kollita_sync_cola_v1', JSON.stringify(cola)); } catch(e) {}
+      toast('📵 Sin conexión — pedido guardado, se enviará al reconectar');
+    }
+
+    // Guardar en kollita_db para que aparezca en historial del panel
+    try {
+      var db = JSON.parse(localStorage.getItem('kollita_db') || '[]');
+      db.push(pedidoSupabase);
+      localStorage.setItem('kollita_db', JSON.stringify(db));
+    } catch(e) {}
   }
   // Si hay bebidas, se le avisa al cliente que esos items van solo por WhatsApp
   if(itemsBebidas.length>0&&itemsMachuca.length>0){
@@ -1841,7 +2192,7 @@ function changeBranch(){
   branch = null;
   cart = [];
   store = 'machuca';
-  localStorage.removeItem('kol_movil_sesion');
+  clearToken();
   // Resetear UI
   $('hdr-branch').textContent = '—';
   const btnCB = $('btn-change-branch');
@@ -1885,38 +2236,108 @@ function _initApp(){
     }
   });
 
-  // Auto-login movido aquí adentro
+  // Auto-login con JWT + sesión local
   var ses = localStorage.getItem('kol_movil_sesion');
-  if(ses){
-    try{
+  if (ses && isTokenValid()) {
+    try {
       var sesObj = JSON.parse(ses);
-      if(Date.now() - sesObj.ts < 86400000){
+      if (Date.now() - sesObj.ts < 86400000) {
         branch = CFG.branches.find(function(b){return b.n===sesObj.branch;}) || null;
-        if(branch){
+        if (branch) {
+          getToken();
           store = sesObj.store || 'machuca';
-          $('scr-branch').style.display='none';
-          $('hdr-branch').textContent=branch.n;
-          $('rc-addr').textContent=CFG.storeAddr;
+          $('scr-branch').style.display = 'none';
+          $('hdr-branch').textContent = branch.n;
+          $('rc-addr').textContent = CFG.storeAddr;
           const btnCB2 = $('btn-change-branch');
-          if(btnCB2) btnCB2.style.display='flex';
+          if (btnCB2) btnCB2.style.display = 'flex';
           renderMachucaCats();
           renderBebCats();
           setStore(store);
         }
       }
-    }catch(e){}
+    } catch(e) {}
+  } else if (!isTokenValid()) {
+    // Token expirado o no existe, limpiar sesión
+    clearToken();
   }
+
+  // Login: Enter key handler
+  ['log-email','log-pass','log-name'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') K.doLogin();
+    });
+  });
 }
 
-return{openCart,closeCart,openHistory,closeHistory,setPayment,recalc,confirmOrder,closeModal,modalSendWA,modalNewOrder,setStore,boloSetSize,boloSetCafe,boloSetCargada,boloToggleSabor,boloCantDelta,boloAgregar,_initApp,changeBranch};
+  // Conexión y sincronización offline
+  var _connStatus = 'unknown';
+  function updateConnStatus(status) {
+    _connStatus = status;
+    const dot = $('conn-dot');
+    if (!dot) return;
+    dot.classList.remove('green', 'red', 'yellow');
+    if (status === 'online') dot.classList.add('green');
+    else if (status === 'offline') dot.classList.add('red');
+    else if (status === 'syncing') dot.classList.add('yellow');
+  }
+  async function checkSupabaseStatus() {
+    if (!navigator.onLine) { updateConnStatus('offline'); return; }
+    try {
+      const r = await fetch(`${SUPA_URL}/rest/v1/`, { method: 'HEAD', headers: { 'apikey': SUPA_KEY } });
+      updateConnStatus(r.ok ? 'online' : 'offline');
+    } catch(e) { updateConnStatus('offline'); }
+  }
+  async function retrySyncQueue() {
+    const cola = lg('kollita_sync_cola_v1', []);
+    if (!cola.length) return;
+    updateConnStatus('syncing');
+    toast('🔄 Sincronizando ' + cola.length + ' pedido(s) pendiente(s)...');
+    const remaining = [];
+    for (const pedido of cola) {
+      try {
+        const r = await fetch(`${SUPA_URL}/rest/v1/pedidos`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY },
+          body: JSON.stringify(pedido)
+        });
+        if (!r.ok) { remaining.push(pedido); }
+      } catch(e) { remaining.push(pedido); }
+    }
+    try { localStorage.setItem('kollita_sync_cola_v1', JSON.stringify(remaining)); } catch(e) {}
+    if (remaining.length === 0) {
+      toast('✅ Todos los pedidos sincronizados');
+    } else {
+      toast('⚠️ ' + remaining.length + ' pedido(s) pendientes aún');
+    }
+    updateConnStatus('online');
+  }
+
+  return{openCart,closeCart,openHistory,closeHistory,setPayment,recalc,confirmOrder,closeModal,modalSendWA,modalNewOrder,setStore,boloSetSize,boloSetCafe,boloSetCargada,boloToggleSabor,boloCantDelta,boloAgregar,_initApp,changeBranch,doLogin,doRegister,toggleLoginMode,showLogin,showBranches,getToken,clearToken,enterApp,checkSupabaseStatus,retrySyncQueue,updateConnStatus};
 })();
 K._initApp();
 
 window.addEventListener('storage', function(e){
   if(e.key==='kollita_db' || e.key==='kollita_pendientes'){
-    recalc();
+    K.recalc();
   }
 });
+
+window.addEventListener('online', function(){
+  toast('🌐 Conexión restablecida');
+  K.checkSupabaseStatus();
+  K.retrySyncQueue();
+});
+window.addEventListener('offline', function(){
+  toast('📵 Sin conexión — modo offline activo');
+  K.updateConnStatus('offline');
+});
+
+// Periodic connectivity check
+setInterval(function(){ K.checkSupabaseStatus(); }, 30000);
+// Initial check after app loads
+setTimeout(function(){ K.checkSupabaseStatus(); }, 1500);
 
 </script>
 </body>

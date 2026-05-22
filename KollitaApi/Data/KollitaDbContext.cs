@@ -13,12 +13,14 @@ public class KollitaDbContext : DbContext
     public DbSet<ItemPendiente> ItemsPendiente => Set<ItemPendiente>();
     public DbSet<Cierre> Cierres => Set<Cierre>();
     public DbSet<ConfigSucursal> ConfigSucursales => Set<ConfigSucursal>();
+    public DbSet<Usuario> Usuarios => Set<Usuario>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Pedido>(e =>
         {
             e.HasKey(p => p.Id);
+            e.Property(p => p.Id).ValueGeneratedNever();
             e.HasIndex(p => p.FechaID);
             e.HasIndex(p => p.Estado);
             e.HasIndex(p => p.Secretario);
@@ -33,6 +35,7 @@ public class KollitaDbContext : DbContext
         modelBuilder.Entity<Pendiente>(e =>
         {
             e.HasKey(p => p.Id);
+            e.Property(p => p.Id).ValueGeneratedNever();
             e.HasIndex(p => p.Estado);
             e.HasIndex(p => p.FechaISO);
             e.HasMany(p => p.Items).WithOne(i => i.Pendiente).HasForeignKey(i => i.PendienteId).OnDelete(DeleteBehavior.Cascade);
@@ -46,6 +49,7 @@ public class KollitaDbContext : DbContext
         modelBuilder.Entity<Cierre>(e =>
         {
             e.HasKey(c => c.Id);
+            e.Property(c => c.Id).ValueGeneratedNever();
             e.HasIndex(c => c.Secretario);
             e.HasIndex(c => c.FechaCierre);
         });
@@ -54,6 +58,15 @@ public class KollitaDbContext : DbContext
         {
             e.HasKey(c => c.Id);
             e.HasIndex(c => c.Sucursal).IsUnique();
+        });
+
+        modelBuilder.Entity<Usuario>(e =>
+        {
+            e.HasKey(u => u.Id);
+            e.Property(u => u.Id).ValueGeneratedOnAdd();
+            e.HasIndex(u => u.Email).IsUnique();
+            e.HasIndex(u => u.Rol);
+            e.HasIndex(u => u.Sucursal);
         });
     }
 }
