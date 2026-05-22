@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using KollitaApi.Hubs;
-using KollitaApi.Messaging;
 using KollitaApi.Models;
 using KollitaApi.Services.Interfaces;
 

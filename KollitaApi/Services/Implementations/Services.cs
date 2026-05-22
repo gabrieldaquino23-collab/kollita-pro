@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using KollitaApi.Data;
 using KollitaApi.Hubs;
-using KollitaApi.Messaging;
 using KollitaApi.Models;
 using KollitaApi.Services;
 using KollitaApi.Services.Interfaces;
@@ -13,13 +10,11 @@ public class PedidoService : IPedidoService
 {
     private readonly IPedidoRepository _repo;
     private readonly IHubContext<KollitaHub> _hub;
-    private readonly IEventBus _eventBus;
 
-    public PedidoService(IPedidoRepository repo, IHubContext<KollitaHub> hub, IEventBus eventBus)
+    public PedidoService(IPedidoRepository repo, IHubContext<KollitaHub> hub)
     {
         _repo = repo;
         _hub = hub;
-        _eventBus = eventBus;
     }
 
     public async Task<List<Pedido>> GetAllAsync(int limit = 500) =>
@@ -34,7 +29,6 @@ public class PedidoService : IPedidoService
         await _repo.AddAsync(pedido);
         await _repo.SaveChangesAsync();
         await _hub.Clients.All.SendAsync("PedidoCreado", pedido);
-        await _eventBus.PublishAsync("pedidos", "PedidoCreado", pedido);
         return pedido;
     }
 
@@ -56,7 +50,6 @@ public class PedidoService : IPedidoService
 
         await _repo.SaveChangesAsync();
         await _hub.Clients.All.SendAsync("PedidoActualizado", pedido);
-        await _eventBus.PublishAsync("pedidos", "PedidoEntregado", new { id, totalEntregado });
         return pedido;
     }
 
@@ -106,15 +99,13 @@ public class PendienteService : IPendienteService
     private readonly IPendienteRepository _pendienteRepo;
     private readonly IPedidoRepository _pedidoRepo;
     private readonly IHubContext<KollitaHub> _hub;
-    private readonly IEventBus _eventBus;
 
     public PendienteService(IPendienteRepository pendienteRepo, IPedidoRepository pedidoRepo,
-        IHubContext<KollitaHub> hub, IEventBus eventBus)
+        IHubContext<KollitaHub> hub)
     {
         _pendienteRepo = pendienteRepo;
         _pedidoRepo = pedidoRepo;
         _hub = hub;
-        _eventBus = eventBus;
     }
 
     public async Task<List<Pendiente>> GetPendientesAsync() =>
@@ -127,7 +118,6 @@ public class PendienteService : IPendienteService
         await _pendienteRepo.AddAsync(pendiente);
         await _pendienteRepo.SaveChangesAsync();
         await _hub.Clients.All.SendAsync("NuevoPendiente", pendiente);
-        await _eventBus.PublishAsync("pendientes", "NuevoPendiente", pendiente);
         return pendiente;
     }
 
@@ -164,7 +154,6 @@ public class PendienteService : IPendienteService
         await _pendienteRepo.SaveChangesAsync();
 
         await _hub.Clients.All.SendAsync("PendientePreparado", new { id, pedido });
-        await _eventBus.PublishAsync("pendientes", "PendientePreparado", new { id, pedidoId = pedido.Id });
         return pedido;
     }
 }
