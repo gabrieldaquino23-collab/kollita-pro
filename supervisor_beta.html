@@ -2034,9 +2034,25 @@ function cfgRenderPasswords(){
     '</tbody></table></div>';
 }
 
-function cfgPWSave(){
+async function cfgPWSave(){
   var pws = cfgLeerPasswords();
   localStorage.setItem('kollita_system_passwords', JSON.stringify(pws));
+  try {
+    await fetch(SUPA_URL + '/rest/v1/system_passwords?id=gt.0', {
+      method: 'DELETE',
+      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY }
+    });
+    var entries = pws.map(function(pw) { return { panel: pw.panel, pass_hash: pw.pass }; });
+    await fetch(SUPA_URL + '/rest/v1/system_passwords', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(entries)
+    });
+  } catch(e) {}
 }
 
 function cfgLeerPasswords(){

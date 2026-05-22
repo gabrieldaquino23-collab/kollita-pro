@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -435,7 +435,7 @@ async function syncSupabaseDown(){
   try{
     var sucEnc=encodeURIComponent(SES.suc);
     var t=await fetch(SUPA_URL+'/rest/v1/turnos?select=*&sucursal_id=eq.'+sucEnc+'&order=hora_cierre.desc&limit=500',{headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}});
-    if(t.ok){var turnos=await t.json();var mapped=(Array.isArray(turnos)&&turnos.length)?turnos.map(function(c){var fc=c.hora_cierre?new Date(c.hora_cierre):null;return{sucursal:c.sucursal_id||'',secretario:c.secretario_nombre||'',turno:c.tipo_turno||'',inicio:c.hora_apertura||'',cierre:c.hora_cierre||'',fechaCierreFormato:fc?fc.toLocaleDateString('es-BO'):'',horaCierreFormato:fc?fc.toLocaleTimeString('es-BO'):'',totalGeneral:parseFloat(c.total_general)||0,totalEfectivo:parseFloat(c.total_efectivo)||0,totalQR:parseFloat(c.total_qr)||0,totalMixtoEfectivo:parseFloat(c.total_mixto_efectivo)||0,totalMixtoQR:parseFloat(c.total_mixto_qr)||0,totalAnticipos:parseFloat(c.total_anticipos)||0,totalDescuentos:parseFloat(c.total_descuentos)||0,cantidadVentas:c.cantidad_ventas||0,cantidadAnulados:c.cantidad_anulados||0,ventas:(c.datos_cierre&&c.datos_cierre.ventas)?c.datos_cierre.ventas:[]};}):[];localStorage.setItem('turnos_cerrados_kollita',JSON.stringify(mapped));console.log('[syncDown] Turnos cargados:',mapped.length);}
+    if(t.ok){var turnos=await t.json();var mapped=(Array.isArray(turnos)&&turnos.length)?turnos.map(function(c){var fc=c.hora_cierre?new Date(c.hora_cierre):null;return{sucursal:c.sucursal_id||'',secretario:c.secretario_nombre||'',turno:c.tipo_turno||'',inicio:c.hora_apertura||'',cierre:c.hora_cierre||'',fechaCierreFormato:fc?fc.toLocaleDateString('es-BO'):'',horaCierreFormato:fc?fc.toLocaleTimeString('es-BO'):'',totalGeneral:parseFloat(c.total_general)||0,totalEfectivo:parseFloat(c.total_efectivo)||0,totalQR:parseFloat(c.total_qr)||0,totalMixtoEfectivo:parseFloat(c.total_mixto_efectivo)||0,totalMixtoQR:parseFloat(c.total_mixto_qr)||0,totalAnticipos:parseFloat(c.total_anticipos)||0,totalDescuentos:parseFloat(c.total_descuentos)||0,cantidadVentas:c.cantidad_ventas||0,cantidadAnulados:c.cantidad_anulados||0,ventas:((c.datos_cierre&&c.datos_cierre.ventas)?c.datos_cierre.ventas.map(function(v){return{id:v.id};}):[])};}):[];localStorage.setItem('turnos_cerrados_kollita',JSON.stringify(mapped));console.log('[syncDown] Turnos cargados:',mapped.length);}
     else{console.warn('[syncDown] Error turnos HTTP:',t.status);}
   }catch(e){console.error('[syncDown] Error turnos:',e);}
   try{
@@ -550,7 +550,7 @@ function simpleLogin(){
     error.innerHTML = 'Credenciales incorrectas. Verifica nombre y contraseña.';
     error.style.display = 'block'; return;
   }
-  SES = {suc: suc, nombre: nombre, expira: Date.now() + 9999999999};
+  SES = {suc: suc, nombre: nombre, pass: pass, expira: Date.now() + 9999999999};
   localStorage.setItem('kollita_enc_ses', JSON.stringify(SES));
   localStorage.setItem('enc_sesion_v2', JSON.stringify({suc:SES.suc, nombre:SES.nombre, ts:Date.now()}));
   syncSupabaseDown();
@@ -932,13 +932,13 @@ function pedAccion(id, tipo){
   document.getElementById('modal-anular').classList.add('open');
 }
 
-function confirmarAnular(){
+async function confirmarAnular(){
   var mot=document.getElementById('an-motivo').value.trim();
   var pas=document.getElementById('an-pass').value;
   var err=document.getElementById('an-err');
   err.style.display='none';
   if(!mot){err.textContent='El motivo es obligatorio';err.style.display='block';return;}
-  if(pas!==PASS_ENC){err.textContent='Contrasena incorrecta';err.style.display='block';return;}
+  if(pas!==SES.pass){err.textContent='Contrasena incorrecta';err.style.display='block';return;}
   var p=null;
   if(_pedAccionId){ p=gAll().find(function(x){return String(x.id)===String(_pedAccionId);}); }
   if(!p){
