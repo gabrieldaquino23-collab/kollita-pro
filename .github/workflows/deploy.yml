@@ -43,9 +43,15 @@ jobs:
 
       - name: Make GHCR package public
         run: |
+          # Try user endpoint first, then org endpoint
+          curl -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/user/packages/container/kollita-api/visibility" \
+            -d '{"visibility":"public"}' 2>/dev/null || \
           curl -X PATCH \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/orgs/${{ github.repository_owner }}/packages/container/kollita-api/visibility" \
-            -d '{"visibility":"public"}' || true
-          echo "Package made public (or already public)"
+            -d '{"visibility":"public"}' 2>/dev/null
+          echo "Package visibility updated"
