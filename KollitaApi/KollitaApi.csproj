@@ -27,4 +27,11 @@
     <PackageReference Include="StackExchange.Redis" Version="2.7.33" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Agents\**" />
+    <Content Remove="Agents\**" />
+    <EmbeddedResource Remove="Agents\**" />
+    <None Remove="Agents\**" />
+  </ItemGroup>
+
 </Project>

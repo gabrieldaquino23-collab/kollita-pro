@@ -72,11 +72,11 @@ var redisConnection = Environment.GetEnvironmentVariable("REDIS_URL")
 
 try
 {
-    var broker = new RedisMessageBroker(redisConnection);
-    var eventBus = new EventBus(broker);
+    var redisBroker = new RedisMessageBroker(redisConnection);
+    var redisEventBus = new EventBus(redisBroker);
 
-    builder.Services.AddSingleton<IMessageBroker>(broker);
-    builder.Services.AddSingleton<IEventBus>(eventBus);
+    builder.Services.AddSingleton<IMessageBroker>(redisBroker);
+    builder.Services.AddSingleton<IEventBus>(redisEventBus);
 
     builder.Services.AddSignalR()
         .AddStackExchangeRedis(redisConnection, options =>
