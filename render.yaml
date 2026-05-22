@@ -1,19 +1,19 @@
 services:
   - type: web
     name: kollita-api
-    runtime: docker
-    plan: starter
+    runtime: image
+    plan: free
     region: oregon
-    numInstances: 2
-    dockerContext: .
-    dockerfilePath: KollitaApi/Dockerfile
+    image:
+      owner: gabrieldaquino23-collab
+      image: kollita-api
+      tag: latest
+    dockerCommand: dotnet KollitaApi.dll
     healthCheckPath: /health
     autoScaling:
       enabled: true
       minInstances: 1
-      maxInstances: 3
-      targetCPUUtilizationPercent: 80
-      targetMemoryUtilizationPercent: 80
+      maxInstances: 2
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
@@ -27,60 +27,9 @@ services:
         value: "KollitaApi"
       - key: JWT_AUDIENCE
         value: "KollitaPro"
-      - key: REDIS_URL
-        fromService:
-          name: kollita-redis
-          type: redis
-          property: connectionString
 
   - type: redis
     name: kollita-redis
     ipAllowList: []
     plan: free
     maxmemoryPolicy: allkeys-lru
-
-  - type: web
-    name: kollita-auth
-    runtime: docker
-    plan: starter
-    region: oregon
-    dockerContext: .
-    dockerfilePath: KollitaApi/Microservices/Auth/Dockerfile
-    healthCheckPath: /health
-    autoScaling:
-      enabled: true
-      minInstances: 1
-      maxInstances: 2
-    envVars:
-      - key: ASPNETCORE_ENVIRONMENT
-        value: Production
-      - key: DATABASE_URL
-        sync: true
-      - key: JWT_KEY
-        sync: true
-      - key: REDIS_URL
-        fromService:
-          name: kollita-redis
-          type: redis
-          property: connectionString
-
-  - type: web
-    name: kollita-notifications
-    runtime: docker
-    plan: starter
-    region: oregon
-    dockerContext: .
-    dockerfilePath: KollitaApi/Microservices/Notifications/Dockerfile
-    healthCheckPath: /health
-    autoScaling:
-      enabled: true
-      minInstances: 1
-      maxInstances: 2
-    envVars:
-      - key: ASPNETCORE_ENVIRONMENT
-        value: Production
-      - key: REDIS_URL
-        fromService:
-          name: kollita-redis
-          type: redis
-          property: connectionString

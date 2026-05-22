@@ -1,0 +1,42 @@
+name: Build & Deploy to Render
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'KollitaApi/**'
+      - 'render.yaml'
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish .NET API
+        run: dotnet publish KollitaApi/KollitaApi.csproj -c Release -o publish
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: KollitaApi/Dockerfile.prod
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/kollita-api:latest
