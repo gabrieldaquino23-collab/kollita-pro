@@ -184,6 +184,7 @@ textarea.fii{resize:vertical;min-height:80px;}
       <input type="date" class="fi" id="pf-desde" onchange="renderPedidos()">
       <input type="date" class="fi" id="pf-hasta" onchange="renderPedidos()">
       <input type="text" class="fi" placeholder="🔍 Cliente o Nº nota..." id="pf-q" onchange="renderPedidos()" style="flex:1;min-width:160px;">
+      <button class="btn-p" onclick="abrirNuevoPedido()">➕ Nuevo Pedido</button>
     </div>
     <div class="estado-tabs" id="estado-tabs">
       <button class="etab active" data-est="PENDIENTE" onclick="filtrarEstado(this)">🟡 PENDIENTES</button>
@@ -334,6 +335,7 @@ function cM(id){ var m=document.getElementById(id); if(m) m.classList.remove('op
 
 const PASS_ENC = 'enc1234';
 let SES = null;
+var CONFIG_DESCUENTO = {};
 
 const CAT_LABELS = { TRADICIONAL:'🟢 Tradicional', ESPECIAL:'🔵 Especial', PREMIUM:'🟣 Premium', OTROS:'🔘 Otros', PEDIDOS:'📋 Pedidos' };
 const CAT_COLORS = { TRADICIONAL:'var(--green)', ESPECIAL:'var(--blue)', PREMIUM:'var(--purple)', OTROS:'var(--orange)', PEDIDOS:'var(--red)' };
@@ -402,7 +404,7 @@ function getCatalogo(){
 function saveCatalogo(d){ localStorage.setItem('kollita_enc_catalogo', JSON.stringify(d)); }
 function gDB(){ try{return JSON.parse(localStorage.getItem('kollita_db')||'[]');}catch{return[];} }
 function gArch(){ var a=[], h=new Date(); for(var m=1;m<=12;m++){ var d=new Date(h.getFullYear(),h.getMonth()-m,1); var k='kollita_archivo_'+d.getFullYear()+'_'+(d.getMonth()+1); try{a=a.concat(JSON.parse(localStorage.getItem(k)||'[]'));}catch{} } return a; }
-function gAll(){ var db=gDB(),ar=gArch(),s=new Set(); return db.concat(ar).filter(function(p){if(s.has(p.id))return false;s.add(p.id);return true;}); }
+function gAll(){ var db=gDB(),ar=gArch(),s=new Set(); return db.concat(ar).filter(function(p){if(s.has(p.id))return false;s.add(p.id);if(SES&&SES.suc){var psuc=p.sucursal||p.sucursal_id||'';if(psuc&&psuc!==SES.suc)return false;}return true;}); }
 function esPedidoCerrado(pid){
   var arch = gArch();
   if(arch.some(function(p){ return p.id===pid; })) return true;
@@ -414,7 +416,7 @@ function esPedidoCerrado(pid){
   }catch(e){}
   return false;
 }
-function gCie(){try{return JSON.parse(localStorage.getItem('turnos_cerrados_kollita')||'[]');}catch{return[];}}
+function gCie(){try{var data=JSON.parse(localStorage.getItem('turnos_cerrados_kollita')||'[]');if(SES&&SES.suc){data=data.filter(function(c){return c.sucursal===SES.suc;});}return data;}catch{return[];}}
 function gRec(){try{return JSON.parse(localStorage.getItem('kollita_reclamos')||'[]');}catch{return[];}}
 function gAnul(){try{return JSON.parse(localStorage.getItem('kollita_log_anulaciones')||'[]');}catch{return[];}}
 function gProd(){try{return JSON.parse(localStorage.getItem('kollita_enc_produccion')||'[]');}catch{return[];}}
@@ -439,6 +441,47 @@ async function syncSupabaseDown(){
   }catch(e){console.error('[syncDown] Error turnos:',e);}
   renderDash();
 }
+async function syncPedidoUp(pedido){
+  if(!SES||!SES.suc) return;
+  try{
+    await fetch(SUPA_URL+'/rest/v1/pedidos',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'resolution=merge-duplicates'},
+      body:JSON.stringify({
+        id:pedido.id, sucursal_id:SES.suc, numero_nota:parseInt(pedido.numeroNota)||0,
+        cliente:pedido.cliente||'', secretario:pedido.secretario||'', estado:pedido.estado||'PREPARADO',
+        total:parseFloat(pedido.total)||0, subtotal:parseFloat(pedido.subtotal)||0,
+        descuento:parseFloat(pedido.descuento)||0, anticipo:parseFloat(pedido.anticipo)||0,
+        saldo_cobrado:parseFloat(pedido.saldoCobrado)||0, total_entregado:parseFloat(pedido.totalEntregado)||0,
+        metodo_pago:pedido.metodoPago||null, fecha_id:pedido.fechaID||'', productos:pedido.productos||pedido.items||[],
+        created_at:new Date().toISOString()
+      })
+    }).catch(function(e){});
+  }catch(e){}
+}
+async function syncAnulacionUp(anulacion){
+  if(!SES||!SES.suc) return;
+  try{
+    await fetch(SUPA_URL+'/rest/v1/bk_log_anulaciones',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'resolution=merge-duplicates'},
+      body:JSON.stringify([{id:anulacion.id, motivo:anulacion.motivo||'', supervisor:anulacion.supervisor||SES.nombre, fecha:anulacion.fecha||'', hora:anulacion.hora||'', turno:anulacion.turno||'', nota:anulacion.nota||{}}])
+    }).catch(function(e){});
+  }catch(e){}
+}
+async function syncProduccionUp(reg){
+  if(!SES||!SES.suc) return;
+  try{
+    await fetch(SUPA_URL+'/rest/v1/produccion',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'resolution=merge-duplicates'},
+      body:JSON.stringify({
+        id:reg.ts||Date.now(), fecha:reg.fecha, turno:reg.turno, encargado:reg.encargado||SES.nombre,
+        sucursal:reg.suc||SES.suc, datos:reg.datos, ts:reg.ts
+      })
+    }).catch(function(e){});
+  }catch(e){}
+}
 function obtenerPreparadosViejos(){
   var db = gDB();
   var ahora = Date.now();
@@ -450,6 +493,7 @@ function obtenerPreparadosViejos(){
   try{
     var pend = JSON.parse(localStorage.getItem('kollita_pendientes')||'[]');
     pend.forEach(function(pp){
+      if(SES&&SES.suc&&pp.branch&&pp.branch!==SES.suc) return;
       var ts = pp.id || pp.createdAt || 0;
       if(typeof ts==='string') ts = new Date(ts).getTime();
       if((ahora - ts) > 86400000){
@@ -563,7 +607,7 @@ function filtrarEstado(btn){
 
 /* ─── DASHBOARD ─── */
 function renderDash(){
-  var all=gAll(), cie=gCie(), rec=gRec(), an=gAnul();
+  var all=gAll().filter(function(p){ return (p.sucursal||p.sucursal_id||p.branch||'') === SES.suc; }), cie=gCie(), rec=gRec(), an=gAnul();
   var h=new Date(), ma=h.getMonth(), aa=h.getFullYear();
   var hoyISO=h.getFullYear()+'-'+String(h.getMonth()+1).padStart(2,'0')+'-'+String(h.getDate()).padStart(2,'0');
   var inMes=function(p){var f=new Date(p.fechaID||p.fecha||p.id);return f.getMonth()===ma&&f.getFullYear()===aa;};
@@ -656,6 +700,7 @@ function renderPedidos(){
   var q=(document.getElementById('pf-q').value||'').toLowerCase().trim();
   var rows=gAll().filter(function(p){
     if(est&&(p.estado||'PREPARADO')!==est)return false;
+    if(SES.suc && (p.sucursal||p.sucursal_id||'')!==SES.suc) return false;
     if(sec&&p.secretario!==sec)return false;
     var fi=p.fechaID||toISO(p.fecha)||'';
     if(des&&fi&&fi<des)return false;
@@ -668,6 +713,7 @@ function renderPedidos(){
     try{
       var pend=JSON.parse(localStorage.getItem('kollita_pendientes')||'[]');
       pend.forEach(function(p){
+        if(SES&&SES.suc&&p.branch&&p.branch!==SES.suc) return;
         var fi2=p.fechaISO||p.date||'';
         if(des&&fi2&&fi2<des)return;
         if(has&&fi2&&fi2>has)return;
@@ -752,6 +798,7 @@ function anularPendienteEnc(pid){
     var log=gAnul();
     log.unshift({id:Date.now(),motivo:'Anulado por encargado desde app móvil',supervisor:SES.nombre+' (Encargado)',fecha:ahora.toLocaleDateString('es-BO'),hora:ahora.toLocaleTimeString('es-BO'),turno:null,origen:'encargado',nota:{id:pen.id,numeroNota:'APP-'+String(pen.id).slice(-5),cliente:pen.client,total:pen.total,subtotal:pen.total,metodoPago:pen.metodoPago||null,secretario:'📱 APP',fecha:pen.fechaISO||pen.date||'',hora:pen.time||'',items:pen.items,estado:'PENDIENTE'}});
     sAnul(log);
+    syncAnulacionUp(log[0]);
     toast('✅ Pendiente APP anulado');
     renderPedidos();renderDash();cargarPendientesEnc();
   }catch(e){}
@@ -888,6 +935,7 @@ function confirmarAnular(){
       fecha:p.fecha,hora:p.hora,items:p.items,estado:p.estado||'PREPARADO'}});
   sAnul(log);
   var db=gDB();db=db.filter(function(x){return x.id!==p.id;});sDB(db);
+  syncPedidoUp({...p, estado:'ANULADO'});
   _pedAccionId=null; _pedAccionTipo=null;
   toast('❌ Nota N '+p.numeroNota+' anulada');
   cM('modal-anular');
@@ -962,6 +1010,7 @@ function guardarNuevoPedido(){
     anticipo:anti, sucursal:SES.suc
   };
   var db=gDB(); db.unshift(pedido); sDB(db);
+  syncPedidoUp(pedido);
   toast('✅ Pedido N '+nota+' registrado');
   cM('modal-nuevo-pedido');
   renderDash(); renderPedidos();
@@ -1020,6 +1069,7 @@ function traspasarAPreparado(id){
     delete db[idx].qrPagado;
     db[idx].totalEntregado = 0;
     sDB(db);
+    syncPedidoUp(db[idx]);
   }
   toast('Pedido N ' + p.numeroNota + ' traspasado a PREPARADO');
   renderDash(); renderPedidos();
@@ -1030,6 +1080,7 @@ function renderCierres(){
   var sec=document.getElementById('cf-sec').value;
   var mes=document.getElementById('cf-mes').value;
   var rows=gCie().filter(function(c){
+    if(SES.suc && (c.sucursal||c.sucursal_id||'')!==SES.suc) return false;
     if(sec&&c.secretario!==sec)return false;
     if(mes){
       var f=new Date(c.cierre||c.inicio);
@@ -1229,6 +1280,7 @@ function guardarProd(){
     all.unshift(reg);
   }
   sProd(all);
+  syncProduccionUp(reg);
   limpiarTodoProd(); // Limpiar campos después de guardar
   var tl = {DIA:'Día', TARDE:'Tarde', NOCHE:'Noche'};
   toast('✅ Producción guardada: ' + fecha + ' - ' + (tl[turno]||turno) + ' | Total: ' + totalUnidades + ' u.');
@@ -1249,6 +1301,7 @@ function renderHP(){
   var vista = document.getElementById('ph-vista').value;
   var TL = {DIA:'Día', TARDE:'Tarde', NOCHE:'Noche'};
   var regs = gProd().filter(function(r){
+    if(SES&&SES.suc&&r.suc&&r.suc!==SES.suc) return false;
     if(mes && !r.fecha.startsWith(mes)) return false;
     if(turno && r.turno !== turno) return false;
     return true;
@@ -1475,7 +1528,7 @@ window.addEventListener('storage', function(e){
     if(document.getElementById('page-dashboard').classList.contains('active')) renderDash();
   }
   if(e.key==='kollita_enc_produccion'){
-    if(document.getElementById('page-produccion').classList.contains('active')) renderProdGrid();
+    if(document.getElementById('page-produccion').classList.contains('active')) initProdGrid();
     if(document.getElementById('page-dashboard').classList.contains('active')) renderDash();
     if(document.getElementById('page-cierres').classList.contains('active')) renderCierres();
   }
