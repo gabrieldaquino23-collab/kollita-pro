@@ -3,9 +3,6 @@ name: Build & Deploy to Render
 on:
   push:
     branches: [main]
-    paths:
-      - 'KollitaApi/**'
-      - 'render.yaml'
   workflow_dispatch:
 
 jobs:
