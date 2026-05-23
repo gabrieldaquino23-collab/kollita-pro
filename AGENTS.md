@@ -57,3 +57,10 @@ Load the project skill for detailed architecture docs:
 ```
 .opencode/skills/kollita-pro/SKILL.md
 ```
+
+## ⚠️ Bugs Corregidos — Lecciones Aprendidas
+**ANTES de modificar `secretarios.html` o cualquier panel, leer:**
+```
+.opencode/skills/kollita-pro/references/bugs-aprendidos.md
+```
+Contiene 15+ patrones de bugs corregidos con soluciones. Evita repetir errores.

@@ -74,6 +74,7 @@ Kollita Pro is a cloud-native POS (Point of Sale) system for multi-branch retail
 | Deploy Render | Docker build from KollitaApi/Dockerfile | [references/deploy-render.md](references/deploy-render.md) |
 | Supabase Management | SQL queries, RLS policies, table management | [references/supabase-admin.md](references/supabase-admin.md) |
 | Testing | upload_backup.js, test_full_upload.js, check_*.js | [references/testing.md](references/testing.md) |
+| **⚠️ Bugs Aprendidos** | **Lecciones de errores corregidos — leer antes de modificar secretarios.html** | [references/bugs-aprendidos.md](references/bugs-aprendidos.md) |
 
 ## Constraints
 
